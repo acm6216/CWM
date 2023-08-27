@@ -1,0 +1,71 @@
+<resources>
+    <string name="app_name">CWM</string>
+    <string name="label_name">Camera Water Mark</string>
+    <string name="label_version">版本：1.0</string>
+    <string name="label_licence">copyright © 2023 QingShu All Right Reserved.</string>
+    <string name="save">保存到设备</string>
+    <string name="apply">应用</string>
+    <string name="add">添加</string>
+    <string name="setting">设置</string>
+    <string name="focal_distance">mm</string>
+    <string name="aperture">F</string>
+    <string name="shutter">S</string>
+    <string name="iso">ISO</string>
+    <string name="lens_param_hint">参数</string>
+    <string name="lens_param_tips">或者单独设置</string>
+    <string name="lens_title">右上</string>
+
+    <string name="logo_picker_title">Logo</string>
+
+    <string name="device_title">左上</string>
+    <string name="device_brand">品牌</string>
+    <string name="device_model">型号</string>
+
+    <string name="date_title">左下</string>
+    <string name="location_title">右下</string>
+    <string name="date_hint">日期</string>
+    <string name="location_hint">位置</string>
+
+    <string name="card_size">卡片尺寸</string>
+    <string name="card_size_small">小</string>
+    <string name="card_size_medium">中</string>
+    <string name="card_size_large">大</string>
+
+    <string name="card_color">卡片颜色</string>
+    <string name="card_color_white">白色</string>
+    <string name="card_color_black">黑色</string>
+
+    <string name="save_status">添加水印中</string>
+
+    <string name="label_canon">佳能</string>
+    <string name="label_nikon">尼康</string>
+    <string name="label_sony">索尼</string>
+    <string name="label_fujifilm">富士</string>
+    <string name="label_panasonic">松下</string>
+    <string name="label_zeiss">蔡司</string>
+    <string name="label_leica">徕卡</string>
+    <string name="label_olympus">奥林巴斯</string>
+    <string name="label_hasselblad">哈苏</string>
+    <string name="label_sigma">适马</string>
+    <string name="label_lumix">松下</string>
+    <string name="label_apple">苹果</string>
+    <string name="label_meizu">魅族</string>
+    <string name="label_honor">荣耀</string>
+    <string name="label_dji">大疆</string>
+    <string name="label_insta360">Insta360</string>
+    <string name="label_samsung">三星</string>
+    <string name="label_sharp">夏普</string>
+    <string name="label_ricoh">理光</string>
+    <string name="logitech_gaming">LG</string>
+    <string name="label_google">谷歌</string>
+    <string name="label_lenovo">联想</string>
+    <string name="label_realme">真我</string>
+    <string name="label_motorola">摩托罗拉</string>
+    <string name="label_xiaomi">小米</string>
+    <string name="label_huawei">华为</string>
+    <string name="label_htc">HTC</string>
+    <string name="label_vivo">VIVO</string>
+    <string name="label_one_plus">一加</string>
+    <string name="label_microsoft">微软</string>
+    <string name="label_nokia">诺基亚</string>
+</resources>
