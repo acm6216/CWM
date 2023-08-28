@@ -17,6 +17,9 @@
 
     <string name="logo_picker_title">Logo</string>
 
+    <string name="menu_clear">移除所有图片</string>
+    <string name="menu_remove">移除此图片</string>
+
     <string name="device_title">左上</string>
     <string name="device_brand">品牌</string>
     <string name="device_model">型号</string>
@@ -37,6 +40,7 @@
 
     <string name="save_status">添加水印中</string>
 
+    <string name="label_smartisan">锤子</string>
     <string name="label_canon">佳能</string>
     <string name="label_nikon">尼康</string>
     <string name="label_sony">索尼</string>
@@ -58,6 +62,7 @@
     <string name="label_ricoh">理光</string>
     <string name="logitech_gaming">LG</string>
     <string name="label_google">谷歌</string>
+    <string name="label_master">GMaster</string>
     <string name="label_lenovo">联想</string>
     <string name="label_realme">真我</string>
     <string name="label_motorola">摩托罗拉</string>
@@ -68,4 +73,6 @@
     <string name="label_one_plus">一加</string>
     <string name="label_microsoft">微软</string>
     <string name="label_nokia">诺基亚</string>
+    <string name="label_nubia">努比亚</string>
+    <string name="label_oppo">OPPO</string>
 </resources>

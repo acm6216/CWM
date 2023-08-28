@@ -1,9 +1,11 @@
 package me.qingshu.cwm
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.setPadding
@@ -14,10 +16,11 @@ import com.google.android.material.card.MaterialCardView
 import me.qingshu.cwm.binding.CardColorBinding
 import me.qingshu.cwm.binding.CardSizeBinding
 import me.qingshu.cwm.binding.DeviceBinding
-import me.qingshu.cwm.binding.LensBinding
 import me.qingshu.cwm.binding.InformationBinding
+import me.qingshu.cwm.binding.LensBinding
 import me.qingshu.cwm.data.UserExif
 import me.qingshu.cwm.databinding.ParamBinding
+
 
 class Param:Fragment() {
 
@@ -60,6 +63,11 @@ class Param:Fragment() {
                 binding.toolbar.navigationIcon?.level = (10000f*offset).toInt()
             }
         )
+        binding.lessonsSheet.treeObserver {
+            val displayMetrics = resources.displayMetrics
+            val height = displayMetrics.heightPixels
+            it.layoutParams.height = (height/10f*6).toInt()
+        }
 
         binding.toolbar.apply {
             setNavigationOnClickListener(::toggle)
@@ -85,6 +93,16 @@ class Param:Fragment() {
         cardSize.bind {
             picture.receiveCardSize(it)
         }
+    }
+
+    private fun <T:View> T.treeObserver(block:((T)->Unit)) {
+        viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                block.invoke(this@treeObserver)
+                this@treeObserver.viewTreeObserver.removeOnPreDrawListener(this)
+                return true
+            }
+        })
     }
 
     private fun apply(view: View) {

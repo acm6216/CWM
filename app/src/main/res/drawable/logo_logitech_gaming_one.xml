@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><!--开通会员可提高反编译速度、资源代码自动转名称，以及激活智能编辑和自动补全功能-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:width="3.1995914dp"
+    android:height="3.2dp"
+    android:viewportWidth="235.82"
+    android:viewportHeight="235.85"
+    android:tint="?attr/colorControlNormal"
+    tools:ignore="VectorRaster">
+
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:fillType="nonZero"
+        android:pathData="m113.15,66.12 l0,103.5 32.84,-0 0,-9.3 -23.35,-0 0,-94.2 -9.49,-0"
+        android:strokeColor="#00000000" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:fillType="nonZero"
+        android:pathData="m80.22,94.41c7.79,-0 14.2,-6.33 14.2,-14.13 0,-7.85 -6.41,-14.19 -14.2,-14.19 -7.79,-0 -14.15,6.34 -14.15,14.19 0,7.81 6.37,14.13 14.15,14.13"
+        android:strokeColor="#00000000" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:fillType="nonZero"
+        android:pathData="m122.64,19.3c-1.29,-0.04 -3.53,-0.04 -4.74,-0.04 -54.43,-0 -98.72,44.19 -98.72,98.65 0,26.34 10.29,51.15 28.88,69.77 18.68,18.66 43.41,29.03 69.84,29.03 26.37,-0 51.14,-10.37 69.8,-29.03 18.59,-18.62 28.82,-43.43 28.82,-69.77l0,-4.51 -70.45,-0 0,9.16 61.1,-0c0,0.18 -0.04,1.19 -0.04,1.4 -3.01,46.6 -41.99,83.38 -89.24,83.38 -23.86,-0 -46.42,-9.26 -63.29,-26.11 -16.89,-16.89 -26.24,-39.41 -26.24,-63.32 0,-23.89 9.35,-46.37 26.24,-63.25 16.86,-16.92 39.43,-26.24 63.29,-26.24 1.06,-0 3.57,0.06 4.74,0.08l0,-9.2"
+        android:strokeColor="#00000000" />
+
+</vector>

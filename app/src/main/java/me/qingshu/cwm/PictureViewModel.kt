@@ -65,6 +65,21 @@ class PictureViewModel : ViewModel() {
         }
     }
 
+    fun removePicture(picture: Picture){
+        viewModelScope.launch {
+            pictureUris.value.filter {
+                picture.uri != it.uri
+            }.also {
+                pictureUris.emit(it)
+            }
+        }
+    }
+    fun removeAllPicture(){
+        viewModelScope.launch {
+            pictureUris.emit(emptyList())
+        }
+    }
+
     val previewPictures = combine(
         pictureUris,
         cardColor,

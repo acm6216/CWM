@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -26,8 +27,18 @@ class Preview : Fragment() {
 
     private val picture: PictureViewModel by activityViewModels()
 
-    private val pictureAdapter = PictureAdapter {
-
+    private val pictureAdapter = PictureAdapter { view,pic ->
+        PopupMenu(view.context,view).apply {
+            menuInflater.inflate(R.menu.option_menu,menu)
+            setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.menu_remove -> picture.removePicture(pic)
+                    else -> picture.removeAllPicture()
+                }
+                true
+            }
+            show()
+        }
     }
 
     override fun onCreateView(
@@ -57,11 +68,11 @@ class Preview : Fragment() {
     }*/
 
     private fun save(view: View){
-        val dialog = SaveStatusDialog().also {
+        SaveStatusDialog().also {
             it.show(childFragmentManager, javaClass.simpleName)
-        }
-        picture.save(view.context,binding.pictureItem){
-            dialog.dismiss()
+            picture.save(view.context,binding.pictureItem){
+                it.dismiss()
+            }
         }
         //requestPermission.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
@@ -80,7 +91,7 @@ class Preview : Fragment() {
         }
     }
 
-    class PictureAdapter(private val click: () -> Unit) :
+    class PictureAdapter(private val click: (View,Picture) -> Unit) :
         ListAdapter<Picture, RecyclerView.ViewHolder>(
             PictureListItem()
         ) {
@@ -106,7 +117,7 @@ class Preview : Fragment() {
         private val binding: PictureMarkBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(picture: Picture, click: () -> Unit) {
+        fun bind(picture: Picture, click: (View,Picture) -> Unit) {
             binding.setMark(picture,click = click)
         }
 

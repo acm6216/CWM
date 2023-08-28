@@ -109,6 +109,10 @@
                             android:id="@+id/card_size"
                             layout="@layout/preference_card_size" />
 
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="128dp"/>
+
                     </androidx.appcompat.widget.LinearLayoutCompat>
                 </androidx.core.widget.NestedScrollView>
 

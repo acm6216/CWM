@@ -40,15 +40,15 @@ class PictureMarkBinding(private val pictureItemBinding: PictureItemBinding) {
         picture: Picture,
         isPreview:Boolean = true,
         bitmap: Bitmap?=null,
-        click: (() -> Unit)? = null
+        click: ((View,Picture) -> Unit)? = null
     ) = binding.apply {
         val size = if(isPreview) picture.cardSize.logoSize.dp else picture.cardSize.logoSizeByBitmap(bitmap!!)
         val textColorValue = ContextCompat.getColor(context,picture.cardColor.textColor())
         val exifHeight = if(isPreview) picture.cardSize.size.dp else picture.cardSize.sizeByBitmap(bitmap!!)
         val ts = if(isPreview) picture.cardSize.textSize else picture.cardSize.textSizeByBitmap(bitmap!!).toFloat()
-        card.setOnClickListener {
-            click?.invoke()
-        }
+       card.setOnClickListener{
+           click?.invoke(it,picture)
+       }
         if (isPreview)
             src.load(picture.uri) {
                 crossfade(true)
