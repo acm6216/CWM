@@ -5,23 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import me.qingshu.cwm.binding.PictureMarkBinding
 import me.qingshu.cwm.data.Picture
 import me.qingshu.cwm.databinding.PictureItemBinding
 import me.qingshu.cwm.databinding.PreviewBinding
 
-class Preview : Fragment() {
+class Preview : BaseFragment() {
 
     private val binding by lazy { PreviewBinding.inflate(layoutInflater) }
 
@@ -49,7 +44,9 @@ class Preview : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding.model = picture
+        binding.lifecycleOwner = this
+        binding.executePendingBindings()
         binding.save.setOnClickListener(::save)
         binding.recyclerView.adapter = pictureAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(view.context)
@@ -69,26 +66,12 @@ class Preview : Fragment() {
 
     private fun save(view: View){
         SaveStatusDialog().also {
-            it.show(childFragmentManager, javaClass.simpleName)
+            //it.show(childFragmentManager, javaClass.simpleName)
             picture.save(view.context,binding.pictureItem){
-                it.dismiss()
+                //it.dismiss()
             }
         }
         //requestPermission.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    }
-
-    private inline fun Fragment.repeatWithViewLifecycle(
-        minState: Lifecycle.State = Lifecycle.State.STARTED,
-        crossinline block: suspend CoroutineScope.() -> Unit
-    ) {
-        if (minState == Lifecycle.State.INITIALIZED || minState == Lifecycle.State.DESTROYED) {
-            throw IllegalArgumentException("minState must be between INITIALIZED and DESTROYED")
-        }
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(minState) {
-                block()
-            }
-        }
     }
 
     class PictureAdapter(private val click: (View,Picture) -> Unit) :

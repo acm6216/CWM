@@ -59,7 +59,7 @@ enum class Logo(
     NUBIA(R.string.label_nubia, R.drawable.logo_nubia, tintEnable = false, padding = 16),
     XPERIA(R.string.label_sony, R.drawable.logo_xperia),
     MASTER(R.string.label_master, R.drawable.logo_master, tintEnable = false),
-    GOOGLE_ONE(R.string.label_google, R.drawable.logo_google_one, tintEnable = false, padding = 16),
+    GOOGLE_ONE(R.string.label_google, R.drawable.logo_google_one, tintEnable = false, padding = 12),
     HUAWEI_ONE(R.string.label_huawei, R.drawable.logo_huawei_one, tintEnable = false),
     SMARTISAN(R.string.label_smartisan, R.drawable.logo_smartisan, tintEnable = false),
     LEICA_ONE(R.string.label_leica, R.drawable.logo_leica_one, tintEnable = false, padding = 16),

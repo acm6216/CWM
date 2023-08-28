@@ -66,6 +66,7 @@ class PictureViewModel : ViewModel() {
     }
 
     fun removePicture(picture: Picture){
+        if(!saveEnable.value) return
         viewModelScope.launch {
             pictureUris.value.filter {
                 picture.uri != it.uri
@@ -75,6 +76,7 @@ class PictureViewModel : ViewModel() {
         }
     }
     fun removeAllPicture(){
+        if(!saveEnable.value) return
         viewModelScope.launch {
             pictureUris.emit(emptyList())
         }
@@ -141,11 +143,13 @@ class PictureViewModel : ViewModel() {
     }
 
     val saveStatus = MutableStateFlow(SaveStatus(pictureCount = 0, currentProgress = 0))
+    val saveEnable = MutableStateFlow(true)
 
     fun save(context: Context, binding: PictureItemBinding,call:()->Unit) {
         val layout = PictureMarkBinding(binding).clear()
         viewModelScope.launch(Dispatchers.IO) {
             saveStatus.emit(SaveStatus(pictureCount = previewPictures.first().size, currentProgress = 0))
+            saveEnable.emit(false)
             previewPictures.first().forEachIndexed { index, it ->
                 val sourceBitmap = context.contentResolver.openInputStream(it.uri)!!.use { stream ->
                     BitmapFactory.decodeStream(stream)
@@ -209,6 +213,7 @@ class PictureViewModel : ViewModel() {
                 saveStatus.emit(SaveStatus(pictureCount = previewPictures.first().size, currentProgress = index+1))
                 delay(250)
             }
+            saveEnable.emit(true)
             call.invoke()
         }
     }

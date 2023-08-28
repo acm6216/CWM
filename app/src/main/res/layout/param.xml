@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="model"
+            type="me.qingshu.cwm.PictureViewModel" />
+    </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/layout_root"
         android:layout_width="match_parent"
@@ -43,6 +49,7 @@
                         android:paddingHorizontal="4dp">
 
                         <ImageView
+                            android:enabled="@{model.saveEnable}"
                             android:id="@+id/logo"
                             android:layout_width="72dp"
                             android:layout_height="32dp"
@@ -58,6 +65,7 @@
                             android:background="?dividerHorizontal" />
 
                         <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:enabled="@{model.saveEnable}"
                             android:id="@+id/picker"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
