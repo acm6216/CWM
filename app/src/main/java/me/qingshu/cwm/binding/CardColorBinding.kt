@@ -15,4 +15,13 @@ class CardColorBinding(private val paramBinding: ParamBinding) {
             })
         }
     }
+
+    fun setCardColor(cardColor: CardColor){
+        when(cardColor){
+            CardColor.WHITE -> R.id.card_color_white
+            else -> R.id.card_color_black
+        }.also {
+            binding.selectRoot.check(it)
+        }
+    }
 }

@@ -17,4 +17,14 @@ class CardSizeBinding(private val paramBinding: ParamBinding) {
             })
         }
     }
+
+    fun setCardSize(cardSize: CardSize){
+        when(cardSize){
+            CardSize.LARGE -> R.id.card_size_large
+            CardSize.MEDIUM -> R.id.card_size_medium
+            else -> R.id.card_size_small
+        }.also {
+            binding.selectRoot.check(it)
+        }
+    }
 }

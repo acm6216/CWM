@@ -97,6 +97,9 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
+                        <include android:id="@+id/template"
+                            layout="@layout/preference_template"/>
+
                         <include
                             android:id="@+id/device"
                             layout="@layout/preference_device" />

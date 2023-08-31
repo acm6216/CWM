@@ -15,6 +15,9 @@
     <string name="lens_param_tips">或者单独设置</string>
     <string name="lens_title">右上</string>
 
+    <string name="template_title">模板</string>
+    <string name="template_name">模板 %d</string>
+
     <string name="logo_picker_title">Logo</string>
 
     <string name="menu_clear">移除所有图片</string>

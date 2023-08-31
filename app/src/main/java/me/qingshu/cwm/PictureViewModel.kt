@@ -64,6 +64,10 @@ class PictureViewModel : ViewModel() {
         }
     }
 
+    val useLogo get() = cardLogo.value
+    val useCardSize get() = cardSize.value
+    val useCardColor get() = cardColor.value
+
     private val userExif = MutableStateFlow(Exif.empty())
     fun receiveUserExif(exif: Exif) {
         viewModelScope.launch {

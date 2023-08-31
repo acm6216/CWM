@@ -17,6 +17,7 @@ import me.qingshu.cwm.binding.CardSizeBinding
 import me.qingshu.cwm.binding.DeviceBinding
 import me.qingshu.cwm.binding.InformationBinding
 import me.qingshu.cwm.binding.LensBinding
+import me.qingshu.cwm.binding.TemplateBinding
 import me.qingshu.cwm.data.Exif
 import me.qingshu.cwm.databinding.ParamBinding
 import me.qingshu.cwm.extensions.treeObserver
@@ -29,11 +30,12 @@ class Param:BaseFragment() {
     private val info by lazy { InformationBinding(binding) }
     private val cardColor by lazy { CardColorBinding(binding) }
     private val cardSize by lazy { CardSizeBinding(binding) }
-    private val picture:PictureViewModel by activityViewModels()
+    private val template by lazy { TemplateBinding(binding) }
+    private val viewModel:PictureViewModel by activityViewModels()
 
     private val picturePicker =
         registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { uri ->
-            picture.receivePicture(uri, requireContext().applicationContext)
+            viewModel.receivePicture(uri, requireContext().applicationContext)
         }
 
     override fun onCreateView(
@@ -46,7 +48,7 @@ class Param:BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.model = picture
+        binding.model = viewModel
         binding.bindLifecycle()
         val behavior = BottomSheetBehavior.from(binding.lessonsSheet).apply {
             isGestureInsetBottomIgnored = true
@@ -54,7 +56,7 @@ class Param:BaseFragment() {
             state = BottomSheetBehavior.STATE_HIDDEN
         }
 
-        fun toggle(view: View) = behavior.toggle(picture.saveEnable.value).apply { view.invalidate() }
+        fun toggle(view: View) = behavior.toggle(viewModel.saveEnable.value).apply { view.invalidate() }
 
         val backCallback = requireActivity()
             .onBackPressedDispatcher.addCallback(viewLifecycleOwner, false) {
@@ -90,16 +92,36 @@ class Param:BaseFragment() {
         device.bind()
         info.bind()
         lens.bind()
+        template.bind(
+            click = {
+                device.setDevice(it.device)
+                info.setInformation(it.information)
+                lens.setLens(it.lens)
+                cardSize.setCardSize(it.cardSize)
+                cardColor.setCardColor(it.cardColor)
+                useLogo(it.logo)
+            },
+            saveCallback = { self ->
+                self.save(
+                    device.getDevice(),
+                    info.getInformation(),
+                    lens.getLens(),
+                    viewModel.useCardSize,
+                    viewModel.useCardColor,
+                    viewModel.useLogo
+                )
+            }
+        )
         cardColor.bind {
-            picture.receiveCardColor(it)
+            viewModel.receiveCardColor(it)
         }
         cardSize.bind {
-            picture.receiveCardSize(it)
+            viewModel.receiveCardSize(it)
         }
 
         repeatWithViewLifecycle {
             launch {
-                picture.saveEnable.collect{
+                viewModel.saveEnable.collect{
                     behavior.isDraggable = it
                 }
             }
@@ -108,14 +130,20 @@ class Param:BaseFragment() {
 
     private fun logoPicker(view: View){
         LogoPicker { logo ->
-            picture.receiveLogo(logo)
-            (view as ImageView).setImageResource(logo.src)
-            view.setPadding(logo.compatPadding().dp)
+            useLogo(logo,view)
         }.show(childFragmentManager, javaClass.simpleName)
     }
 
+    private fun useLogo(logo: Logo) = useLogo(logo,binding.logo)
+
+    private fun useLogo(logo: Logo,view: View){
+        viewModel.receiveLogo(logo)
+        (view as ImageView).setImageResource(logo.src)
+        view.setPadding(logo.compatPadding().dp)
+    }
+
     private fun apply(view: View) {
-        picture.receiveUserExif(
+        viewModel.receiveUserExif(
             Exif(
                 device = device.getDevice(),
                 lens = lens.getLens(),
