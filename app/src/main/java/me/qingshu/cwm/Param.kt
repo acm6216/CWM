@@ -19,6 +19,7 @@ import me.qingshu.cwm.binding.InformationBinding
 import me.qingshu.cwm.binding.LensBinding
 import me.qingshu.cwm.binding.TemplateBinding
 import me.qingshu.cwm.data.Exif
+import me.qingshu.cwm.data.Logo
 import me.qingshu.cwm.databinding.ParamBinding
 import me.qingshu.cwm.extensions.treeObserver
 
@@ -136,7 +137,7 @@ class Param:BaseFragment() {
 
     private fun useLogo(logo: Logo) = useLogo(logo,binding.logo)
 
-    private fun useLogo(logo: Logo,view: View){
+    private fun useLogo(logo: Logo, view: View){
         viewModel.receiveLogo(logo)
         (view as ImageView).setImageResource(logo.src)
         view.setPadding(logo.compatPadding().dp)

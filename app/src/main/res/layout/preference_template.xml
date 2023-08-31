@@ -18,7 +18,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <me.qingshu.cwm.ReadOnlyTextInputLayout
+        <me.qingshu.cwm.view.ReadOnlyTextInputLayout
             android:id="@+id/template_root"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -28,12 +28,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/template_title">
 
-            <me.qingshu.cwm.ReadOnlyTextInputEditText
+            <me.qingshu.cwm.view.ReadOnlyTextInputEditText
                 android:id="@+id/template_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textIsSelectable="false" />
-        </me.qingshu.cwm.ReadOnlyTextInputLayout>
+        </me.qingshu.cwm.view.ReadOnlyTextInputLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/save_template"

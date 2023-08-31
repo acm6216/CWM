@@ -11,6 +11,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import me.qingshu.cwm.data.Logo
 import me.qingshu.cwm.databinding.LogoItemBinding
 import me.qingshu.cwm.databinding.LogoPickerBinding
 
@@ -57,7 +58,7 @@ class LogoPicker(
             (this * scale + 0.5f).toInt()
         }
 
-        fun bind(logo: Logo,click:(Logo)->Unit) = binding.apply{
+        fun bind(logo: Logo, click:(Logo)->Unit) = binding.apply{
             src.setOnClickListener {
                 click.invoke(logo)
             }

@@ -1,4 +1,4 @@
-package me.qingshu.cwm
+package me.qingshu.cwm.view
 
 import android.content.Context
 import android.graphics.Color

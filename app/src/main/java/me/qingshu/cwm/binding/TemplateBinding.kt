@@ -5,7 +5,7 @@ import android.view.View
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import me.qingshu.cwm.Logo
+import me.qingshu.cwm.data.Logo
 import me.qingshu.cwm.R
 import me.qingshu.cwm.data.CardColor
 import me.qingshu.cwm.data.CardSize

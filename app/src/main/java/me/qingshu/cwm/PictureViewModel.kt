@@ -31,6 +31,7 @@ import me.qingshu.cwm.data.Lens
 import me.qingshu.cwm.data.Picture
 import me.qingshu.cwm.data.UriExif
 import me.qingshu.cwm.data.Exif
+import me.qingshu.cwm.data.Logo
 import me.qingshu.cwm.databinding.PictureItemBinding
 import me.qingshu.cwm.extensions.aperture
 import me.qingshu.cwm.extensions.focalLength

@@ -1,7 +1,8 @@
-package me.qingshu.cwm
+package me.qingshu.cwm.data
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import me.qingshu.cwm.R
 
 enum class Logo(
     @StringRes val label: Int,
@@ -72,7 +73,7 @@ enum class Logo(
 
     fun iconPadding() = when (this) {
         DJI, FUJIFILM, LEICA_ONE, GOOGLE_ONE, NUBIA, HTC -> padding / 4
-        PANASONIC, OLYMPUS, SIGMA, LUMIX, MOTOROLA_NEW,LG_ONE -> padding / 2
+        PANASONIC, OLYMPUS, SIGMA, LUMIX, MOTOROLA_NEW, LG_ONE -> padding / 2
         NIKON -> -2
         else -> compatPadding()
     }

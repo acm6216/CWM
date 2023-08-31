@@ -1,7 +1,5 @@
 package me.qingshu.cwm.data
 
-import me.qingshu.cwm.Logo
-
 data class Template(
     val logo: Logo,
     val device: Device,

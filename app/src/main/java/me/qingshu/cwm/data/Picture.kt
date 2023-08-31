@@ -1,7 +1,6 @@
 package me.qingshu.cwm.data
 
 import android.net.Uri
-import me.qingshu.cwm.Logo
 
 data class Picture(
     val uri: Uri,
