@@ -30,9 +30,11 @@ import me.qingshu.cwm.data.Information
 import me.qingshu.cwm.data.Lens
 import me.qingshu.cwm.data.Picture
 import me.qingshu.cwm.data.UriExif
-import me.qingshu.cwm.data.UserExif
+import me.qingshu.cwm.data.Exif
 import me.qingshu.cwm.databinding.PictureItemBinding
-import kotlin.math.ceil
+import me.qingshu.cwm.extensions.aperture
+import me.qingshu.cwm.extensions.focalLength
+import me.qingshu.cwm.extensions.shutter
 
 class PictureViewModel : ViewModel() {
 
@@ -62,8 +64,8 @@ class PictureViewModel : ViewModel() {
         }
     }
 
-    private val userExif = MutableStateFlow(UserExif.empty())
-    fun receiveUserExif(exif: UserExif) {
+    private val userExif = MutableStateFlow(Exif.empty())
+    fun receiveUserExif(exif: Exif) {
         viewModelScope.launch {
             userExif.emit(exif)
         }
@@ -74,7 +76,7 @@ class PictureViewModel : ViewModel() {
             if(picture.userExif.lens.isEmpty())
                 _message.trySend(R.string.use_lens_message_error)
             else userExif.value.let {
-                UserExif(
+                Exif(
                     device = it.device,
                     lens = picture.userExif.lens,
                     information = it.information
@@ -88,7 +90,7 @@ class PictureViewModel : ViewModel() {
             if(picture.userExif.information.date.isEmpty())
                 _message.trySend(R.string.use_date_message_error)
             else userExif.value.let {
-                UserExif(
+                Exif(
                     device = it.device,
                     lens = it.lens,
                     information = Information(
@@ -105,7 +107,7 @@ class PictureViewModel : ViewModel() {
             if(picture.userExif.device.isEmpty())
                 _message.trySend(R.string.use_device_message_error)
             else userExif.value.let {
-                UserExif(
+                Exif(
                     device = picture.userExif.device,
                     lens = it.lens,
                     information = it.information
@@ -119,7 +121,7 @@ class PictureViewModel : ViewModel() {
             if(picture.userExif.information.location.isEmpty())
                 _message.trySend(R.string.use_location_message_error)
             else userExif.value.let {
-                UserExif(
+                Exif(
                     device = it.device,
                     lens = it.lens,
                     information = Information(
@@ -158,7 +160,7 @@ class PictureViewModel : ViewModel() {
             val targetInfo = Information.combine(it.userExif.information, exif.information)
             Picture(
                 it.uri, cardSize, cardColor,
-                logo, UserExif(targetDevice, targetLens, targetInfo)
+                logo, Exif(targetDevice, targetLens, targetInfo)
             )
         }
     }
@@ -182,7 +184,7 @@ class PictureViewModel : ViewModel() {
                     //val longitudeRef = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF) ?: ""
                     UriExif(
                         uri,
-                        UserExif(
+                        Exif(
                             device = Device(brand = "", model = device),
                             lens = Lens(
                                 paramVisible = false,
@@ -220,7 +222,7 @@ class PictureViewModel : ViewModel() {
                 launch(Dispatchers.Main) {
                     layout.setMark(picture = it, isPreview = false, bitmap = sourceBitmap)
                 }
-                delay(550)
+                delay(250)
                 val bitmap = Bitmap.createBitmap(
                     sourceBitmap.width,
                     size,
@@ -244,13 +246,7 @@ class PictureViewModel : ViewModel() {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
                     MediaStore.Images.Media.insertImage(
                         context.contentResolver, newBitmap, file?.name?:"", "Camera Water Mark"
-                    )/*.also { state ->
-                        if (state.isNotEmpty()) {
-                            Log.d("TAG", "save: 保存成功！")
-                        } else {
-                            Log.d("TAG", "save: 保存失败！")
-                        }
-                    }*/
+                    )
                 else context.contentResolver.insert(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI, ContentValues().apply {
                         put(MediaStore.Images.Media.DISPLAY_NAME, file?.name ?: "")
@@ -259,13 +255,7 @@ class PictureViewModel : ViewModel() {
                     }
                 )?.also { uri ->
                     context.contentResolver.openOutputStream(uri)?.use { os ->
-                        newBitmap.compress(Bitmap.CompressFormat.JPEG, 100, os)/*.also { state ->
-                            if (state) {
-                                Log.d("TAG", "save: 保存成功！")
-                            } else {
-                                Log.d("TAG", "save: 保存失败！")
-                            }
-                        }*/
+                        newBitmap.compress(Bitmap.CompressFormat.JPEG, 100, os)
                     }
                 }
                 delay(250)
@@ -273,39 +263,6 @@ class PictureViewModel : ViewModel() {
             saveEnable.emit(true)
             if(previewPictures.first().isNotEmpty()) _message.trySend(R.string.save_status_completed)
             else _message.trySend(R.string.save_status_error)
-        }
-    }
-
-    private fun String.focalLength(): String {
-        val a = substring(0, indexOf('/')).toFloat()
-        val b = substring(indexOf('/') + 1, length).toFloat()
-        return (a / b).toInt().toString()
-    }
-
-    private fun String.shutter(): String {
-        val v = this.toDouble()
-        return if (v > 0) "1/${ceil(1 / v).toInt()}"
-        else this
-    }
-
-    private fun String.aperture(): String {
-        val a = substring(0, indexOf('/')).toFloat()
-        val b = substring(indexOf('/') + 1, length).toFloat()
-        val result = a / b
-        return when {
-            result > 1.8f && result < 2f -> "2"
-            result > 1.2f && result < 1.5f -> "1.4"
-            result > 1.5f && result < 1.9f -> "1.8"
-            result > 1f && result < 1.4f -> "1.2"
-            result > 4.9 && result < 8 -> "5.6"
-            result > 2f && result < 5.6f -> "4"
-            result > 5.6f && result <= 8f -> "8"
-            result > 8f && result <= 11f -> "11"
-            result > 11f && result <= 16f -> "16"
-            result > 16f && result <= 22f -> "22"
-            result > 22f && result <= 45f -> "45"
-            result > 45 -> "64"
-            else -> "0.95"
         }
     }
 

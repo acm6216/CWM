@@ -19,6 +19,7 @@ import me.qingshu.cwm.binding.PictureMarkBinding
 import me.qingshu.cwm.data.Picture
 import me.qingshu.cwm.databinding.PictureItemBinding
 import me.qingshu.cwm.databinding.PreviewBinding
+import me.qingshu.cwm.extensions.fadeToVisibilityUnsafe
 
 class Preview : BaseFragment() {
 

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.widget.ImageView
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,8 +17,9 @@ import me.qingshu.cwm.binding.CardSizeBinding
 import me.qingshu.cwm.binding.DeviceBinding
 import me.qingshu.cwm.binding.InformationBinding
 import me.qingshu.cwm.binding.LensBinding
-import me.qingshu.cwm.data.UserExif
+import me.qingshu.cwm.data.Exif
 import me.qingshu.cwm.databinding.ParamBinding
+import me.qingshu.cwm.extensions.treeObserver
 
 class Param:BaseFragment() {
 
@@ -114,19 +114,9 @@ class Param:BaseFragment() {
         }.show(childFragmentManager, javaClass.simpleName)
     }
 
-    private fun <T:View> T.treeObserver(block:((T)->Unit)) {
-        viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-            override fun onPreDraw(): Boolean {
-                block.invoke(this@treeObserver)
-                this@treeObserver.viewTreeObserver.removeOnPreDrawListener(this)
-                return true
-            }
-        })
-    }
-
     private fun apply(view: View) {
         picture.receiveUserExif(
-            UserExif(
+            Exif(
                 device = device.getDevice(),
                 lens = lens.getLens(),
                 information = info.getInformation()

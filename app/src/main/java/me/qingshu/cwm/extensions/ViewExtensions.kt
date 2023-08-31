@@ -1,29 +1,13 @@
-package me.qingshu.cwm
+package me.qingshu.cwm.extensions
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.content.Context
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewPropertyAnimator
 import android.view.ViewTreeObserver
-import android.view.animation.AnimationUtils
-import android.view.animation.Interpolator
-import androidx.annotation.IntegerRes
-import androidx.annotation.InterpolatorRes
-import androidx.core.graphics.Insets
 import androidx.core.view.*
-import androidx.databinding.BindingAdapter
 import kotlinx.coroutines.*
 import kotlin.coroutines.resume
-
-fun Context.getInteger(@IntegerRes id: Int) = resources.getInteger(id)
-
-val Context.shortAnimTime: Int
-    get() = getInteger(android.R.integer.config_shortAnimTime)
-
-fun Context.getInterpolator(@InterpolatorRes id: Int): Interpolator =
-    AnimationUtils.loadInterpolator(this,id)
 
 @OptIn(DelicateCoroutinesApi::class)
 fun View.fadeToVisibilityUnsafe(visible: Boolean, force: Boolean = false, gone: Boolean = false) {
@@ -94,3 +78,12 @@ suspend fun ViewPropertyAnimator.awaitEnd(): Unit =
             }
         })
     }
+ fun <T:View> T.treeObserver(block:((T)->Unit)) {
+    viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+        override fun onPreDraw(): Boolean {
+            block.invoke(this@treeObserver)
+            this@treeObserver.viewTreeObserver.removeOnPreDrawListener(this)
+            return true
+        }
+    })
+}

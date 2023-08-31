@@ -1,6 +1,6 @@
 package me.qingshu.cwm.data
 
-val EMPTY:String get() = ""
+import me.qingshu.cwm.extensions.EMPTY
 
 data class Lens(
     val param: String = EMPTY,
@@ -23,4 +23,8 @@ data class Lens(
     }
 
     fun isEmpty() = param.isEmpty() && focalDistance.isEmpty() && aperture.isEmpty() && shutter.isEmpty() && iso.isEmpty()
+
+    companion object{
+        val empty get() = Lens(param = EMPTY, focalDistance = EMPTY, aperture = EMPTY, shutter = EMPTY, iso = EMPTY)
+    }
 }
