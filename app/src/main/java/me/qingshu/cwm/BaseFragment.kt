@@ -1,5 +1,6 @@
 package me.qingshu.cwm
 
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -21,5 +22,10 @@ abstract class BaseFragment:Fragment(){
                 block()
             }
         }
+    }
+
+    protected fun <V:ViewDataBinding> V.bindLifecycle(){
+        lifecycleOwner = this@BaseFragment
+        executePendingBindings()
     }
 }

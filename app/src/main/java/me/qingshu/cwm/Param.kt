@@ -1,17 +1,17 @@
 package me.qingshu.cwm
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.ImageView
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.setPadding
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.card.MaterialCardView
 import kotlinx.coroutines.launch
 import me.qingshu.cwm.binding.CardColorBinding
 import me.qingshu.cwm.binding.CardSizeBinding
@@ -31,11 +31,10 @@ class Param:BaseFragment() {
     private val cardSize by lazy { CardSizeBinding(binding) }
     private val picture:PictureViewModel by activityViewModels()
 
-    private val picturePicker = registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { uri ->
-        picture.receivePicture(uri,requireContext().applicationContext)
-    }
-
-    private lateinit var behavior: BottomSheetBehavior<MaterialCardView>
+    private val picturePicker =
+        registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { uri ->
+            picture.receivePicture(uri, requireContext().applicationContext)
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,15 +42,19 @@ class Param:BaseFragment() {
         savedInstanceState: Bundle?
     ): View = binding.root
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.model = picture
-        binding.lifecycleOwner = this
-        binding.executePendingBindings()
-        behavior = BottomSheetBehavior.from(binding.lessonsSheet)
-        behavior.isGestureInsetBottomIgnored = true
-        behavior.expandedOffset = 0
-        behavior.state = BottomSheetBehavior.STATE_HIDDEN
+        binding.bindLifecycle()
+        val behavior = BottomSheetBehavior.from(binding.lessonsSheet).apply {
+            isGestureInsetBottomIgnored = true
+            expandedOffset = 0
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
+        fun toggle(view: View) = behavior.toggle(picture.saveEnable.value).apply { view.invalidate() }
 
         val backCallback = requireActivity()
             .onBackPressedDispatcher.addCallback(viewLifecycleOwner, false) {
@@ -75,17 +78,15 @@ class Param:BaseFragment() {
             setNavigationOnClickListener(::toggle)
             setOnClickListener(::toggle)
         }
-        binding.logo.apply {
-            setOnClickListener {
-                LogoPicker { logo ->
-                    picture.receiveLogo(logo)
-                    setImageResource(logo.src)
-                    setPadding(logo.compatPadding().dp)
-                }.show(childFragmentManager, javaClass.simpleName)
-            }
+        binding.logo.setOnClickListener(::logoPicker)
+
+        binding.root.setOnTouchListener{ _,_ ->
+            behavior.close()
+            false
         }
         binding.apply.setOnClickListener(::apply)
         binding.picker.setOnClickListener { picturePicker.launch(arrayOf("image/*")) }
+
         device.bind()
         info.bind()
         lens.bind()
@@ -103,6 +104,14 @@ class Param:BaseFragment() {
                 }
             }
         }
+    }
+
+    private fun logoPicker(view: View){
+        LogoPicker { logo ->
+            picture.receiveLogo(logo)
+            (view as ImageView).setImageResource(logo.src)
+            view.setPadding(logo.compatPadding().dp)
+        }.show(childFragmentManager, javaClass.simpleName)
     }
 
     private fun <T:View> T.treeObserver(block:((T)->Unit)) {
@@ -126,12 +135,11 @@ class Param:BaseFragment() {
         view.invalidate()
     }
 
-    private fun toggle(view: View) = behavior.toggle().apply { view.invalidate() }
-
-    private fun <T:View> BottomSheetBehavior<T>.toggle(){
-        if(picture.saveEnable.value)
-        state = if(state==BottomSheetBehavior.STATE_EXPANDED) BottomSheetBehavior.STATE_COLLAPSED
-        else BottomSheetBehavior.STATE_EXPANDED
+    private fun <T:View> BottomSheetBehavior<T>.toggle(isEnable:Boolean){
+        if(isEnable) {
+            state = if (state == BottomSheetBehavior.STATE_EXPANDED) BottomSheetBehavior.STATE_COLLAPSED
+                else BottomSheetBehavior.STATE_EXPANDED
+        }
     }
 
     private fun <T:View> BottomSheetBehavior<T>.close(){

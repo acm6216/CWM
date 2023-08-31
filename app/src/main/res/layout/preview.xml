@@ -9,10 +9,17 @@
             type="me.qingshu.cwm.PictureViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:paddingBottom="?actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:visibility="gone"
+            android:id="@+id/indicator"
+            android:indeterminate="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -22,6 +29,7 @@
             android:paddingEnd="?android:attr/listPreferredItemPaddingEnd">
 
             <TextView
+                android:layout_marginTop="2dp"
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -43,6 +51,7 @@
                 app:layout_constraintTop_toBottomOf="@id/name" />
 
             <TextView
+                android:id="@+id/copyright"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
@@ -76,17 +85,16 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:enabled="@{model.saveEnable}"
             android:id="@+id/save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            app:icon="@drawable/ic_download"
+            android:src="@drawable/ic_download"
             android:text="@string/save"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_gravity="top|end"
             tools:ignore="ContentDescription" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

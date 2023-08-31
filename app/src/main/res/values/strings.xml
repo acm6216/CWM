@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">CWM</string>
     <string name="label_name">Camera Water Mark</string>
-    <string name="label_version">版本：1.0</string>
-    <string name="label_licence">copyright © 2023 QingShu All Right Reserved.</string>
+    <string name="label_version">版本：1.1</string>
+    <string name="label_licence">Copyright © 2023 QingShu All Right Reserved.</string>
     <string name="save">保存到设备</string>
     <string name="apply">应用</string>
     <string name="add">添加</string>
@@ -19,6 +19,15 @@
 
     <string name="menu_clear">移除所有图片</string>
     <string name="menu_remove">移除此图片</string>
+    <string name="menu_lens_param">使用此镜头</string>
+    <string name="menu_date_param">使用此日期</string>
+    <string name="menu_location_param">使用此位置</string>
+    <string name="menu_device_param">使用此设备</string>
+
+    <string name="use_lens_message_error">没有读取到此图片的镜头参数</string>
+    <string name="use_date_message_error">没有读取到此图片的日期参数</string>
+    <string name="use_device_message_error">没有读取到此图片的设备参数</string>
+    <string name="use_location_message_error">没有读取到此图片的位置参数</string>
 
     <string name="device_title">左上</string>
     <string name="device_brand">品牌</string>
@@ -39,6 +48,8 @@
     <string name="card_color_black">黑色</string>
 
     <string name="save_status">添加水印中</string>
+    <string name="save_status_completed">已保存</string>
+    <string name="save_status_error">没有图片</string>
 
     <string name="label_smartisan">锤子</string>
     <string name="label_canon">佳能</string>
