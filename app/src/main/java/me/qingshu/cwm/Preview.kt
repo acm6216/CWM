@@ -99,8 +99,17 @@ class Preview : BaseFragment() {
         ListAdapter<Picture, RecyclerView.ViewHolder>(
             PictureListItem()
         ) {
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-            PictureViewHolder.from(PictureMarkBinding(PictureItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)))
+            PictureViewHolder.from(
+                PictureMarkBinding(
+                    PictureItemBinding.inflate(
+                        LayoutInflater.from(
+                            parent.context
+                        ), parent, false
+                    )
+                )
+            )
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) =
             (holder as PictureViewHolder).bind(getItem(position), click)

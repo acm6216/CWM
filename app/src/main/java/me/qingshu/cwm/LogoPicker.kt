@@ -50,15 +50,17 @@ class LogoPicker(
             = holder.bind(Logo.values()[position],click)
     }
 
-    class LogoViewHolder(private val binding: LogoItemBinding):RecyclerView.ViewHolder(binding.root){
+    class LogoViewHolder(private val binding: LogoItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         private inline val Int.dp: Int get() = run { toFloat().dp }
-        private inline val Float.dp: Int get() = run {
-            val scale: Float = binding.root.resources.displayMetrics.density
-            (this * scale + 0.5f).toInt()
-        }
+        private inline val Float.dp: Int
+            get() = run {
+                val scale: Float = binding.root.resources.displayMetrics.density
+                (this * scale + 0.5f).toInt()
+            }
 
-        fun bind(logo: Logo, click:(Logo)->Unit) = binding.apply{
+        fun bind(logo: Logo, click: (Logo) -> Unit) = binding.apply {
             src.setOnClickListener {
                 click.invoke(logo)
             }
@@ -67,8 +69,8 @@ class LogoPicker(
             src.setPadding(logo.padding.dp)
         }.executePendingBindings()
 
-        companion object{
-            fun from(binding:LogoItemBinding) = LogoViewHolder(binding)
+        companion object {
+            fun from(binding: LogoItemBinding) = LogoViewHolder(binding)
         }
     }
 }

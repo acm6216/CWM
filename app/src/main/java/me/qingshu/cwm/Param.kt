@@ -31,7 +31,6 @@ class Param:BaseFragment() {
     private val info by lazy { InformationBinding(binding) }
     private val cardColor by lazy { CardColorBinding(binding) }
     private val cardSize by lazy { CardSizeBinding(binding) }
-    private val template by lazy { TemplateBinding(binding) }
     private val viewModel:PictureViewModel by activityViewModels()
 
     private val picturePicker =
@@ -93,7 +92,7 @@ class Param:BaseFragment() {
         device.bind()
         info.bind()
         lens.bind()
-        template.bind(
+        TemplateBinding(binding).bind(
             click = {
                 device.setDevice(it.device)
                 info.setInformation(it.information)
