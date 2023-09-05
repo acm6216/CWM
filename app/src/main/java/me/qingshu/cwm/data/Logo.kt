@@ -67,7 +67,9 @@ enum class Logo(
     HASSELBLAD_ONE(R.string.label_hasselblad, R.drawable.logo_hasselblad_two, padding = 0),
     HASSELBLAD_TWO(R.string.label_hasselblad, R.drawable.logo_hasselblad_one, padding = 16),
     SAMSUNG_ONE(R.string.label_samsung, R.drawable.logo_samsung_one, tintEnable = true),
-    MOTOROLA_NEW(R.string.label_motorola, R.drawable.logo_motorola_new, padding = 8);
+    MOTOROLA_NEW(R.string.label_motorola, R.drawable.logo_motorola_new, padding = 8),
+    HUAWEI_TWO(R.string.label_huawei, R.drawable.logo_huawei_two, padding = 8, tintEnable = false),
+    HUAWEI_THREE(R.string.label_huawei, R.drawable.logo_huawei_three, padding = 8, tintEnable = false);
 
     fun compatPadding() = if (padding >= 16) padding / 2 else if (padding >= 12) 0 else padding
 

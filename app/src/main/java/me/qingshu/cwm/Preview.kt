@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import me.qingshu.cwm.binding.PictureMarkBinding
@@ -20,6 +21,7 @@ import me.qingshu.cwm.data.Picture
 import me.qingshu.cwm.databinding.PictureItemBinding
 import me.qingshu.cwm.databinding.PreviewBinding
 import me.qingshu.cwm.extensions.fadeToVisibilityUnsafe
+import me.qingshu.cwm.extensions.treeObserver
 
 class Preview : BaseFragment() {
 
@@ -131,7 +133,20 @@ class Preview : BaseFragment() {
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(picture: Picture, click: (View,Picture) -> Unit) {
-            binding.setMark(picture,click = click)
+            val src = binding.src
+            src.treeObserver {
+                binding.setMark(picture,click = click, height = it.height, width = it.width)
+            }
+
+            src.load(picture.uri) {
+                crossfade(true)
+                target {
+                    val width = src.width.toFloat()
+                    val height = it.intrinsicHeight*width/it.intrinsicWidth
+                    src.setImageDrawable(it)
+                    binding.setMark(picture,click = click, height = height.toInt(), width = width.toInt())
+                }
+            }
         }
 
         companion object {

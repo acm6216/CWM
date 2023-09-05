@@ -7,5 +7,5 @@ data class Picture(
     val cardSize: CardSize,
     val cardColor: CardColor,
     val logo: Logo,
-    val userExif: Exif
+    val userExif: SimpleExif
 )

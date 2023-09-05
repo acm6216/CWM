@@ -60,9 +60,11 @@ class TemplateBinding(private val paramBinding: ParamBinding) {
             cardColor = cardColor,
             logo = logo
         ).also {
-            Template.USE.add(index, it)
-            Template.USE.removeAt(index + 1)
-            Template.USE.store()
+            Template.USE.run {
+                add(index, it)
+                removeAt(index + 1)
+                store()
+            }
         }
     }
 

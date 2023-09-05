@@ -1,6 +1,11 @@
 package me.qingshu.cwm.data
 
+import androidx.exifinterface.media.ExifInterface
 import me.qingshu.cwm.extensions.EMPTY
+import me.qingshu.cwm.extensions.aperture
+import me.qingshu.cwm.extensions.focalLength
+import me.qingshu.cwm.extensions.iso
+import me.qingshu.cwm.extensions.shutter
 
 data class Lens(
     val param: String = EMPTY,
@@ -26,5 +31,14 @@ data class Lens(
 
     companion object{
         val empty get() = Lens(param = EMPTY, focalDistance = EMPTY, aperture = EMPTY, shutter = EMPTY, iso = EMPTY)
+
+        fun from(exifInterface: ExifInterface) = Lens(
+            paramVisible = false,
+            param = EMPTY,
+            iso = exifInterface.iso(),
+            shutter = exifInterface.shutter(),
+            aperture = exifInterface.aperture(),
+            focalDistance = exifInterface.focalLength()
+        )
     }
 }

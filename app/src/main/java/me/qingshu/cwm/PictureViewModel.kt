@@ -25,17 +25,12 @@ import kotlinx.coroutines.launch
 import me.qingshu.cwm.binding.PictureMarkBinding
 import me.qingshu.cwm.data.CardColor
 import me.qingshu.cwm.data.CardSize
-import me.qingshu.cwm.data.Device
 import me.qingshu.cwm.data.Information
-import me.qingshu.cwm.data.Lens
 import me.qingshu.cwm.data.Picture
 import me.qingshu.cwm.data.UriExif
-import me.qingshu.cwm.data.Exif
+import me.qingshu.cwm.data.SimpleExif
 import me.qingshu.cwm.data.Logo
 import me.qingshu.cwm.databinding.PictureItemBinding
-import me.qingshu.cwm.extensions.aperture
-import me.qingshu.cwm.extensions.focalLength
-import me.qingshu.cwm.extensions.shutter
 
 class PictureViewModel : ViewModel() {
 
@@ -69,10 +64,10 @@ class PictureViewModel : ViewModel() {
     val useCardSize get() = cardSize.value
     val useCardColor get() = cardColor.value
 
-    private val userExif = MutableStateFlow(Exif.empty())
-    fun receiveUserExif(exif: Exif) {
+    private val userExif = MutableStateFlow(SimpleExif.empty())
+    fun receiveUserExif(simpleExif: SimpleExif) {
         viewModelScope.launch {
-            userExif.emit(exif)
+            userExif.emit(simpleExif)
         }
     }
 
@@ -81,7 +76,7 @@ class PictureViewModel : ViewModel() {
             if(picture.userExif.lens.isEmpty())
                 _message.trySend(R.string.use_lens_message_error)
             else userExif.value.let {
-                Exif(
+                SimpleExif(
                     device = it.device,
                     lens = picture.userExif.lens,
                     information = it.information
@@ -95,7 +90,7 @@ class PictureViewModel : ViewModel() {
             if(picture.userExif.information.date.isEmpty())
                 _message.trySend(R.string.use_date_message_error)
             else userExif.value.let {
-                Exif(
+                SimpleExif(
                     device = it.device,
                     lens = it.lens,
                     information = Information(
@@ -112,7 +107,7 @@ class PictureViewModel : ViewModel() {
             if(picture.userExif.device.isEmpty())
                 _message.trySend(R.string.use_device_message_error)
             else userExif.value.let {
-                Exif(
+                SimpleExif(
                     device = picture.userExif.device,
                     lens = it.lens,
                     information = it.information
@@ -126,7 +121,7 @@ class PictureViewModel : ViewModel() {
             if(picture.userExif.information.location.isEmpty())
                 _message.trySend(R.string.use_location_message_error)
             else userExif.value.let {
-                Exif(
+                SimpleExif(
                     device = it.device,
                     lens = it.lens,
                     information = Information(
@@ -160,12 +155,12 @@ class PictureViewModel : ViewModel() {
         cardLogo, userExif
     ) { uris, cardColor, cardSize, logo, exif ->
         uris.map {
-            val targetDevice = if (it.userExif.device.isEmpty()) exif.device else it.userExif.device
-            val targetLens = if (it.userExif.lens.isEmpty()) exif.lens else it.userExif.lens
-            val targetInfo = Information.combine(it.userExif.information, exif.information)
+            val targetDevice = if (it.exif.device.isEmpty()) exif.device else it.exif.device
+            val targetLens = if (it.exif.lens.isEmpty()) exif.lens else it.exif.lens
+            val targetInfo = Information.combine(it.exif.information, exif.information)
             Picture(
                 it.uri, cardSize, cardColor,
-                logo, Exif(targetDevice, targetLens, targetInfo)
+                logo, SimpleExif(targetDevice, targetLens, targetInfo)
             )
         }
     }
@@ -175,33 +170,7 @@ class PictureViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             uris.map { uri ->
                 context.contentResolver.openInputStream(uri)!!.use {
-                    val exif = ExifInterface(it)
-                    val shutter =
-                        exif.getAttribute(ExifInterface.TAG_EXPOSURE_TIME)?.shutter() ?: ""
-                    val iso = exif.getAttribute(ExifInterface.TAG_PHOTOGRAPHIC_SENSITIVITY) ?: ""
-                    val date = exif.getAttribute(ExifInterface.TAG_DATETIME) ?: ""
-                    val device = exif.getAttribute(ExifInterface.TAG_MODEL) ?: ""
-                    val aperture =
-                        exif.getAttribute(ExifInterface.TAG_APERTURE_VALUE)?.aperture() ?: ""
-                    val focalLength =
-                        exif.getAttribute(ExifInterface.TAG_FOCAL_LENGTH)?.focalLength() ?: ""
-                    //val latitudeRef = exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF) ?: ""
-                    //val longitudeRef = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF) ?: ""
-                    UriExif(
-                        uri,
-                        Exif(
-                            device = Device(brand = "", model = device),
-                            lens = Lens(
-                                paramVisible = false,
-                                param = "",
-                                focalDistance = focalLength,
-                                aperture = aperture,
-                                shutter = shutter,
-                                iso = iso
-                            ),
-                            information = Information(date = date, location = "")
-                        )
-                    )
+                    UriExif(uri, SimpleExif.from(ExifInterface(it)))
                 }
             }.also {
                 pictureUris.emit(it)
@@ -225,7 +194,7 @@ class PictureViewModel : ViewModel() {
                     width = sourceBitmap.width
                 }
                 launch(Dispatchers.Main) {
-                    layout.setMark(picture = it, isPreview = false, bitmap = sourceBitmap)
+                    layout.setMark(picture = it, height = sourceBitmap.height, width = sourceBitmap.width)
                 }
                 delay(250)
                 val bitmap = Bitmap.createBitmap(

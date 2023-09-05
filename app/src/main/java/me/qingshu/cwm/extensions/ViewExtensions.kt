@@ -13,6 +13,7 @@ import kotlin.coroutines.resume
 fun View.fadeToVisibilityUnsafe(visible: Boolean, force: Boolean = false, gone: Boolean = false) {
     GlobalScope.launch(Dispatchers.Main.immediate) { fadeToVisibility(visible, force, gone) }
 }
+
 suspend fun View.fadeToVisibility(visible: Boolean, force: Boolean = false, gone: Boolean = false) {
     if (visible) {
         fadeIn(force)
@@ -20,6 +21,7 @@ suspend fun View.fadeToVisibility(visible: Boolean, force: Boolean = false, gone
         fadeOut(force, gone)
     }
 }
+
 suspend fun View.fadeIn(force: Boolean = false) {
     if (!isVisible) {
         alpha = 0f
@@ -37,6 +39,7 @@ suspend fun View.fadeIn(force: Boolean = false) {
         awaitEnd()
     }
 }
+
 suspend fun View.fadeOut(force: Boolean = false, gone: Boolean = false) {
     animate().run {
         alpha(0f)
@@ -78,6 +81,7 @@ suspend fun ViewPropertyAnimator.awaitEnd(): Unit =
             }
         })
     }
+
  fun <T:View> T.treeObserver(block:((T)->Unit)) {
     viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
         override fun onPreDraw(): Boolean {

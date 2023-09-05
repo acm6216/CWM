@@ -9,6 +9,10 @@ class LensBinding(private val paramBinding: ParamBinding) {
     private val binding get() = paramBinding.lens
 
     private var isCheck:Boolean = true
+        set(value) {
+            field = value
+            binding.paramRoot.setEndIconDrawable(updateEndIcon())
+        }
 
     private fun updateEndIcon() = if (isCheck) R.drawable.ic_visibility_on else R.drawable.ic_visibility_off
 

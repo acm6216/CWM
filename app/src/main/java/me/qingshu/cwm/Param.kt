@@ -18,7 +18,7 @@ import me.qingshu.cwm.binding.DeviceBinding
 import me.qingshu.cwm.binding.InformationBinding
 import me.qingshu.cwm.binding.LensBinding
 import me.qingshu.cwm.binding.TemplateBinding
-import me.qingshu.cwm.data.Exif
+import me.qingshu.cwm.data.SimpleExif
 import me.qingshu.cwm.data.Logo
 import me.qingshu.cwm.databinding.ParamBinding
 import me.qingshu.cwm.extensions.treeObserver
@@ -144,7 +144,7 @@ class Param:BaseFragment() {
 
     private fun apply(view: View) {
         viewModel.receiveUserExif(
-            Exif(
+            SimpleExif(
                 device = device.getDevice(),
                 lens = lens.getLens(),
                 information = info.getInformation()

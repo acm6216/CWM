@@ -9,7 +9,7 @@ data class Template(
     val cardColor: CardColor
 ){
     companion object{
-        val MAX get() = 6
+        val MAX get() = 8
         val USE = ArrayList<Template>()
     }
 }
