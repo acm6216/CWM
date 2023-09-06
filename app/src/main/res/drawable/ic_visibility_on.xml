@@ -9,6 +9,7 @@
 
     <path
         android:fillColor="@android:color/white"
-        android:pathData="@string/path_password_eye"/>
+        android:pathData="@string/path_password_eye"
+        tools:ignore="PrivateResource" />
 
 </vector>

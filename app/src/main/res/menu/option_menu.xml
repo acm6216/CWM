@@ -9,7 +9,9 @@
     <item
         android:id="@+id/menu_date_param"
         android:title="@string/menu_date_param"/>
+    <!-- 无法获取图片准确位置 -->
     <item
+        android:visible="false"
         android:id="@+id/menu_location_param"
         android:title="@string/menu_location_param"/>
     <item
