@@ -3,12 +3,6 @@ package me.qingshu.cwm.data
 enum class CardSize {
     LARGE,MEDIUM,SMALL;
 
-    val size get() = when(this){
-        LARGE -> 48
-        MEDIUM -> 40
-        else -> 32
-    }
-
     private fun base(height:Int,width:Int) = when(this){
         LARGE -> if(height<width) 6f else 11f
         MEDIUM -> if(height<width) 7.5f else 12f

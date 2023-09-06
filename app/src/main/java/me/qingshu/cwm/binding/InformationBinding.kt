@@ -1,7 +1,7 @@
 package me.qingshu.cwm.binding
 
 import android.annotation.SuppressLint
-import android.view.View
+import me.qingshu.cwm.extensions.setOnClickListener
 import me.qingshu.cwm.data.Information
 import me.qingshu.cwm.databinding.ParamBinding
 import java.text.SimpleDateFormat
@@ -17,7 +17,7 @@ class InformationBinding(private val paramBinding: ParamBinding) {
     }
 
     @SuppressLint("SimpleDateFormat")
-    private fun bindDate(view: View){
+    private fun bindDate(){
         SimpleDateFormat("yyyy.MM.dd")
             .format(Date(System.currentTimeMillis())).also {
                 binding.date.setText(it)
@@ -25,7 +25,7 @@ class InformationBinding(private val paramBinding: ParamBinding) {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun locationInfo(view: View){
+    private fun locationInfo(){
         val result = "${binding.location.text} · "
         binding.location.setText(result)
         binding.location.setSelection(result.length)

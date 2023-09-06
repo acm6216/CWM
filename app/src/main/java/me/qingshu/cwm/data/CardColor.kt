@@ -5,7 +5,8 @@ import me.qingshu.cwm.R
 
 enum class CardColor(@ColorRes val color:Int) {
     WHITE(R.color.white),
-    BLACK(R.color.black);
+    BLACK(R.color.black),
+    GREY(R.color.grey);
 
     fun textColor() = when(this){
         WHITE -> R.color.black

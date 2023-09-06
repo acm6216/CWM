@@ -157,7 +157,7 @@ class PictureViewModel : ViewModel() {
         uris.map {
             val targetDevice = if (it.exif.device.isEmpty()) exif.device else it.exif.device
             val targetLens = if (it.exif.lens.isEmpty()) exif.lens else it.exif.lens
-            val targetInfo = Information.combine(it.exif.information, exif.information)
+            val targetInfo = Information.combine(exif.information,it.exif.information)
             Picture(
                 it.uri, cardSize, cardColor,
                 logo, SimpleExif(targetDevice, targetLens, targetInfo)
@@ -180,6 +180,7 @@ class PictureViewModel : ViewModel() {
 
     val saveEnable = MutableStateFlow(true)
 
+    @Suppress("DEPRECATION")
     fun save(context: Context, binding: PictureItemBinding) {
         val layout = PictureMarkBinding(binding).clear()
         viewModelScope.launch(Dispatchers.IO) {

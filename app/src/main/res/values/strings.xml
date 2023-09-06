@@ -49,6 +49,7 @@
     <string name="card_color">卡片颜色</string>
     <string name="card_color_white">白色</string>
     <string name="card_color_black">黑色</string>
+    <string name="card_color_grey">灰色</string>
 
     <string name="save_status">添加水印中</string>
     <string name="save_status_completed">已保存</string>

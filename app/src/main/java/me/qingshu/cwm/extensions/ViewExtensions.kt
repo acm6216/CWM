@@ -9,6 +9,8 @@ import androidx.core.view.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.resume
 
+fun View.setOnClickListener(block:()->Unit) = setOnClickListener { block.invoke() }
+
 @OptIn(DelicateCoroutinesApi::class)
 fun View.fadeToVisibilityUnsafe(visible: Boolean, force: Boolean = false, gone: Boolean = false) {
     GlobalScope.launch(Dispatchers.Main.immediate) { fadeToVisibility(visible, force, gone) }

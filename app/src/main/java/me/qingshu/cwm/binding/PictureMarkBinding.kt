@@ -2,7 +2,6 @@ package me.qingshu.cwm.binding
 
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.blue
@@ -21,8 +20,6 @@ class PictureMarkBinding(private val pictureItemBinding: PictureItemBinding) {
     val src get() = binding.src
 
     val root get() = pictureItemBinding.root
-
-    fun height(picture: Picture) = picture.cardSize.size.dp
 
     fun realHeight(bitmap: Bitmap,picture: Picture) = picture.cardSize.sizeByHeight(bitmap.height,bitmap.width)
 

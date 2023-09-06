@@ -1,6 +1,5 @@
 package me.qingshu.cwm.extensions
 
-import android.util.Log
 import androidx.exifinterface.media.ExifInterface
 import java.text.DecimalFormat
 import kotlin.math.ceil
@@ -18,7 +17,7 @@ fun ExifInterface.aperture() = getAttribute(ExifInterface.TAG_APERTURE_VALUE)?.l
     val b = it.substring(it.indexOf('/') + 1, it.length).toDouble()
     return 2.0.pow(a / b / 2).let { v ->
         DecimalFormat("#.#").format(v).let { s ->
-            Log.d("TAG", "aperture: $s,$v")
+            //Log.d("TAG", "aperture: $s,$v")
             when(s){
                 "5.7" -> "5.6"
                 else -> s
@@ -44,6 +43,6 @@ fun ExifInterface.lensModel() = getAttribute(ExifInterface.TAG_LENS_MODEL)?:""
 
 fun ExifInterface.location(){
     getAttribute(ExifInterface.TAG_GPS_LONGITUDE).also {
-        Log.d("TAG", "aperture: location = $it")
+        //Log.d("TAG", "aperture: location = $it")
     }
 }
