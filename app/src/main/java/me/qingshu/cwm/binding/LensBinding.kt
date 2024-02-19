@@ -3,10 +3,11 @@ package me.qingshu.cwm.binding
 import me.qingshu.cwm.R
 import me.qingshu.cwm.data.Lens
 import me.qingshu.cwm.databinding.ParamBinding
+import me.qingshu.cwm.databinding.PreferenceLensBinding
 
-class LensBinding(private val paramBinding: ParamBinding) {
+class LensBinding(paramBinding: ParamBinding):Binding<PreferenceLensBinding>(paramBinding) {
 
-    private val binding get() = paramBinding.lens
+    override val binding get() = get { it.lens }
 
     private var isCheck:Boolean = true
         set(value) {

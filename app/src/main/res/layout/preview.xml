@@ -79,8 +79,17 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <include
-                    android:id="@+id/picture_item"
-                    layout="@layout/picture_item" />
+                    android:id="@+id/style_default"
+                    layout="@layout/style_default" />
+                <include
+                    android:id="@+id/style_card"
+                    layout="@layout/style_card" />
+                <include
+                    android:id="@+id/style_card_inner"
+                    layout="@layout/style_card_inner" />
+                <include
+                    android:id="@+id/style_space"
+                    layout="@layout/style_space" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

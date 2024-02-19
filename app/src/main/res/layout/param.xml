@@ -97,8 +97,14 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
+                        <include android:id="@+id/styles"
+                            layout="@layout/preference_styles"/>
+
                         <include android:id="@+id/template"
                             layout="@layout/preference_template"/>
+
+                        <include android:id="@+id/gravity"
+                            layout="@layout/preference_gravity"/>
 
                         <include
                             android:id="@+id/device"
@@ -119,6 +125,9 @@
                         <include
                             android:id="@+id/card_size"
                             layout="@layout/preference_card_size" />
+                        <include
+                            android:id="@+id/picture"
+                            layout="@layout/preference_picture" />
 
                         <View
                             android:layout_width="match_parent"

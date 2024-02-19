@@ -15,11 +15,14 @@ import kotlinx.coroutines.launch
 import me.qingshu.cwm.binding.CardColorBinding
 import me.qingshu.cwm.binding.CardSizeBinding
 import me.qingshu.cwm.binding.DeviceBinding
+import me.qingshu.cwm.binding.GravityBinding
 import me.qingshu.cwm.binding.InformationBinding
 import me.qingshu.cwm.binding.LensBinding
+import me.qingshu.cwm.binding.FilletBinding
+import me.qingshu.cwm.binding.StyleBinding
 import me.qingshu.cwm.binding.TemplateBinding
-import me.qingshu.cwm.data.SimpleExif
-import me.qingshu.cwm.data.Logo
+import me.qingshu.cwm.data.Exif
+import me.qingshu.cwm.data.Icon
 import me.qingshu.cwm.databinding.ParamBinding
 import me.qingshu.cwm.extensions.treeObserver
 
@@ -27,6 +30,8 @@ class Param:BaseFragment() {
 
     private val binding by lazy { ParamBinding.inflate(layoutInflater) }
     private val device by lazy { DeviceBinding(binding) }
+    private val gravity by lazy { GravityBinding(binding) }
+    private val fillet by lazy { FilletBinding(binding) }
     private val lens by lazy { LensBinding(binding) }
     private val info by lazy { InformationBinding(binding) }
     private val cardColor by lazy { CardColorBinding(binding) }
@@ -86,12 +91,18 @@ class Param:BaseFragment() {
             behavior.close()
             false
         }
-        binding.apply.setOnClickListener(::apply)
+        binding.apply.setOnClick(::apply)
         binding.picker.setOnClickListener { picturePicker.launch(arrayOf("image/*")) }
 
         device.bind()
         info.bind()
         lens.bind()
+        fillet.bind{
+            viewModel.receiveFillet(it)
+        }
+        gravity.bind{ gravity,fromUser ->
+            viewModel.receiveGravity(gravity,fromUser)
+        }
         TemplateBinding(binding).bind(
             click = {
                 device.setDevice(it.device)
@@ -99,7 +110,7 @@ class Param:BaseFragment() {
                 lens.setLens(it.lens)
                 cardSize.setCardSize(it.cardSize)
                 cardColor.setCardColor(it.cardColor)
-                useLogo(it.logo)
+                //useLogo(it.icon)
             },
             saveCallback = { self ->
                 self.save(
@@ -112,6 +123,9 @@ class Param:BaseFragment() {
                 )
             }
         )
+        StyleBinding(binding).bind{ style,fromUser ->
+            viewModel.receiveStyle(style,fromUser)
+        }
         cardColor.bind {
             viewModel.receiveCardColor(it)
         }
@@ -125,32 +139,39 @@ class Param:BaseFragment() {
                     behavior.isDraggable = it
                 }
             }
+            launch {
+                viewModel.styles.collect{
+                    info.visible(it)
+                    gravity.visible(it)
+                    fillet.visible(it)
+                }
+
+            }
         }
     }
 
     private fun logoPicker(view: View){
-        LogoPicker { logo ->
+        LogoPicker(viewModel.styles.value.icon) { logo ->
             useLogo(logo,view)
         }.show(childFragmentManager, javaClass.simpleName)
     }
 
-    private fun useLogo(logo: Logo) = useLogo(logo,binding.logo)
+    private fun useLogo(icon: Icon) = useLogo(icon,binding.logo)
 
-    private fun useLogo(logo: Logo, view: View){
-        viewModel.receiveLogo(logo)
-        (view as ImageView).setImageResource(logo.src)
-        view.setPadding(logo.compatPadding().dp)
+    private fun useLogo(icon: Icon, view: View){
+        viewModel.receiveLogo(icon)
+        (view as ImageView).setImageResource(icon.src)
+        view.setPadding(icon.compatPadding().dp)
     }
 
-    private fun apply(view: View) {
+    private fun apply() {
         viewModel.receiveUserExif(
-            SimpleExif(
+            Exif(
                 device = device.getDevice(),
                 lens = lens.getLens(),
                 information = info.getInformation()
             )
         )
-        view.invalidate()
     }
 
     private fun <T:View> BottomSheetBehavior<T>.toggle(isEnable:Boolean){

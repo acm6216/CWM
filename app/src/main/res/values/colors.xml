@@ -65,4 +65,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="grey">#FF515151</color>
+    <color name="new_year">#B42E23</color>
+    <color name="new_year_text">#FEAE34</color>
 </resources>

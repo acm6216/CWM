@@ -9,19 +9,13 @@ import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
-import me.qingshu.cwm.binding.PictureMarkBinding
 import me.qingshu.cwm.data.Picture
-import me.qingshu.cwm.databinding.PictureItemBinding
 import me.qingshu.cwm.databinding.PreviewBinding
 import me.qingshu.cwm.extensions.fadeToVisibilityUnsafe
-import me.qingshu.cwm.extensions.treeObserver
+import me.qingshu.cwm.style.adapter.PictureAdapter
 
 class Preview : BaseFragment() {
 
@@ -36,10 +30,7 @@ class Preview : BaseFragment() {
                 when (it.itemId) {
                     R.id.menu_remove -> viewModel.removePicture(picture)
                     R.id.menu_clear -> viewModel.removeAllPicture()
-                    R.id.menu_lens_param -> viewModel.useLens(picture)
-                    R.id.menu_date_param -> viewModel.useDate(picture)
-                    R.id.menu_device_param -> viewModel.useDevice(picture)
-                    R.id.menu_location_param -> viewModel.useLocation(picture)
+                    R.id.menu_exif -> viewModel.exif(picture,view.context)
                 }
                 true
             }
@@ -59,7 +50,7 @@ class Preview : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.model = viewModel
         binding.bindLifecycle()
-        binding.save.setOnClickListener(::save)
+        binding.save.setOnClick(::save)
         binding.recyclerView.adapter = pictureAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(view.context)
         repeatWithViewLifecycle {
@@ -78,6 +69,11 @@ class Preview : BaseFragment() {
                     showMessage(it)
                 }
             }
+            launch {
+                viewModel.pictureExif.collect{ e ->
+                    e.also {  ExifDialog(it).show(childFragmentManager,javaClass.simpleName) }
+                }
+            }
         }
         binding.copyright.also {
             val content = SpannableString(it.text.toString())
@@ -93,65 +89,8 @@ class Preview : BaseFragment() {
         }
     }
 
-    private fun save(view: View){
-        viewModel.save(view.context,binding.pictureItem)
-    }
-
-    class PictureAdapter(private val click: (View,Picture) -> Unit) :
-        ListAdapter<Picture, RecyclerView.ViewHolder>(
-            PictureListItem()
-        ) {
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-            PictureViewHolder.from(
-                PictureMarkBinding(
-                    PictureItemBinding.inflate(
-                        LayoutInflater.from(
-                            parent.context
-                        ), parent, false
-                    )
-                )
-            )
-
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) =
-            (holder as PictureViewHolder).bind(getItem(position), click)
-    }
-
-    class PictureListItem : DiffUtil.ItemCallback<Picture>() {
-        override fun areItemsTheSame(oldItem: Picture, newItem: Picture): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(oldItem: Picture, newItem: Picture): Boolean {
-            return oldItem.uri.toString() == newItem.uri.toString()
-        }
-
-    }
-
-    class PictureViewHolder private constructor(
-        private val binding: PictureMarkBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(picture: Picture, click: (View,Picture) -> Unit) {
-            val src = binding.src
-            src.treeObserver {
-                binding.setMark(picture,click = click, height = it.height, width = it.width)
-            }
-
-            src.load(picture.uri) {
-                crossfade(true)
-                target {
-                    val width = src.width.toFloat()
-                    val height = it.intrinsicHeight*width/it.intrinsicWidth
-                    src.setImageDrawable(it)
-                    binding.setMark(picture,click = click, height = height.toInt(), width = width.toInt())
-                }
-            }
-        }
-
-        companion object {
-            fun from(binding: PictureMarkBinding) = PictureViewHolder(binding)
-        }
+    private fun save(){
+        viewModel.save(requireContext().applicationContext,binding)
     }
 
 }

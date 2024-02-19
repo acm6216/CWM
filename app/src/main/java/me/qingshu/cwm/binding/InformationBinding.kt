@@ -1,15 +1,22 @@
 package me.qingshu.cwm.binding
 
 import android.annotation.SuppressLint
+import android.view.View
 import me.qingshu.cwm.extensions.setOnClickListener
 import me.qingshu.cwm.data.Information
 import me.qingshu.cwm.databinding.ParamBinding
+import me.qingshu.cwm.databinding.PreferenceOtherBinding
+import me.qingshu.cwm.style.Styles
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class InformationBinding(private val paramBinding: ParamBinding) {
+class InformationBinding(paramBinding: ParamBinding):Binding<PreferenceOtherBinding>(paramBinding) {
 
-    private val binding get() = paramBinding.other
+    override val binding get() = get { it.other }
+
+    fun visible(styles: Styles){
+        binding.root.visibility = if(styles.visibleLens) View.VISIBLE else View.GONE
+    }
 
     fun bind(){
         binding.info.setOnClickListener(::bindDate)

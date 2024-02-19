@@ -4,30 +4,31 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import me.qingshu.cwm.R
 
-enum class Logo(
-    @StringRes val label: Int,
-    @DrawableRes val src: Int,
-    val tintEnable: Boolean = true,
-    val padding: Int = 12
-) {
+enum class CameraLogo(
+    @StringRes override val label: Int,
+    @DrawableRes override val src: Int,
+    override val tintEnable: Boolean = true,
+    override val padding: Int = 12
+):Icon {
+
     CANNON(R.string.label_canon, R.drawable.logo_canon, tintEnable = false),
-    SONY_ALPHA(R.string.label_sony, R.drawable.logo_sony_alpha, tintEnable = false),
-    SONY(R.string.label_sony, R.drawable.logo_sony, padding = -8),
+    SONY_ALPHA(R.string.label_sony, R.drawable.logo_sony_alpha, tintEnable = false, padding = 4),
+    SONY(R.string.label_sony, R.drawable.logo_sony, padding = 4),
     FUJIFILM(R.string.label_fujifilm, R.drawable.logo_fujifilm, padding = 16),
     PANASONIC(
         R.string.label_panasonic,
         R.drawable.logo_panasonic,
-        padding = -16,
+        padding = 4,
         tintEnable = false
     ),
-    NIKON(R.string.label_nikon, R.drawable.logo_nikon, padding = 0),
+    NIKON(R.string.label_nikon, R.drawable.logo_nikon, padding = 4),
     NIKON_NEW(R.string.label_nikon, R.drawable.logo_nikon_new, padding = -2, tintEnable = false),
-    OLYMPUS(R.string.label_olympus, R.drawable.logo_olympus, padding = -16),
+    OLYMPUS(R.string.label_olympus, R.drawable.logo_olympus, padding = 4),
     LEICA(R.string.label_leica, R.drawable.logo_leica, tintEnable = false, padding = -8),
     LEICA_NEW(R.string.label_leica, R.drawable.logo_leica_new, padding = -4),
     HASSELBLAD(R.string.label_hasselblad, R.drawable.logo_hasselblad, padding = 0),
     SIGMA(R.string.label_sigma, R.drawable.logo_sigma, padding = 16),
-    LUMIX(R.string.label_lumix, R.drawable.logo_lumix, padding = -16),
+    LUMIX(R.string.label_lumix, R.drawable.logo_lumix, padding = 4),
     APPLE(R.string.label_apple, R.drawable.logo_apple),
     APPLE_COLORFUL(R.string.label_apple, R.drawable.logo_apple_colorful, tintEnable = false),
     MEIZU(R.string.label_meizu, R.drawable.logo_meizu, tintEnable = false),
@@ -36,7 +37,7 @@ enum class Logo(
     INSTA360(R.string.label_insta360, R.drawable.logo_insta360),
     SAMSUNG(R.string.label_samsung, R.drawable.logo_samsung, tintEnable = false),
     SHARP(R.string.label_sharp, R.drawable.logo_sharp, tintEnable = false, padding = -8),
-    RICOH(R.string.label_ricoh, R.drawable.logo_ricoh, tintEnable = false, padding = -8),
+    RICOH(R.string.label_ricoh, R.drawable.logo_ricoh, tintEnable = false, padding = 4),
     LG(R.string.logitech_gaming, R.drawable.logo_logitech_gaming, tintEnable = false),
     LG_NEW(R.string.logitech_gaming, R.drawable.logo_logitech_gaming_new, tintEnable = false),
     GOOGLE(R.string.label_google, R.drawable.logo_google, tintEnable = false),
@@ -65,18 +66,18 @@ enum class Logo(
     SMARTISAN(R.string.label_smartisan, R.drawable.logo_smartisan, tintEnable = false),
     LEICA_ONE(R.string.label_leica, R.drawable.logo_leica_one, tintEnable = false, padding = 16),
     HASSELBLAD_ONE(R.string.label_hasselblad, R.drawable.logo_hasselblad_two, padding = 0),
-    HASSELBLAD_TWO(R.string.label_hasselblad, R.drawable.logo_hasselblad_one, padding = 16),
+    HASSELBLAD_TWO(R.string.label_hasselblad, R.drawable.logo_hasselblad_one, padding = 4),
     SAMSUNG_ONE(R.string.label_samsung, R.drawable.logo_samsung_one, tintEnable = true),
     MOTOROLA_NEW(R.string.label_motorola, R.drawable.logo_motorola_new, padding = 8),
     HUAWEI_TWO(R.string.label_huawei, R.drawable.logo_huawei_two, padding = 8, tintEnable = false),
     HUAWEI_THREE(R.string.label_huawei, R.drawable.logo_huawei_three, padding = 8, tintEnable = false);
 
-    fun compatPadding() = if (padding >= 16) padding / 2 else if (padding >= 12) 0 else padding
+    override fun compatPadding() = if (padding >= 16) padding / 2 else if (padding >= 12) 0 else padding
 
-    fun iconPadding() = when (this) {
-        DJI, FUJIFILM, LEICA_ONE, GOOGLE_ONE, NUBIA, HTC -> padding / 4
-        PANASONIC, OLYMPUS, SIGMA, LUMIX, MOTOROLA_NEW, LG_ONE -> padding / 2
-        NIKON -> -2
-        else -> compatPadding()
+    override fun iconPadding() = when (this) {
+        DJI, SONY_ALPHA,HASSELBLAD_TWO -> padding
+        else -> 0
     }
+
+    override fun getNumberOfIcons(): Array<out Icon> = CameraLogo.values()
 }

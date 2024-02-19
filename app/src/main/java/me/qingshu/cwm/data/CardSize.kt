@@ -17,5 +17,5 @@ enum class CardSize {
 
     fun dividerHeightSizeByHeight(height:Int,width:Int) =(height/base(height, width)/10f*3f).toInt()
 
-    fun divideWidthSizeByHeight(height:Int,width:Int) =(height/base(height, width)/28f).toInt()
+    fun dividerWidthSizeByHeight(height:Int, width:Int) =(height/base(height, width)/28f).toInt()
 }

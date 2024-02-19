@@ -4,32 +4,38 @@ import android.content.DialogInterface
 import android.view.View
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import me.qingshu.cwm.data.Logo
 import me.qingshu.cwm.R
+import me.qingshu.cwm.data.BaseBoAdapter
+import me.qingshu.cwm.data.CameraLogo
 import me.qingshu.cwm.data.CardColor
 import me.qingshu.cwm.data.CardSize
 import me.qingshu.cwm.data.Device
+import me.qingshu.cwm.data.Icon
 import me.qingshu.cwm.data.Information
 import me.qingshu.cwm.data.Lens
 import me.qingshu.cwm.data.Template
 import me.qingshu.cwm.databinding.ParamBinding
+import me.qingshu.cwm.databinding.PreferenceTemplateBinding
 import me.qingshu.cwm.extensions.edit
 import me.qingshu.cwm.extensions.sharedPreferences
 
 private const val TEMPLATE_KEY = "TEMPLATE_KEY"
 private const val TEMPLATE_VALUE = "TEMPLATE_VALUE"
 
-class TemplateBinding(private val paramBinding: ParamBinding) {
+class TemplateBinding(paramBinding: ParamBinding):Binding<PreferenceTemplateBinding>(paramBinding) {
 
-    private val binding get() = paramBinding.template
-    private val context get() = binding.root.context
+    override val binding get() = get { it.template }
 
-    private val getValue get() = sharedPreferences().getInt(TEMPLATE_KEY,0)
-    private val getTemplateValue get() = sharedPreferences().getString(TEMPLATE_VALUE,"")?:""
+    private inline val getValue get() = sharedPreferences().getInt(TEMPLATE_KEY,0)
+    private inline val getTemplateValue get() = sharedPreferences().getString(TEMPLATE_VALUE,"")?:""
     private lateinit var clickCallback: (Template) -> Unit
 
-    fun bind(click:(Template)->Unit,saveCallback:((TemplateBinding)->Unit)?=null) = binding.apply {
+    fun bind(
+        click:(Template)->Unit,
+        saveCallback:((TemplateBinding)->Unit)?=null
+    ) = binding.apply {
         templateRoot.setOnClickListener(::templatePicker)
         getValue.let {
             context.getString(R.string.template_name,it+1)
@@ -49,7 +55,7 @@ class TemplateBinding(private val paramBinding: ParamBinding) {
         lens: Lens,
         cardSize: CardSize,
         cardColor: CardColor,
-        logo: Logo
+        icon: Icon
     ) {
         val index = getValue
         Template(
@@ -58,7 +64,7 @@ class TemplateBinding(private val paramBinding: ParamBinding) {
             lens = lens,
             cardSize = cardSize,
             cardColor = cardColor,
-            logo = logo
+            //icon = icon
         ).also {
             Template.USE.run {
                 add(index, it)
@@ -69,7 +75,7 @@ class TemplateBinding(private val paramBinding: ParamBinding) {
     }
 
     private fun ArrayList<Template>.store(){
-        Gson().toJson(this).also {
+        GsonBuilder().registerTypeAdapter(Icon::class.java, BaseBoAdapter()).create().toJson(this).also {
             sharedPreferences().edit {
                 putString(TEMPLATE_VALUE,it)
             }
@@ -82,7 +88,7 @@ class TemplateBinding(private val paramBinding: ParamBinding) {
         if (value.isEmpty())
             repeat(Template.MAX) {
                 Template(
-                    logo = Logo.CANNON,
+                    //icon = CameraLogo.CANNON,
                     device = Device.empty,
                     lens = Lens.empty,
                     information = Information.empty,
@@ -90,7 +96,7 @@ class TemplateBinding(private val paramBinding: ParamBinding) {
                     cardColor = CardColor.WHITE
                 ).also { Template.USE.add(it) }
             }
-        else Gson().fromJson<ArrayList<Template>>(value,
+        else GsonBuilder().registerTypeAdapter(Icon::class.java, BaseBoAdapter()).create().fromJson<ArrayList<Template>>(value,
             object : TypeToken<ArrayList<Template>>() {}.type).also {
             Template.USE.addAll(it)
         }

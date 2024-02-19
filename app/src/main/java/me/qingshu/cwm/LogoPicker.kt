@@ -11,12 +11,13 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import me.qingshu.cwm.data.Logo
+import me.qingshu.cwm.data.Icon
 import me.qingshu.cwm.databinding.LogoItemBinding
 import me.qingshu.cwm.databinding.LogoPickerBinding
 
 class LogoPicker(
-    private val logoPicker:((Logo)->Unit)?=null
+    private val icons: Icon,
+    private val logoPicker:((Icon)->Unit)?=null
 ):DialogFragment() {
 
     private val binding:LogoPickerBinding by lazy { LogoPickerBinding.inflate(layoutInflater) }
@@ -29,7 +30,7 @@ class LogoPicker(
 
     private fun onCreated() {
         binding.recyclerView.apply {
-            adapter = LogoAdapter{
+            adapter = LogoAdapter(icons){
                 logoPicker?.invoke(it)
                 dismiss()
             }
@@ -40,14 +41,14 @@ class LogoPicker(
         }
     }
 
-    class LogoAdapter(private val click:(Logo)->Unit):RecyclerView.Adapter<LogoViewHolder>(){
+    class LogoAdapter(private val icons: Icon,private val click:(Icon)->Unit):RecyclerView.Adapter<LogoViewHolder>(){
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LogoViewHolder
             = LogoViewHolder.from(LogoItemBinding.inflate(LayoutInflater.from(parent.context)))
 
-        override fun getItemCount(): Int = Logo.values().size
+        override fun getItemCount(): Int = icons.getNumberOfIcons().size
 
         override fun onBindViewHolder(holder: LogoViewHolder, position: Int)
-            = holder.bind(Logo.values()[position],click)
+            = holder.bind(icons.getNumberOfIcons()[position],click)
     }
 
     class LogoViewHolder(private val binding: LogoItemBinding) :
@@ -60,13 +61,13 @@ class LogoPicker(
                 (this * scale + 0.5f).toInt()
             }
 
-        fun bind(logo: Logo, click: (Logo) -> Unit) = binding.apply {
+        fun bind(icon: Icon, click: (Icon) -> Unit) = binding.apply {
             src.setOnClickListener {
-                click.invoke(logo)
+                click.invoke(icon)
             }
-            src.setImageResource(logo.src)
-            src.contentDescription = root.context.getString(logo.label)
-            src.setPadding(logo.padding.dp)
+            src.setImageResource(icon.src)
+            src.contentDescription = root.context.getString(icon.label)
+            src.setPadding(icon.padding.dp)
         }.executePendingBindings()
 
         companion object {

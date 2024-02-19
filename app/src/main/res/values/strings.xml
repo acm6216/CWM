@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">CWM</string>
     <string name="label_name">Camera Water Mark</string>
-    <string name="label_version">版本：1.2</string>
+    <string name="label_version">版本：1.5.0</string>
     <string name="label_licence">Copyright © 2023 QingShu All Right Reserved.</string>
     <string name="save">保存到设备</string>
     <string name="apply">应用</string>
@@ -13,33 +13,39 @@
     <string name="iso">ISO</string>
     <string name="lens_param_hint">参数</string>
     <string name="lens_param_tips">或者单独设置</string>
-    <string name="lens_title">右上</string>
+    <string name="lens_title">曝光参数</string>
+
+    <string name="styles_title">样式</string>
+
+    <string name="gravity_title">位置</string>
 
     <string name="template_title">模板</string>
     <string name="template_name">模板 %d</string>
+
+    <string name="picture_title">图片效果</string>
+    <string name="picture_corner">圆角</string>
+    <string name="picture_margin">边距</string>
+    <string name="picture_shadow">阴影</string>
 
     <string name="logo_picker_title">Logo</string>
 
     <string name="menu_clear">移除所有图片</string>
     <string name="menu_remove">移除此图片</string>
-    <string name="menu_lens_param">使用此镜头</string>
-    <string name="menu_date_param">使用此日期</string>
-    <string name="menu_location_param">使用此位置</string>
-    <string name="menu_device_param">使用此设备</string>
+    <string name="menu_exif">查看Exif</string>
 
     <string name="use_lens_message_error">没有读取到此图片的镜头参数</string>
     <string name="use_date_message_error">没有读取到此图片的日期参数</string>
     <string name="use_device_message_error">没有读取到此图片的设备参数</string>
     <string name="use_location_message_error">没有读取到此图片的位置参数</string>
 
-    <string name="device_title">左上</string>
+    <string name="device_title">设备</string>
     <string name="device_brand">品牌</string>
     <string name="device_model">型号</string>
 
-    <string name="date_title">左下</string>
+    <string name="date_title">日期、位置/镜头</string>
     <string name="date_hint">日期</string>
     <string name="location_hint">位置/镜头</string>
-    <string name="location_title">右下</string>
+    <string name="location_title">\u3000</string>
 
     <string name="card_size">卡片尺寸</string>
     <string name="card_size_small">小</string>
@@ -50,6 +56,7 @@
     <string name="card_color_white">白色</string>
     <string name="card_color_black">黑色</string>
     <string name="card_color_grey">灰色</string>
+    <string name="card_color_gold">新年</string>
 
     <string name="save_status">添加水印中</string>
     <string name="save_status_completed">已保存</string>
@@ -90,4 +97,24 @@
     <string name="label_nokia">诺基亚</string>
     <string name="label_nubia">努比亚</string>
     <string name="label_oppo">OPPO</string>
+
+    <string name="styles_default">默认</string>
+    <string name="styles_card">卡片</string>
+    <string name="styles_inner">内部</string>
+    <string name="styles_new_year">新年</string>
+    <string name="styles_space">留白</string>
+
+    <string name="gravity_left_top">左上</string>
+    <string name="gravity_left_bottom">左下</string>
+    <string name="gravity_right_top">右上</string>
+    <string name="gravity_right_bottom">右下</string>
+    <string name="gravity_center">居中</string>
+
+    <string name="exif_dialog">快门 = %sS\n拍摄日期 = %s\n光圈 = f%s\n设备 = %s\n焦距 = %smm\nISO = %s\n镜头型号 = %s\n地理位置 = %s</string>
+
+    <string-array name="model_symbol">
+        <item>ℤ</item>
+    </string-array>
+
+    <string name="festival_label_long">龙年</string>
 </resources>

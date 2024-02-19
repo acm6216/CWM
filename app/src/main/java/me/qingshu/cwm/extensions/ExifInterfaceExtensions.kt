@@ -46,3 +46,5 @@ fun ExifInterface.location(){
         //Log.d("TAG", "aperture: location = $it")
     }
 }
+
+fun ExifInterface.pictureNumber() = getAttribute(ExifInterface.TAG_IMAGE_UNIQUE_ID)

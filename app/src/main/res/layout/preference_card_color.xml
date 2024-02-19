@@ -3,6 +3,9 @@
 
     <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?selectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -28,6 +31,7 @@
             app:singleSelection="true">
 
             <com.google.android.material.chip.Chip
+                style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:id="@+id/card_color_white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -37,6 +41,7 @@
                 app:checkedIconEnabled="true" />
 
             <com.google.android.material.chip.Chip
+                style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:id="@+id/card_color_black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -46,11 +51,22 @@
                 app:checkedIconEnabled="true" />
 
             <com.google.android.material.chip.Chip
+                style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:id="@+id/card_color_grey"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checkable="true"
                 android:text="@string/card_color_grey"
+                app:checkedIcon="@drawable/ic_check"
+                app:checkedIconEnabled="true" />
+
+            <com.google.android.material.chip.Chip
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:id="@+id/card_color_gold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:text="@string/card_color_gold"
                 app:checkedIcon="@drawable/ic_check"
                 app:checkedIconEnabled="true" />
 

@@ -3,10 +3,11 @@ package me.qingshu.cwm.binding
 import me.qingshu.cwm.R
 import me.qingshu.cwm.data.CardSize
 import me.qingshu.cwm.databinding.ParamBinding
+import me.qingshu.cwm.databinding.PreferenceCardSizeBinding
 
-class CardSizeBinding(private val paramBinding: ParamBinding) {
+class CardSizeBinding(paramBinding: ParamBinding):Binding<PreferenceCardSizeBinding>(paramBinding) {
 
-    private val binding get() = paramBinding.cardSize
+    override val binding get() = get { it.cardSize }
 
     fun bind(select:((CardSize)->Unit)?=null){
         binding.selectRoot.setOnCheckedChangeListener { _, checkedId ->

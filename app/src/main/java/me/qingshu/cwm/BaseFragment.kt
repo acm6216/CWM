@@ -1,5 +1,6 @@
 package me.qingshu.cwm
 
+import android.view.View
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -22,6 +23,10 @@ abstract class BaseFragment:Fragment(){
                 block()
             }
         }
+    }
+
+    protected fun View.setOnClick(block:()->Unit){
+        setOnClickListener { block.invoke() }
     }
 
     protected fun <V:ViewDataBinding> V.bindLifecycle(){

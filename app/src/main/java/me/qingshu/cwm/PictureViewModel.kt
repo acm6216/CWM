@@ -1,36 +1,37 @@
 package me.qingshu.cwm
 
-import android.content.ContentValues
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.PorterDuff
 import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
-import androidx.documentfile.provider.DocumentFile
+import android.util.Log
 import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import me.qingshu.cwm.binding.PictureMarkBinding
+import me.qingshu.cwm.binding.FilletBinding.Companion.FILLET_NONE
 import me.qingshu.cwm.data.CardColor
 import me.qingshu.cwm.data.CardSize
+import me.qingshu.cwm.data.Device
 import me.qingshu.cwm.data.Information
+import me.qingshu.cwm.data.Lens
 import me.qingshu.cwm.data.Picture
 import me.qingshu.cwm.data.UriExif
-import me.qingshu.cwm.data.SimpleExif
-import me.qingshu.cwm.data.Logo
-import me.qingshu.cwm.databinding.PictureItemBinding
+import me.qingshu.cwm.data.Exif
+import me.qingshu.cwm.data.CameraLogo
+import me.qingshu.cwm.data.Icon
+import me.qingshu.cwm.data.StyleGravity
+import me.qingshu.cwm.style.Styles
+import me.qingshu.cwm.databinding.PreviewBinding
+import me.qingshu.cwm.style.inner.CardInnerBuilder
+import me.qingshu.cwm.style.card.CardStyleBuilder
+import me.qingshu.cwm.style.def.DefaultStyleBuilder
+import me.qingshu.cwm.style.newyear.NewYearStyleBuilder
+import me.qingshu.cwm.style.space.SpaceStyleBuilder
 
 class PictureViewModel : ViewModel() {
 
@@ -53,83 +54,61 @@ class PictureViewModel : ViewModel() {
         }
     }
 
-    private val cardLogo = MutableStateFlow(Logo.CANNON)
-    fun receiveLogo(logo: Logo) {
+    private val fillet = MutableStateFlow(FILLET_NONE)
+    fun receiveFillet(flags: Int){
         viewModelScope.launch {
-            cardLogo.emit(logo)
+            fillet.emit(flags)
         }
     }
 
-    val useLogo get() = cardLogo.value
+    private val cardIcon = MutableStateFlow<Icon>(CameraLogo.CANNON)
+    fun receiveLogo(icon: Icon) {
+        viewModelScope.launch {
+            cardIcon.emit(icon)
+        }
+    }
+
+    val useLogo get() = cardIcon.value
     val useCardSize get() = cardSize.value
     val useCardColor get() = cardColor.value
 
-    private val userExif = MutableStateFlow(SimpleExif.empty())
-    fun receiveUserExif(simpleExif: SimpleExif) {
+    val styles = MutableStateFlow(Styles.DEFAULT)
+
+    val styleGravity = MutableStateFlow(StyleGravity.CENTER)
+    fun receiveStyle(style: Styles,fromUser:Boolean){
         viewModelScope.launch {
-            userExif.emit(simpleExif)
+            if(fromUser) {
+                _message.trySend(R.string.save_status_completed)
+            }
+            styles.emit(style)
         }
     }
 
-    fun useLens(picture: Picture){
-        viewModelScope.launch(Dispatchers.IO) {
-            if(picture.userExif.lens.isEmpty())
-                _message.trySend(R.string.use_lens_message_error)
-            else userExif.value.let {
-                SimpleExif(
-                    device = it.device,
-                    lens = picture.userExif.lens,
-                    information = it.information
-                )
-            }.also { userExif.emit(it) }
+    fun receiveGravity(gravity:StyleGravity,fromUser: Boolean){
+        viewModelScope.launch {
+            //if(fromUser){
+
+            //}
+            Log.d("TAG", "receiveGravity: $gravity")
+            styleGravity.emit(gravity)
         }
     }
 
-    fun useDate(picture: Picture){
-        viewModelScope.launch(Dispatchers.IO) {
-            if(picture.userExif.information.date.isEmpty())
-                _message.trySend(R.string.use_date_message_error)
-            else userExif.value.let {
-                SimpleExif(
-                    device = it.device,
-                    lens = it.lens,
-                    information = Information(
-                        date = picture.userExif.information.date,
-                        location = it.information.location
-                    )
-                )
-            }.also { userExif.emit(it) }
+    private val userExif = MutableStateFlow(Exif.empty())
+    fun receiveUserExif(exif: Exif) {
+        viewModelScope.launch {
+            userExif.emit(exif)
         }
     }
 
-    fun useDevice(picture: Picture){
-        viewModelScope.launch(Dispatchers.IO) {
-            if(picture.userExif.device.isEmpty())
-                _message.trySend(R.string.use_device_message_error)
-            else userExif.value.let {
-                SimpleExif(
-                    device = picture.userExif.device,
-                    lens = it.lens,
-                    information = it.information
-                )
-            }.also { userExif.emit(it) }
-        }
-    }
-
-    fun useLocation(picture: Picture){
-        viewModelScope.launch(Dispatchers.IO) {
-            if(picture.userExif.information.location.isEmpty())
-                _message.trySend(R.string.use_location_message_error)
-            else userExif.value.let {
-                SimpleExif(
-                    device = it.device,
-                    lens = it.lens,
-                    information = Information(
-                        date = it.information.date,
-                        location = picture.userExif.information.location
-                    )
-                )
-            }.also { userExif.emit(it) }
+    private val _pictureExif = Channel<ExifInterface>(capacity = Channel.CONFLATED)
+    val pictureExif = _pictureExif.receiveAsFlow()
+    fun exif(picture: Picture,context: Context){
+        viewModelScope.launch {
+            context.contentResolver.openInputStream(picture.uri)?.use {
+                val exif = ExifInterface(it)
+                _pictureExif.trySend(exif)
+            }
         }
     }
 
@@ -152,16 +131,30 @@ class PictureViewModel : ViewModel() {
 
     val previewPictures = combine(
         pictureUris, cardColor, cardSize,
-        cardLogo, userExif
-    ) { uris, cardColor, cardSize, logo, exif ->
-        uris.map {
-            val targetDevice = if (it.exif.device.isEmpty()) exif.device else it.exif.device
-            val targetLens = if (it.exif.lens.isEmpty()) exif.lens else it.exif.lens
-            val targetInfo = Information.combine(exif.information,it.exif.information)
+        cardIcon, userExif,styles,styleGravity,fillet
+    ) { any ->
+        val uris = any[0] as List<UriExif>
+        val cardColor = any[1] as CardColor
+        val cardSize = any[2] as CardSize
+        val icon = any[3] as Icon
+        val exif = any[4] as Exif
+        val style = any[5] as Styles
+        val gravity = any[6] as StyleGravity
+        val f = any[7] as Int
+        saveEnable.emit(false)
+        uris.map { ue ->
+            val targetDevice = Device.combine(exif.device,ue.exif.device)
+            val targetLens = Lens.combine(exif.lens,ue.exif.lens)
+            val targetInfo = Information.combine(exif.information,ue.exif.information)
             Picture(
-                it.uri, cardSize, cardColor,
-                logo, SimpleExif(targetDevice, targetLens, targetInfo)
+                ue.uri, cardSize, cardColor,
+                icon, Exif(targetDevice, targetLens, targetInfo),
+                styles = style,
+                gravity = gravity,
+                fillet = f
             )
+        }.also {
+            saveEnable.emit(true)
         }
     }
 
@@ -170,7 +163,7 @@ class PictureViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             uris.map { uri ->
                 context.contentResolver.openInputStream(uri)!!.use {
-                    UriExif(uri, SimpleExif.from(ExifInterface(it)))
+                    UriExif(uri, Exif.from(ExifInterface(it)))
                 }
             }.also {
                 pictureUris.emit(it)
@@ -180,60 +173,18 @@ class PictureViewModel : ViewModel() {
 
     val saveEnable = MutableStateFlow(true)
 
-    @Suppress("DEPRECATION")
-    fun save(context: Context, binding: PictureItemBinding) {
-        val layout = PictureMarkBinding(binding).clear()
+    fun save(context: Context, binding: PreviewBinding) {
+        val target = when(styles.value){
+            Styles.DEFAULT -> DefaultStyleBuilder(binding.styleDefault)
+            Styles.NEW_YEAR -> NewYearStyleBuilder(binding.styleDefault)
+            Styles.SPACE -> SpaceStyleBuilder(binding.styleSpace)
+            Styles.INNER -> CardInnerBuilder(binding.styleCardInner)
+            else -> CardStyleBuilder(binding.styleCard)
+        }
         viewModelScope.launch(Dispatchers.IO) {
-            saveEnable.emit(false)
             previewPictures.first().forEach {
-                val sourceBitmap = context.contentResolver.openInputStream(it.uri)!!.use { stream ->
-                    BitmapFactory.decodeStream(stream)
-                }
-                val size = layout.realHeight(sourceBitmap,it)
-                layout.exifRoot.layoutParams.apply {
-                    height = size
-                    width = sourceBitmap.width
-                }
-                launch(Dispatchers.Main) {
-                    layout.setMark(picture = it, height = sourceBitmap.height, width = sourceBitmap.width)
-                }
-                delay(250)
-                val bitmap = Bitmap.createBitmap(
-                    sourceBitmap.width,
-                    size,
-                    Bitmap.Config.ARGB_8888
-                )
-                layout.exifRoot.draw(Canvas(bitmap).apply {
-                    drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
-                })
-
-                val newBitmap = Bitmap.createBitmap(
-                    sourceBitmap.width,
-                    sourceBitmap.height + bitmap.height,
-                    Bitmap.Config.ARGB_8888
-                )
-                Canvas(newBitmap).apply {
-                    drawBitmap(sourceBitmap, 0f, 0f, null)
-                    drawBitmap(bitmap, 0f, sourceBitmap.height.toFloat(), null)
-                }
-
-                val file = DocumentFile.fromSingleUri(context, it.uri)
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
-                    MediaStore.Images.Media.insertImage(
-                        context.contentResolver, newBitmap, file?.name?:"", "Camera Water Mark"
-                    )
-                else context.contentResolver.insert(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, ContentValues().apply {
-                        put(MediaStore.Images.Media.DISPLAY_NAME, file?.name ?: "")
-                        put(MediaStore.Images.Media.DESCRIPTION, file?.name ?: "")
-                        put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-                    }
-                )?.also { uri ->
-                    context.contentResolver.openOutputStream(uri)?.use { os ->
-                        newBitmap.compress(Bitmap.CompressFormat.JPEG, 100, os)
-                    }
-                }
-                delay(250)
+                saveEnable.emit(false)
+                target.execute(context,it,this)
             }
             saveEnable.emit(true)
             if(previewPictures.first().isNotEmpty()) _message.trySend(R.string.save_status_completed)

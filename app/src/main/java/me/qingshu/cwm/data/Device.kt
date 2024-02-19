@@ -12,6 +12,11 @@ data class Device(val brand:String,val model:String){
     companion object{
         val empty get() = Device(brand = EMPTY, model = EMPTY)
 
+        fun combine(a: Device, b: Device) = Device(
+            brand = a.brand.ifEmpty { b.brand },
+            model = a.model.ifEmpty { b.model }
+        )
+
         fun from(exifInterface: ExifInterface) = Device(
             brand = EMPTY,
             model = exifInterface.device()
