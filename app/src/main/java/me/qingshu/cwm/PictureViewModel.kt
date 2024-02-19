@@ -2,7 +2,6 @@ package me.qingshu.cwm
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -74,7 +73,6 @@ class PictureViewModel : ViewModel() {
 
     val styles = MutableStateFlow(Styles.DEFAULT)
 
-    val styleGravity = MutableStateFlow(StyleGravity.CENTER)
     fun receiveStyle(style: Styles,fromUser:Boolean){
         viewModelScope.launch {
             if(fromUser) {
@@ -84,12 +82,9 @@ class PictureViewModel : ViewModel() {
         }
     }
 
-    fun receiveGravity(gravity:StyleGravity,fromUser: Boolean){
+    private val styleGravity = MutableStateFlow(StyleGravity.CENTER)
+    fun receiveGravity(gravity:StyleGravity){
         viewModelScope.launch {
-            //if(fromUser){
-
-            //}
-            Log.d("TAG", "receiveGravity: $gravity")
             styleGravity.emit(gravity)
         }
     }

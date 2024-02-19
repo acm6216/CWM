@@ -6,7 +6,8 @@ data class Template(
     val lens: Lens,
     val information: Information,
     val cardSize: CardSize,
-    val cardColor: CardColor
+    val cardColor: CardColor,
+    val name:String
 ){
     companion object{
         val MAX get() = 8

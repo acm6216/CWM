@@ -23,7 +23,7 @@ class DefaultStyleBuilder(
         picture: Picture,
         coroutineScope: CoroutineScope
     ) {
-        val layout = DefaultPictureMarkBinding(binding)
+        val layout = DefaultMarkBinding(binding)
 
         coroutineScope.launch(Dispatchers.Main) { layout.clear() }
 

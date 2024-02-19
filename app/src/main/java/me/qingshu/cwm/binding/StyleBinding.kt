@@ -23,8 +23,6 @@ class StyleBinding(paramBinding: ParamBinding):Binding<PreferenceStylesBinding>(
         initStyle()
     }
 
-    private fun sharedPreferences() = context.sharedPreferences()
-
     private inline val getValue get() = sharedPreferences().getInt(STYLE_KEY,0)
 
     private fun stylePicker(view: View){

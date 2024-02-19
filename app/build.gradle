@@ -11,8 +11,8 @@ android {
         applicationId "me.qingshu.cwm"
         minSdk 21
         targetSdk 33
-        versionCode 31
-        versionName "1.5.0"
+        versionCode 32
+        versionName "1.5.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         dexOptions {

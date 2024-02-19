@@ -7,12 +7,16 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.Rect
+import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.qingshu.cwm.data.Picture
 import me.qingshu.cwm.databinding.StyleSpaceBinding
+import me.qingshu.cwm.style.CORNER_ALL
 import me.qingshu.cwm.style.StyleBuilder
+import me.qingshu.cwm.style.radius
+import me.qingshu.cwm.style.shadow
 
 class SpaceStyleBuilder(
     private val binding:StyleSpaceBinding
@@ -29,7 +33,11 @@ class SpaceStyleBuilder(
                 {
 
                 })
-            source!!
+            source!!.let {
+                val isRadius = picture.isCorner()
+                if(isRadius) it.radius(source.width / 20f.toInt(), CORNER_ALL)
+                else it
+            }
         }
 
         val size = layout.realHeight(sourceBitmap, picture)
@@ -59,6 +67,10 @@ class SpaceStyleBuilder(
         val margin = sourceBitmap.width/15f
         val shadowSize = sourceBitmap.width/20f
 
+        val textColorValue = ContextCompat.getColor(context,picture.cardColor.textColor)
+        val isRadius = picture.isCorner()
+        val isShadow = picture.isShadow()
+
         val newBitmap = Bitmap.createBitmap(
             sourceBitmap.width+(margin*2).toInt() + exifW,
             sourceBitmap.height + (margin*2).toInt(),
@@ -67,8 +79,8 @@ class SpaceStyleBuilder(
         Canvas(newBitmap).apply {
             drawColor(layout.color(picture.cardColor.bgColor))
             density = sourceBitmap.density
-            drawBitmap(sourceBitmap, margin, margin, null)
             drawBitmap(bitmap, margin+sourceBitmap.width.toFloat(), margin, null)
+            drawBitmap(sourceBitmap.shadow(shadowSize,textColorValue,isRadius,isShadow), margin-shadowSize, margin-shadowSize, null)
         }
         saveBitmap(context, picture, newBitmap)
     }

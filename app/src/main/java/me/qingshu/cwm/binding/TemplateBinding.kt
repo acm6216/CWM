@@ -1,14 +1,13 @@
 package me.qingshu.cwm.binding
 
 import android.content.DialogInterface
+import android.view.LayoutInflater
 import android.view.View
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import me.qingshu.cwm.R
 import me.qingshu.cwm.data.BaseBoAdapter
-import me.qingshu.cwm.data.CameraLogo
 import me.qingshu.cwm.data.CardColor
 import me.qingshu.cwm.data.CardSize
 import me.qingshu.cwm.data.Device
@@ -18,8 +17,8 @@ import me.qingshu.cwm.data.Lens
 import me.qingshu.cwm.data.Template
 import me.qingshu.cwm.databinding.ParamBinding
 import me.qingshu.cwm.databinding.PreferenceTemplateBinding
+import me.qingshu.cwm.databinding.RenameDialogBinding
 import me.qingshu.cwm.extensions.edit
-import me.qingshu.cwm.extensions.sharedPreferences
 
 private const val TEMPLATE_KEY = "TEMPLATE_KEY"
 private const val TEMPLATE_VALUE = "TEMPLATE_VALUE"
@@ -37,11 +36,7 @@ class TemplateBinding(paramBinding: ParamBinding):Binding<PreferenceTemplateBind
         saveCallback:((TemplateBinding)->Unit)?=null
     ) = binding.apply {
         templateRoot.setOnClickListener(::templatePicker)
-        getValue.let {
-            context.getString(R.string.template_name,it+1)
-        }.also {
-            templateText.setText(it)
-        }
+        templateRoot.setOnLongClickListener(::renameTemplate)
         saveTemplate.setOnClickListener{
             saveCallback?.invoke(this@TemplateBinding)
         }
@@ -55,7 +50,8 @@ class TemplateBinding(paramBinding: ParamBinding):Binding<PreferenceTemplateBind
         lens: Lens,
         cardSize: CardSize,
         cardColor: CardColor,
-        icon: Icon
+        name:String = "",
+        fromButton:Boolean = false
     ) {
         val index = getValue
         Template(
@@ -64,7 +60,7 @@ class TemplateBinding(paramBinding: ParamBinding):Binding<PreferenceTemplateBind
             lens = lens,
             cardSize = cardSize,
             cardColor = cardColor,
-            //icon = icon
+            name = if(fromButton) Template.USE[getValue].name else name
         ).also {
             Template.USE.run {
                 add(index, it)
@@ -82,32 +78,61 @@ class TemplateBinding(paramBinding: ParamBinding):Binding<PreferenceTemplateBind
         }
     }
 
+    private fun renameTemplate(view: View):Boolean{
+        val layout = RenameDialogBinding.inflate(LayoutInflater.from(view.context))
+        layout.input.setText(Template.USE[getValue].name)
+        MaterialAlertDialogBuilder(view.context).apply {
+            setView(layout.root)
+            setTitle(R.string.template_rename)
+            setPositiveButton(R.string.template_save){_,_ ->
+                val targetName = layout.input.text.toString()
+                if (targetName.trim().replace("\n","").isNotEmpty()) {
+                    Template.USE[getValue].run {
+                        save(
+                            device = device,
+                            information = information,
+                            lens = lens,
+                            cardSize = cardSize,
+                            cardColor = cardColor,
+                            name = targetName
+                        )
+                    }
+                    binding.templateText.setText(targetName)
+                }
+            }
+            setNegativeButton(R.string.template_cancel,null)
+            show()
+        }
+        return true
+    }
+
     private fun initTemplate() {
         Template.USE.clear()
         val value = getTemplateValue
         if (value.isEmpty())
-            repeat(Template.MAX) {
+            repeat(Template.MAX) { index ->
                 Template(
-                    //icon = CameraLogo.CANNON,
                     device = Device.empty,
                     lens = Lens.empty,
                     information = Information.empty,
                     cardSize = CardSize.LARGE,
-                    cardColor = CardColor.WHITE
+                    cardColor = CardColor.WHITE,
+                    name = "模板 ${index+1}"
                 ).also { Template.USE.add(it) }
             }
         else GsonBuilder().registerTypeAdapter(Icon::class.java, BaseBoAdapter()).create().fromJson<ArrayList<Template>>(value,
             object : TypeToken<ArrayList<Template>>() {}.type).also {
             Template.USE.addAll(it)
         }
+
+        binding.templateText.setText(Template.USE[getValue].name)
         clickCallback.invoke(getTemplate(getValue))
     }
 
     private fun templatePicker(view: View){
         MaterialAlertDialogBuilder(view.context).apply {
-            val name = context.getString(R.string.template_title)
-            val array = IntArray(Template.MAX)
-            setSingleChoiceItems(array.mapIndexed { index, _ ->  "$name ${index+1}" }.toTypedArray(),getValue,::templateClick)
+
+            setSingleChoiceItems(Template.USE.map {it.name }.toTypedArray(),getValue,::templateClick)
             show()
         }
     }
@@ -116,15 +141,12 @@ class TemplateBinding(paramBinding: ParamBinding):Binding<PreferenceTemplateBind
         sharedPreferences().edit {
             putInt(TEMPLATE_KEY,which)
         }
-        context.getString(R.string.template_name,which+1).also {
-            binding.templateText.setText(it)
-        }
-        clickCallback.invoke(getTemplate(which))
+        val target = getTemplate(which)
+        binding.templateText.setText(target.name)
+        clickCallback.invoke(target)
         dialog.dismiss()
     }
 
     private fun getTemplate(index:Int) = Template.USE[index]
-
-    private fun sharedPreferences() = context.sharedPreferences()
 
 }

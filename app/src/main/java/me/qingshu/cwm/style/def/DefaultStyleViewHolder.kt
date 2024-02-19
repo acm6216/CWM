@@ -7,7 +7,7 @@ import me.qingshu.cwm.extensions.treeObserver
 import me.qingshu.cwm.style.StyleViewHolder
 
 class DefaultStyleViewHolder private constructor(
-    private val binding: DefaultPictureMarkBinding
+    private val binding: DefaultMarkBinding
 ) : StyleViewHolder(binding.root) {
 
     override fun bind(picture: Picture, click: (View, Picture) -> Unit) {
@@ -28,6 +28,6 @@ class DefaultStyleViewHolder private constructor(
     }
 
     companion object {
-        fun from(binding: DefaultPictureMarkBinding) = DefaultStyleViewHolder(binding)
+        fun from(binding: DefaultMarkBinding) = DefaultStyleViewHolder(binding)
     }
 }

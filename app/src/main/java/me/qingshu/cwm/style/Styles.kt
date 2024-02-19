@@ -18,7 +18,7 @@ enum class Styles(
     CARD(R.string.styles_card, fillet = true),
     INNER(R.string.styles_inner, gravityVisible = true),
     NEW_YEAR(R.string.styles_new_year,visibleLens = true, icon = FestivalLogo.CHINESE_NEW_YEAR),
-    SPACE(R.string.styles_space,visibleLens = true);
+    SPACE(R.string.styles_space,visibleLens = true, fillet = true);
 
     fun styleName(context: Context) = context.getString(id)
 

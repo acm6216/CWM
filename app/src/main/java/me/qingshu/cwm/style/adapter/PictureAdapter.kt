@@ -12,9 +12,9 @@ import me.qingshu.cwm.databinding.StyleCardInnerBinding
 import me.qingshu.cwm.databinding.StyleDefaultBinding
 import me.qingshu.cwm.databinding.StyleSpaceBinding
 import me.qingshu.cwm.style.inner.CardInnerMarkBinding
-import me.qingshu.cwm.style.card.CardPictureMarkBinding
+import me.qingshu.cwm.style.card.CardMarkBinding
 import me.qingshu.cwm.style.card.CardStyleViewHolder
-import me.qingshu.cwm.style.def.DefaultPictureMarkBinding
+import me.qingshu.cwm.style.def.DefaultMarkBinding
 import me.qingshu.cwm.style.def.DefaultStyleViewHolder
 import me.qingshu.cwm.style.newyear.NewYearMarkBinding
 import me.qingshu.cwm.style.newyear.NewYearViewHolder
@@ -29,7 +29,7 @@ class PictureAdapter(private val click: (View, Picture) -> Unit) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder = when(viewType){
         Styles.DEFAULT.ordinal -> DefaultStyleViewHolder.from(
-            DefaultPictureMarkBinding(
+            DefaultMarkBinding(
                 StyleDefaultBinding.inflate(
                     LayoutInflater.from(
                         parent.context
@@ -64,7 +64,7 @@ class PictureAdapter(private val click: (View, Picture) -> Unit) :
             )
         )
         else -> CardStyleViewHolder.from(
-            CardPictureMarkBinding(
+            CardMarkBinding(
                 StyleCardBinding.inflate(
                     LayoutInflater.from(
                         parent.context

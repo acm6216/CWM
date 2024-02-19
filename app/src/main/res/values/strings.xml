@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">CWM</string>
     <string name="label_name">Camera Water Mark</string>
-    <string name="label_version">版本：1.5.0</string>
+    <string name="label_version">版本：1.5.1</string>
     <string name="label_licence">Copyright © 2023 QingShu All Right Reserved.</string>
     <string name="save">保存到设备</string>
     <string name="apply">应用</string>
@@ -19,8 +19,11 @@
 
     <string name="gravity_title">位置</string>
 
-    <string name="template_title">模板</string>
+    <string name="template_title">模板 *</string>
     <string name="template_name">模板 %d</string>
+    <string name="template_rename">重命名</string>
+    <string name="template_save">保存</string>
+    <string name="template_cancel">取消</string>
 
     <string name="picture_title">图片效果</string>
     <string name="picture_corner">圆角</string>

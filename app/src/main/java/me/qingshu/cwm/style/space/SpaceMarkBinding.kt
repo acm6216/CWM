@@ -16,6 +16,7 @@ class SpaceMarkBinding(
     val exifRoot get() = binding.exifRoot
 
     val src get() = binding.src
+    val card get() = binding.card
 
     fun realHeight(bitmap: Bitmap, picture: Picture) = picture.cardSize.sizeByHeight(bitmap.height,bitmap.width)
 
@@ -49,7 +50,7 @@ class SpaceMarkBinding(
         cardRoot.setBackgroundResource(picture.cardColor.bgColor)
         exifRoot.apply {
             layoutParams.width = width/10*4
-            layoutParams.height = if(click==null) height else height/2
+            layoutParams.height = if(click==null) height else src.height
             setBackgroundResource(picture.cardColor.bgColor)
         }
         //infoRoot.setPadding(0,0,exifHeight/4,0)
@@ -69,6 +70,7 @@ class SpaceMarkBinding(
         val base = if(click==null) 2 else 1/4
 
         arrayOf(aperture,iso,shutter,focalDistance).forEach {
+            //it.layoutParams.height = (deviceRoot.height/7f).toInt()
             it.visibility = if(it.text.trim().isEmpty()) View.GONE else View.VISIBLE
             it.textSize = ts.toFloat()///10f*9f
             it.setTextColor(textColorValue)

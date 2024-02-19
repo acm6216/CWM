@@ -27,7 +27,7 @@ class CardStyleBuilder(
         picture: Picture,
         coroutineScope: CoroutineScope
     ) {
-        val layout = CardPictureMarkBinding(binding)
+        val layout = CardMarkBinding(binding)
 
         coroutineScope.launch(Dispatchers.Main) { layout.clear() }
 

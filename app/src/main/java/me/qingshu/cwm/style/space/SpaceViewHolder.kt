@@ -11,9 +11,14 @@ class SpaceViewHolder(
 ):StyleViewHolder(binding.root) {
     override fun bind(picture: Picture, click: (View, Picture) -> Unit) {
         val src = binding.src
+
         src.treeObserver {
             binding.setMark(picture,click = click, height = it.height, width = it.width)
         }
+
+        binding.card.radius = if(picture.isCorner()) 8f.dp else  0f
+
+        binding.card.elevation = if(picture.isShadow()) 4f.dp else  0f
 
         src.load(picture.uri) {
             crossfade(true)

@@ -5,10 +5,9 @@ import coil.load
 import me.qingshu.cwm.data.Picture
 import me.qingshu.cwm.extensions.treeObserver
 import me.qingshu.cwm.style.StyleViewHolder
-import me.qingshu.cwm.style.Styles
 
 class CardStyleViewHolder  private constructor(
-    private val binding: CardPictureMarkBinding
+    private val binding: CardMarkBinding
 ) : StyleViewHolder(binding.root) {
 
     override fun bind(picture: Picture, click: (View, Picture) -> Unit) {
@@ -19,7 +18,7 @@ class CardStyleViewHolder  private constructor(
 
         binding.card.radius = if(picture.isCorner()) 8f.dp else  0f
 
-        binding.card.elevation = if(picture.isShadow()) 2f.dp else  0f
+        binding.card.elevation = if(picture.isShadow()) 4f.dp else  0f
 
         src.load(picture.uri) {
             crossfade(true)
@@ -33,6 +32,6 @@ class CardStyleViewHolder  private constructor(
     }
 
     companion object {
-        fun from(binding: CardPictureMarkBinding) = CardStyleViewHolder(binding)
+        fun from(binding: CardMarkBinding) = CardStyleViewHolder(binding)
     }
 }

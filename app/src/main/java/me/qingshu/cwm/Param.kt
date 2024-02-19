@@ -25,6 +25,7 @@ import me.qingshu.cwm.data.Exif
 import me.qingshu.cwm.data.Icon
 import me.qingshu.cwm.databinding.ParamBinding
 import me.qingshu.cwm.extensions.treeObserver
+import me.qingshu.cwm.style.Styles
 
 class Param:BaseFragment() {
 
@@ -100,8 +101,8 @@ class Param:BaseFragment() {
         fillet.bind{
             viewModel.receiveFillet(it)
         }
-        gravity.bind{ gravity,fromUser ->
-            viewModel.receiveGravity(gravity,fromUser)
+        gravity.bind{ gravity ->
+            viewModel.receiveGravity(gravity)
         }
         TemplateBinding(binding).bind(
             click = {
@@ -119,7 +120,7 @@ class Param:BaseFragment() {
                     lens.getLens(),
                     viewModel.useCardSize,
                     viewModel.useCardColor,
-                    viewModel.useLogo
+                    fromButton = true
                 )
             }
         )
@@ -141,13 +142,16 @@ class Param:BaseFragment() {
             }
             launch {
                 viewModel.styles.collect{
-                    info.visible(it)
-                    gravity.visible(it)
-                    fillet.visible(it)
+                    styleChanged(it)
                 }
-
             }
         }
+    }
+
+    private fun styleChanged(styles: Styles){
+        info.visible(styles)
+        gravity.visible(styles)
+        fillet.visible(styles)
     }
 
     private fun logoPicker(view: View){
