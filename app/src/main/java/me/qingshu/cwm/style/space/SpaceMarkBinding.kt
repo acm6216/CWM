@@ -14,7 +14,6 @@ class SpaceMarkBinding(
 ): StyleMarkBinding<StyleSpaceBinding>(binding) {
 
     val exifRoot get() = binding.exifRoot
-
     val src get() = binding.src
     val card get() = binding.card
 
@@ -50,7 +49,9 @@ class SpaceMarkBinding(
         cardRoot.setBackgroundResource(picture.cardColor.bgColor)
         exifRoot.apply {
             layoutParams.width = width/10*4
-            layoutParams.height = if(click==null) height else src.height
+            if(click==null) {
+                layoutParams.height = height
+            }
             setBackgroundResource(picture.cardColor.bgColor)
         }
         //infoRoot.setPadding(0,0,exifHeight/4,0)
@@ -58,10 +59,10 @@ class SpaceMarkBinding(
         logo.apply {
             setImageResource(picture.icon.src)
             layoutParams.also {
-                it.width = (width/10f*4/2f).toInt()
+                it.width = (width/10f*4f/2.5f).toInt()
                 it.height = (exifHeight/10f*9f).toInt()
             }
-            setPadding(picture.icon.padding.dp)
+            setPadding(picture.icon.padding.dp/2)
         }
         shutter.text = picture.userExif.lens.shutter
         iso.text = picture.userExif.lens.iso
@@ -70,10 +71,10 @@ class SpaceMarkBinding(
         val base = if(click==null) 2 else 1/4
 
         arrayOf(aperture,iso,shutter,focalDistance).forEach {
-            //it.layoutParams.height = (deviceRoot.height/7f).toInt()
             it.visibility = if(it.text.trim().isEmpty()) View.GONE else View.VISIBLE
-            it.textSize = ts.toFloat()///10f*9f
+            it.textSize = ts.toFloat()/10f*9f
             it.setTextColor(textColorValue)
+            it.isPreview = click!=null
             it.setPadding(0,ts*base,0,ts*base)
         }
         if (picture.icon.tintEnable) logo.setColorFilter(textColorValue)

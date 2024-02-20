@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">CWM</string>
     <string name="label_name">Camera Water Mark</string>
-    <string name="label_version">版本：1.5.1</string>
+    <string name="label_version">version - 1.5.2</string>
     <string name="label_licence">Copyright © 2023 QingShu All Right Reserved.</string>
     <string name="save">保存到设备</string>
     <string name="apply">应用</string>
@@ -29,6 +29,7 @@
     <string name="picture_corner">圆角</string>
     <string name="picture_margin">边距</string>
     <string name="picture_shadow">阴影</string>
+    <string name="picture_blur">模糊</string>
 
     <string name="logo_picker_title">Logo</string>
 
@@ -112,6 +113,10 @@
     <string name="gravity_right_top">右上</string>
     <string name="gravity_right_bottom">右下</string>
     <string name="gravity_center">居中</string>
+    <string name="gravity_center_horizontal_and_top">顶部居中</string>
+    <string name="gravity_center_horizontal_and_bottom">底部居中</string>
+    <string name="gravity_center_vertical_left">左居中</string>
+    <string name="gravity_center_vertical_right">右居中</string>
 
     <string name="exif_dialog">快门 = %sS\n拍摄日期 = %s\n光圈 = f%s\n设备 = %s\n焦距 = %smm\nISO = %s\n镜头型号 = %s\n地理位置 = %s</string>
 

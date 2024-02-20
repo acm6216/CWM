@@ -19,8 +19,8 @@ import me.qingshu.cwm.style.radius
 import me.qingshu.cwm.style.shadow
 
 class SpaceStyleBuilder(
-    private val binding:StyleSpaceBinding
-): StyleBuilder<StyleSpaceBinding>(binding) {
+    private val binding: StyleSpaceBinding
+) : StyleBuilder<StyleSpaceBinding>(binding) {
     override fun execute(context: Context, picture: Picture, coroutineScope: CoroutineScope) {
 
         val layout = SpaceMarkBinding(binding)
@@ -34,8 +34,7 @@ class SpaceStyleBuilder(
 
                 })
             source!!.let {
-                val isRadius = picture.isCorner()
-                if(isRadius) it.radius(source.width / 20f.toInt(), CORNER_ALL)
+                if (picture.isCorner()) it.radius(source.width / 20f.toInt(), CORNER_ALL)
                 else it
             }
         }
@@ -53,7 +52,7 @@ class SpaceStyleBuilder(
             )
         }
         Thread.sleep(250)
-        val exifW = sourceBitmap.width/10*4
+        val exifW = sourceBitmap.width / 10 * 4
         val bitmap = Bitmap.createBitmap(
             exifW,
             sourceBitmap.height,
@@ -64,23 +63,28 @@ class SpaceStyleBuilder(
             drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
         })
 
-        val margin = sourceBitmap.width/15f
-        val shadowSize = sourceBitmap.width/20f
+        val margin = sourceBitmap.width / 15f
+        val shadowSize = sourceBitmap.width / 20f
 
-        val textColorValue = ContextCompat.getColor(context,picture.cardColor.textColor)
+        val textColorValue = ContextCompat.getColor(context, picture.cardColor.textColor)
         val isRadius = picture.isCorner()
         val isShadow = picture.isShadow()
 
         val newBitmap = Bitmap.createBitmap(
-            sourceBitmap.width+(margin*2).toInt() + exifW,
-            sourceBitmap.height + (margin*2).toInt(),
+            sourceBitmap.width + (margin * 2).toInt() + exifW,
+            sourceBitmap.height + (margin * 2).toInt(),
             Bitmap.Config.ARGB_8888
         )
         Canvas(newBitmap).apply {
             drawColor(layout.color(picture.cardColor.bgColor))
             density = sourceBitmap.density
-            drawBitmap(bitmap, margin+sourceBitmap.width.toFloat(), margin, null)
-            drawBitmap(sourceBitmap.shadow(shadowSize,textColorValue,isRadius,isShadow), margin-shadowSize, margin-shadowSize, null)
+            drawBitmap(bitmap, margin + sourceBitmap.width.toFloat(), margin, null)
+            drawBitmap(
+                sourceBitmap.shadow(shadowSize, textColorValue, isRadius, isShadow),
+                margin - shadowSize,
+                margin - shadowSize,
+                null
+            )
         }
         saveBitmap(context, picture, newBitmap)
     }

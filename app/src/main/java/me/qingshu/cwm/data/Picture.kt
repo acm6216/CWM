@@ -11,7 +11,8 @@ data class Picture(
     val userExif: Exif,
     val styles: Styles,
     val gravity:StyleGravity = StyleGravity.CENTER,
-    val fillet:Int = 0
+    val fillet:Int = 0,
+    val visible:Boolean = true
 ){
 
     fun isShadow():Boolean = (fillet and (1 shl 1)) != 0

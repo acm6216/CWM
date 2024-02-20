@@ -1,8 +1,11 @@
 package me.qingshu.cwm.style.inner
 
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import coil.load
 import me.qingshu.cwm.data.Picture
+import me.qingshu.cwm.databinding.StyleCardInnerBinding
 import me.qingshu.cwm.extensions.treeObserver
 import me.qingshu.cwm.style.StyleViewHolder
 
@@ -28,6 +31,13 @@ class CardInnerStyleViewHolder private constructor(
     }
 
     companion object {
-        fun from(binding: CardInnerMarkBinding) = CardInnerStyleViewHolder(binding)
+        fun from(parent: ViewGroup) = CardInnerStyleViewHolder(
+            CardInnerMarkBinding(
+                StyleCardInnerBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,false
+                )
+            )
+        )
     }
 }

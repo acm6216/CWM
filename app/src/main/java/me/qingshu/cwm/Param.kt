@@ -21,6 +21,7 @@ import me.qingshu.cwm.binding.LensBinding
 import me.qingshu.cwm.binding.FilletBinding
 import me.qingshu.cwm.binding.StyleBinding
 import me.qingshu.cwm.binding.TemplateBinding
+import me.qingshu.cwm.binding.ToolbarBinding
 import me.qingshu.cwm.data.Exif
 import me.qingshu.cwm.data.Icon
 import me.qingshu.cwm.databinding.ParamBinding
@@ -37,6 +38,7 @@ class Param:BaseFragment() {
     private val info by lazy { InformationBinding(binding) }
     private val cardColor by lazy { CardColorBinding(binding) }
     private val cardSize by lazy { CardSizeBinding(binding) }
+    private val toolbar by lazy { ToolbarBinding(binding) }
     private val viewModel:PictureViewModel by activityViewModels()
 
     private val picturePicker =
@@ -86,14 +88,12 @@ class Param:BaseFragment() {
             setNavigationOnClickListener(::toggle)
             setOnClickListener(::toggle)
         }
-        binding.logo.setOnClickListener(::logoPicker)
 
         binding.root.setOnTouchListener{ _,_ ->
             behavior.close()
             false
         }
         binding.apply.setOnClick(::apply)
-        binding.picker.setOnClickListener { picturePicker.launch(arrayOf("image/*")) }
 
         device.bind()
         info.bind()
@@ -124,6 +124,11 @@ class Param:BaseFragment() {
                 )
             }
         )
+        toolbar.bind(
+            logoPicker = { logoPicker(it) },
+            picturePicker = { picturePicker.launch(arrayOf("image/*")) },
+            visible = { viewModel.receiveLogoVisible(it) }
+        )
         StyleBinding(binding).bind{ style,fromUser ->
             viewModel.receiveStyle(style,fromUser)
         }
@@ -152,6 +157,7 @@ class Param:BaseFragment() {
         info.visible(styles)
         gravity.visible(styles)
         fillet.visible(styles)
+        toolbar.visible(styles)
     }
 
     private fun logoPicker(view: View){
@@ -160,7 +166,7 @@ class Param:BaseFragment() {
         }.show(childFragmentManager, javaClass.simpleName)
     }
 
-    private fun useLogo(icon: Icon) = useLogo(icon,binding.logo)
+    //private fun useLogo(icon: Icon) = useLogo(icon,binding.logo)
 
     private fun useLogo(icon: Icon, view: View){
         viewModel.receiveLogo(icon)

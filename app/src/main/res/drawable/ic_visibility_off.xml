@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="NewApi"
     android:height="24dp"
+    android:tint="?attr/colorControlNormal"
     android:viewportHeight="24"
     android:viewportWidth="24"
     android:width="24dp">

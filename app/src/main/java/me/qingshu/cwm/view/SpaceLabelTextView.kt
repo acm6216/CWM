@@ -12,6 +12,12 @@ class SpaceLabelTextView @JvmOverloads constructor(
     defStyleAttr: Int = android.R.attr.textViewStyle
 ) : AppCompatTextView(context, attr, defStyleAttr) {
 
+    var isPreview:Boolean = false
+        set(value) {
+            field = value
+            invalidate()
+        }
+
     override fun setTextColor(color: Int) {
         super.setTextColor(color)
         paint.color = color
@@ -29,11 +35,12 @@ class SpaceLabelTextView @JvmOverloads constructor(
             offset + strokeW / 2,
             strokeW / 2,
             offset + textSize * 3 + broderWidth * 2 - strokeW / 2,
-            textSize + broderWidth * 2f - strokeW / 2,
+            if(isPreview) measuredHeight - strokeW*2 else textSize + broderWidth * 2f - strokeW / 2,
             textSize / 3,
             textSize / 3,
             paint
         )
+
         paint.style = Paint.Style.FILL
         paint.strokeWidth = strokeW
         canvas.drawText(
@@ -44,14 +51,17 @@ class SpaceLabelTextView @JvmOverloads constructor(
             (textSize * 2 + broderWidth) / 2,
             paint
         )
+        val ts = paint.textSize
+        paint.textSize = paint.textSize/4f*3f
         canvas.drawText(
             label,
             0,
             label.length,
-            offset + (textSize * 3) / (2 + label.length / 2),
-            (textSize * 2 + broderWidth) / 2,
+            offset + (textSize * 3) / (2 + label.length / 2)+ts/2,
+            (textSize * 2 + broderWidth) / 2+if(isPreview) ts/32 else ts/4,
             paint
         )
+        paint.textSize = ts
     }
 
 }

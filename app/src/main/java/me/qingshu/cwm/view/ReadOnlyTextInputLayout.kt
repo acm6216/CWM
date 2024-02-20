@@ -1,5 +1,6 @@
 package me.qingshu.cwm.view
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
@@ -27,6 +28,7 @@ class ReadOnlyTextInputLayout @JvmOverloads constructor(
         }
     }
 
+    @SuppressLint("PrivateResource")
     fun setDropDown(dropDown: Boolean) {
         if (dropDown) {
             endIconMode = END_ICON_CUSTOM

@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import me.qingshu.cwm.binding.FilletBinding.Companion.FILLET_NONE
 import me.qingshu.cwm.data.CardColor
 import me.qingshu.cwm.data.CardSize
 import me.qingshu.cwm.data.Device
@@ -53,7 +52,7 @@ class PictureViewModel : ViewModel() {
         }
     }
 
-    private val fillet = MutableStateFlow(FILLET_NONE)
+    private val fillet = MutableStateFlow(0)
     fun receiveFillet(flags: Int){
         viewModelScope.launch {
             fillet.emit(flags)
@@ -71,8 +70,14 @@ class PictureViewModel : ViewModel() {
     val useCardSize get() = cardSize.value
     val useCardColor get() = cardColor.value
 
-    val styles = MutableStateFlow(Styles.DEFAULT)
+    private val logoVisible = MutableStateFlow(true)
+    fun receiveLogoVisible(visible:Boolean){
+        viewModelScope.launch {
+            logoVisible.emit(visible)
+        }
+    }
 
+    val styles = MutableStateFlow(Styles.DEFAULT)
     fun receiveStyle(style: Styles,fromUser:Boolean){
         viewModelScope.launch {
             if(fromUser) {
@@ -126,7 +131,7 @@ class PictureViewModel : ViewModel() {
 
     val previewPictures = combine(
         pictureUris, cardColor, cardSize,
-        cardIcon, userExif,styles,styleGravity,fillet
+        cardIcon, userExif,styles,styleGravity,fillet,logoVisible
     ) { any ->
         val uris = any[0] as List<UriExif>
         val cardColor = any[1] as CardColor
@@ -136,6 +141,7 @@ class PictureViewModel : ViewModel() {
         val style = any[5] as Styles
         val gravity = any[6] as StyleGravity
         val f = any[7] as Int
+        val visible = any[8] as Boolean
         saveEnable.emit(false)
         uris.map { ue ->
             val targetDevice = Device.combine(exif.device,ue.exif.device)
@@ -146,7 +152,8 @@ class PictureViewModel : ViewModel() {
                 icon, Exif(targetDevice, targetLens, targetInfo),
                 styles = style,
                 gravity = gravity,
-                fillet = f
+                fillet = f,
+                visible = visible
             )
         }.also {
             saveEnable.emit(true)

@@ -25,10 +25,7 @@ class CardInnerBuilder(
 
         val sourceBitmap = context.contentResolver.openInputStream(picture.uri)!!.use { stream ->
             val source = BitmapFactory.decodeStream(stream,
-                Rect(0, 0, 0, 0), BitmapFactory.Options().apply
-                {
-
-                })
+                Rect(0, 0, 0, 0), BitmapFactory.Options().apply {})
             source!!
         }
 

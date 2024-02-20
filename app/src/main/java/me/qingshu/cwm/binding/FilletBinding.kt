@@ -6,14 +6,16 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import me.qingshu.cwm.R
 import me.qingshu.cwm.databinding.ParamBinding
-import me.qingshu.cwm.databinding.PreferencePictureBinding
+import me.qingshu.cwm.databinding.PreferenceFilletBinding
+import me.qingshu.cwm.extensions.cornel
 import me.qingshu.cwm.extensions.edit
+import me.qingshu.cwm.extensions.shadow
 import me.qingshu.cwm.style.Styles
 
 private const val FILLET_KEY = "FILLET_KEY"
 class FilletBinding(
     paramBinding: ParamBinding
-):Binding<PreferencePictureBinding>(paramBinding) {
+):Binding<PreferenceFilletBinding>(paramBinding) {
 
     companion object{
         const val FILLET_NONE = 0
@@ -22,7 +24,7 @@ class FilletBinding(
         const val FILLET_ALL = FILLET_CORNEL or FILLET_SHADOW
     }
 
-    private inline val getValue get() = sharedPreferences().getInt(FILLET_KEY,FILLET_NONE)
+    private inline val getValue get() = sharedPreferences().getInt(FILLET_KEY,0)
 
     override val binding get() = get { it.picture }
 
@@ -43,6 +45,7 @@ class FilletBinding(
         val v = getValue
         selectRoot.findViewById<Chip>(R.id.corner).isChecked = isCorner(v)
         selectRoot.findViewById<Chip>(R.id.shadow).isChecked = isShadow(v)
+        select?.invoke(v)
     }
 
 
@@ -53,13 +56,8 @@ class FilletBinding(
     private fun flags(group:ChipGroup):Int{
         val cornel = group.findViewById<Chip>(R.id.corner)
         val shadow = group.findViewById<Chip>(R.id.shadow)
-        return if(cornel.isChecked && shadow.isChecked){
-            FILLET_ALL
-        }else if(!cornel.isChecked && shadow.isChecked){
-            FILLET_SHADOW
-        }else if(cornel.isChecked && !shadow.isChecked){
-            FILLET_CORNEL
-        }else FILLET_NONE
+        return cornel.cornel() or shadow.shadow()
     }
+
 
 }

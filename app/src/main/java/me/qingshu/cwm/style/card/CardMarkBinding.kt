@@ -19,6 +19,7 @@ class CardMarkBinding(
 
     val src get() = binding.src
     val card get() = binding.card
+    val cardRoot get() = binding.cardRoot
     val exifRoot get() = binding.exifRoot
 
     fun color(@ColorRes resValue:Int) = ContextCompat.getColor(src.context,resValue)

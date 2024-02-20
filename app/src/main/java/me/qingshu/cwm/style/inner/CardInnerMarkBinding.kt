@@ -49,6 +49,7 @@ class CardInnerMarkBinding(
             setPadding(picture.icon.iconPadding().dp)
             if (picture.icon.tintEnable) setColorFilter(textColorValue)
             else colorFilter = null
+            visibility = if(picture.visible) View.VISIBLE else View.GONE
         }
         cardRoot.setOnClickListener{
             click?.invoke(it,picture)
@@ -57,7 +58,7 @@ class CardInnerMarkBinding(
         exifRoot.gravity = picture.gravity.flags
         lens.text = picture.userExif.lens.string()
         device.text = picture.userExif.device.string()
-        device.setPadding(0,0,0,hv/2)
+        device.setPadding(0,0,0,hv/8)
         lens.setPadding(0)
 
         arrayOf(device,lens).forEach {

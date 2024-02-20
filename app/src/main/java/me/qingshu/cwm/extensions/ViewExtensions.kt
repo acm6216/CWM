@@ -6,8 +6,12 @@ import android.view.View
 import android.view.ViewPropertyAnimator
 import android.view.ViewTreeObserver
 import androidx.core.view.*
+import com.google.android.material.chip.Chip
 import kotlinx.coroutines.*
 import kotlin.coroutines.resume
+
+fun Chip.cornel() = if(isChecked) 1 else 0
+fun Chip.shadow() = if(isChecked) 1 shl 1 else 0
 
 fun View.setOnClickListener(block:()->Unit) = setOnClickListener { block.invoke() }
 

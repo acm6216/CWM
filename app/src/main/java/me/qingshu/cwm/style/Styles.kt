@@ -12,11 +12,12 @@ enum class Styles(
     val visibleLens:Boolean = false,
     val icon: Icon = CameraLogo.SONY,
     val gravityVisible:Boolean = false,
-    val fillet:Boolean = false
+    val fillet:Boolean = false,
+    val iconVisible:Boolean = false
 ){
     DEFAULT(R.string.styles_default,visibleLens = true),
     CARD(R.string.styles_card, fillet = true),
-    INNER(R.string.styles_inner, gravityVisible = true),
+    INNER(R.string.styles_inner, gravityVisible = true, iconVisible = true),
     NEW_YEAR(R.string.styles_new_year,visibleLens = true, icon = FestivalLogo.CHINESE_NEW_YEAR),
     SPACE(R.string.styles_space,visibleLens = true, fillet = true);
 

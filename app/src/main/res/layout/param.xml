@@ -42,41 +42,10 @@
                     app:subtitleTextAppearance="@style/Subtitle"
                     app:title="@string/setting">
 
-                    <androidx.appcompat.widget.LinearLayoutCompat
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="end|center_vertical"
-                        android:paddingHorizontal="4dp">
-
-                        <ImageView
-                            android:enabled="@{model.saveEnable}"
-                            android:id="@+id/logo"
-                            android:layout_width="72dp"
-                            android:layout_height="32dp"
-                            android:background="?selectableItemBackgroundBorderless"
-                            android:padding="4dp"
-                            android:src="@drawable/logo_canon"
-                            tools:ignore="ContentDescription" />
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="24dp"
-                            android:layout_marginHorizontal="4dp"
-                            android:background="?dividerHorizontal" />
-
-                        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:enabled="@{model.saveEnable}"
-                            android:id="@+id/picker"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="4dp"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/ic_picture"
-                            android:text="@string/add"
-                            app:elevation="0dp"
-                            app:fabSize="mini" />
-
-                    </androidx.appcompat.widget.LinearLayoutCompat>
+                    <include
+                        app:model="@{model}"
+                        android:id="@+id/bar"
+                        layout="@layout/preference_toolbar"/>
                 </androidx.appcompat.widget.Toolbar>
 
                 <View
@@ -127,7 +96,7 @@
                             layout="@layout/preference_card_size" />
                         <include
                             android:id="@+id/picture"
-                            layout="@layout/preference_picture" />
+                            layout="@layout/preference_fillet" />
 
                         <View
                             android:layout_width="match_parent"

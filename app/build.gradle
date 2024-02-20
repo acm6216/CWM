@@ -5,14 +5,14 @@ plugins {
 
 android {
     namespace 'me.qingshu.cwm'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "me.qingshu.cwm"
         minSdk 21
-        targetSdk 33
-        versionCode 32
-        versionName "1.5.1"
+        targetSdk 34
+        versionCode 33
+        versionName "1.5.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         dexOptions {
