@@ -77,7 +77,7 @@ class CardStyleBuilder(
         )
         val textColorValue = ContextCompat.getColor(context,picture.cardColor.textColor)
         val isRadius = picture.isCorner()
-        val isShadow = picture.isShadow()
+        val isShadow = picture.isShadowPicture()
         Canvas(newBitmap).apply {
             drawColor(layout.color(picture.cardColor.bgColor))
             density = sourceBitmap.density

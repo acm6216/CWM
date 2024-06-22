@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/icon"
+            app:elevation="1dp"
+            android:src="@drawable/ic_circle"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginVertical="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:textAllCaps="false"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:id="@+id/label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:visibility="invisible"
+            android:id="@+id/checked"
+            android:layout_marginTop="4dp"
+            android:tintMode="multiply"
+            android:tint="@color/checked"
+            android:src="@drawable/ic_circle"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            tools:ignore="ContentDescription,UseAppTint" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

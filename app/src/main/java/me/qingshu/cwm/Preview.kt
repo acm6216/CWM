@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import me.qingshu.cwm.data.Picture
@@ -21,16 +20,16 @@ class Preview : BaseFragment() {
 
     private val binding by lazy { PreviewBinding.inflate(layoutInflater) }
 
-    private val viewModel: PictureViewModel by activityViewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     private fun onMenuItemClick(view: View, picture: Picture){
         PopupMenu(view.context,view).apply {
             menuInflater.inflate(R.menu.option_menu,menu)
             setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.menu_remove -> viewModel.removePicture(picture)
-                    R.id.menu_clear -> viewModel.removeAllPicture()
-                    R.id.menu_exif -> viewModel.exif(picture,view.context)
+                    R.id.menu_remove -> mainViewModel.removePicture(picture)
+                    R.id.menu_clear -> mainViewModel.removeAllPicture()
+                    R.id.menu_exif -> mainViewModel.exif(picture,view.context)
                 }
                 true
             }
@@ -48,30 +47,34 @@ class Preview : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.model = viewModel
+        binding.model = mainViewModel
         binding.bindLifecycle()
-        binding.save.setOnClick(::save)
         binding.recyclerView.adapter = pictureAdapter
-        binding.recyclerView.layoutManager = LinearLayoutManager(view.context)
+        binding.recyclerView.itemAnimator = null
         repeatWithViewLifecycle {
             launch {
-                viewModel.previewPictures.collect {
+                mainViewModel.previewPictures.collect {
                     pictureAdapter.submitList(it)
                 }
             }
             launch {
-                viewModel.saveEnable.collect{
+                mainViewModel.saveEnable.collect{
                     binding.indicator.fadeToVisibilityUnsafe(!it)
                 }
             }
             launch {
-                viewModel.message.collect{
+                mainViewModel.message.collect{
                     showMessage(it)
                 }
             }
             launch {
-                viewModel.pictureExif.collect{ e ->
+                mainViewModel.pictureExif.collect{ e ->
                     e.also {  ExifDialog(it).show(childFragmentManager,javaClass.simpleName) }
+                }
+            }
+            launch {
+                mainViewModel.save.collect{
+                    save()
                 }
             }
         }
@@ -81,16 +84,18 @@ class Preview : BaseFragment() {
             it.text = content
         }
 
+        val packageInfo = requireActivity().packageManager.getPackageInfo(requireActivity().packageName, 0)
+        binding.version.text = getString(R.string.label_version,packageInfo.versionName)
     }
 
     private fun showMessage(@StringRes strRes:Int){
         if(strRes!=0) {
-            Snackbar.make(binding.save, strRes, Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(binding.recyclerView, strRes, Snackbar.LENGTH_SHORT).show()
         }
     }
 
     private fun save(){
-        viewModel.save(requireContext().applicationContext,binding)
+        mainViewModel.save(requireContext().applicationContext,binding)
     }
 
 }

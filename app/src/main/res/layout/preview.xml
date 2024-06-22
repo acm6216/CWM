@@ -6,11 +6,10 @@
     <data>
         <variable
             name="model"
-            type="me.qingshu.cwm.PictureViewModel" />
+            type="me.qingshu.cwm.MainViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:paddingBottom="?actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -67,8 +66,8 @@
                 android:clipToPadding="false"
                 android:paddingTop="?actionBarSize"
                 android:paddingBottom="88dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
@@ -93,17 +92,6 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:enabled="@{model.saveEnable}"
-            android:id="@+id/save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_download"
-            android:text="@string/save"
-            android:layout_gravity="top|end"
-            tools:ignore="ContentDescription" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

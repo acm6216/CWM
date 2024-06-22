@@ -31,6 +31,7 @@ class CardMarkBinding(
             logo.setImageDrawable(null)
             device.text = ""
             lens.text = ""
+            artSignature.text = ""
             root.invalidate()
         }
         return this
@@ -46,7 +47,9 @@ class CardMarkBinding(
         val ts = picture.cardSize.textSizeByHeight(height, width).toFloat()
         val size = picture.cardSize.logoSizeByHeight(height, width)
         val exifHeight = picture.cardSize.sizeByHeight(height, width)
-        logo.apply {
+
+        if(picture.artSignature.visible) artSignature.text = picture.artSignature.text
+        else logo.apply {
             setImageResource(picture.icon.src)
             layoutParams.also {
                 it.width = size * 2
@@ -56,6 +59,10 @@ class CardMarkBinding(
             if (picture.icon.tintEnable) setColorFilter(textColorValue)
             else colorFilter = null
         }
+
+        logo.visibility = if(!picture.artSignature.visible) View.VISIBLE else View.GONE
+        artSignature.visibility = if(picture.artSignature.visible) View.VISIBLE else View.GONE
+
         divider.apply {
             Color.argb(
                 128,
@@ -83,8 +90,11 @@ class CardMarkBinding(
             it.visibility = if(it.text.trim().isEmpty()) View.GONE else View.VISIBLE
             it.textSize = ts
             it.setTextColor(textColorValue)
+            it.typeface = typeface()
         }
-
+        artSignature.typeface = picture.artSignature.typeface(context)
+        artSignature.textSize = ts*1.6f
+        artSignature.setTextColor(textColorValue)
         cardRoot.setBackgroundResource(picture.cardColor.bgColor)
     }
 

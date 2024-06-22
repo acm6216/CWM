@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import me.qingshu.cwm.extensions.sharedPreferences
 
 abstract class BaseFragment:Fragment(){
 
@@ -28,6 +29,8 @@ abstract class BaseFragment:Fragment(){
     protected fun View.setOnClick(block:()->Unit){
         setOnClickListener { block.invoke() }
     }
+
+    protected fun sharedPreferences() = requireContext().sharedPreferences()
 
     protected fun <V:ViewDataBinding> V.bindLifecycle(){
         lifecycleOwner = this@BaseFragment

@@ -1,6 +1,5 @@
 package me.qingshu.cwm.style.inner
 
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import androidx.annotation.ColorRes
@@ -24,6 +23,7 @@ class CardInnerMarkBinding(
             logo.setImageDrawable(null)
             device.text = ""
             lens.text = ""
+            artSignature.text = ""
             exifRoot.gravity = Gravity.START
             root.invalidate()
         }
@@ -40,7 +40,12 @@ class CardInnerMarkBinding(
         val ts = picture.cardSize.textSizeByHeight(height, width).toFloat()
         val size = picture.cardSize.logoSizeByHeight(height, width)
         val hv = picture.cardSize.dividerHeightSizeByHeight(height, width)/2
-        logo.apply {
+
+        logo.visibility = if(!picture.artSignature.visible) View.VISIBLE else View.GONE
+        artSignature.visibility = if(picture.artSignature.visible) View.VISIBLE else View.GONE
+
+        if(picture.artSignature.visible) artSignature.text = picture.artSignature.text
+        else logo.apply {
             setImageResource(picture.icon.src)
             layoutParams.also {
                 it.width = size * 2
@@ -49,13 +54,14 @@ class CardInnerMarkBinding(
             setPadding(picture.icon.iconPadding().dp)
             if (picture.icon.tintEnable) setColorFilter(textColorValue)
             else colorFilter = null
-            visibility = if(picture.visible) View.VISIBLE else View.GONE
+            visibility = if(picture.visibleIcon) View.VISIBLE else View.GONE
         }
+
         cardRoot.setOnClickListener{
             click?.invoke(it,picture)
         }
         exifRoot.setPadding(hv*2)
-        exifRoot.gravity = picture.gravity.flags
+        exifRoot.gravity = picture.gravity
         lens.text = picture.userExif.lens.string()
         device.text = picture.userExif.device.string()
         device.setPadding(0,0,0,hv/8)
@@ -65,8 +71,15 @@ class CardInnerMarkBinding(
             it.visibility = if(it.text.trim().isEmpty()) View.GONE else View.VISIBLE
             it.textSize = ts
             it.setTextColor(textColorValue)
+            it.setShadowLayer(ts/5,ts/6,ts/10,textColorValue.textShadowColor())
+            it.typeface = typeface()
         }
 
+        artSignature.typeface = picture.artSignature.typeface(context)
+        artSignature.setTextColor(textColorValue)
+        artSignature.textSize = ts*1.6f
         cardRoot.setBackgroundResource(picture.cardColor.bgColor)
     }
+
+
 }

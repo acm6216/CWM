@@ -1,29 +1,22 @@
 package me.qingshu.cwm.style
 
-import android.content.Context
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import me.qingshu.cwm.R
-import me.qingshu.cwm.data.CameraLogo
-import me.qingshu.cwm.data.FestivalLogo
-import me.qingshu.cwm.data.Icon
+import me.qingshu.cwm.data.Logo
 
 enum class Styles(
-    @StringRes val id:Int,
+    @StringRes val label:Int,
+    @DrawableRes val src:Int,
     val visibleLens:Boolean = false,
-    val icon: Icon = CameraLogo.SONY,
+    val icon: Logo = Logo.SONY,
     val gravityVisible:Boolean = false,
-    val fillet:Boolean = false,
+    val effect:Boolean = false,
     val iconVisible:Boolean = false
 ){
-    DEFAULT(R.string.styles_default,visibleLens = true),
-    CARD(R.string.styles_card, fillet = true),
-    INNER(R.string.styles_inner, gravityVisible = true, iconVisible = true),
-    NEW_YEAR(R.string.styles_new_year,visibleLens = true, icon = FestivalLogo.CHINESE_NEW_YEAR),
-    SPACE(R.string.styles_space,visibleLens = true, fillet = true);
+    DEFAULT(R.string.styles_default,visibleLens = true,src = R.drawable.ic_style_default),
+    CARD(R.string.styles_card, effect = true,src = R.drawable.ic_style_card),
+    INNER(R.string.styles_inner, gravityVisible = true, iconVisible = true,src = R.drawable.ic_style_inner),
+    SPACE(R.string.styles_space, effect = true,src = R.drawable.ic_style_space);
 
-    fun styleName(context: Context) = context.getString(id)
-
-    companion object{
-        fun from(value:Int) = if(value> values().size || value<0) values()[0] else values()[value]
-    }
 }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:background="?android:windowBackground"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:background="?android:windowBackground"
+            android:id="@+id/viewpager"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"/>
+
+        <View
+            android:background="?dividerHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+        <com.google.android.material.tabs.TabLayout
+            android:background="@null"
+            android:layout_margin="8dp"
+            app:tabMode="scrollable"
+            app:tabGravity="center"
+            app:tabIndicatorGravity="top"
+            android:id="@+id/table_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

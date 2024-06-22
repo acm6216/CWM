@@ -68,7 +68,7 @@ class SpaceStyleBuilder(
 
         val textColorValue = ContextCompat.getColor(context, picture.cardColor.textColor)
         val isRadius = picture.isCorner()
-        val isShadow = picture.isShadow()
+        val isShadow = picture.isShadowPicture()
 
         val newBitmap = Bitmap.createBitmap(
             sourceBitmap.width + (margin * 2).toInt() + exifW,

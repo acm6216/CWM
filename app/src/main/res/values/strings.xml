@@ -1,62 +1,56 @@
 <resources>
     <string name="app_name">CWM</string>
     <string name="label_name">Camera Water Mark</string>
-    <string name="label_version">version - 1.5.2</string>
+    <string name="label_version">version - %s</string>
     <string name="label_licence">Copyright © 2023 QingShu All Right Reserved.</string>
-    <string name="save">保存到设备</string>
     <string name="apply">应用</string>
     <string name="add">添加</string>
     <string name="setting">设置</string>
+
+    <string name="dialog_ok">确定</string>
+    <string name="dialog_cancel">取消</string>
+    <string name="dialog_close">关闭</string>
+
     <string name="focal_distance">mm</string>
     <string name="aperture">F</string>
     <string name="shutter">S</string>
     <string name="iso">ISO</string>
-    <string name="lens_param_hint">参数</string>
+    <string name="lens_param_hint">Exif参数</string>
     <string name="lens_param_tips">或者单独设置</string>
-    <string name="lens_title">曝光参数</string>
+    <string name="lens_title">参数</string>
 
-    <string name="styles_title">样式</string>
-
-    <string name="gravity_title">位置</string>
+    <string name="word_art_title">艺术字</string>
 
     <string name="template_title">模板 *</string>
     <string name="template_name">模板 %d</string>
-    <string name="template_rename">重命名</string>
-    <string name="template_save">保存</string>
+    <string name="template_rename">命名</string>
+    <string name="template_apply">应用</string>
     <string name="template_cancel">取消</string>
 
-    <string name="picture_title">图片效果</string>
-    <string name="picture_corner">圆角</string>
-    <string name="picture_margin">边距</string>
-    <string name="picture_shadow">阴影</string>
-    <string name="picture_blur">模糊</string>
-
     <string name="logo_picker_title">Logo</string>
+    <string name="symbol_picker_title">特殊符号</string>
+    <string name="device_picker_title">相机品牌</string>
 
     <string name="menu_clear">移除所有图片</string>
     <string name="menu_remove">移除此图片</string>
     <string name="menu_exif">查看Exif</string>
 
-    <string name="use_lens_message_error">没有读取到此图片的镜头参数</string>
-    <string name="use_date_message_error">没有读取到此图片的日期参数</string>
-    <string name="use_device_message_error">没有读取到此图片的设备参数</string>
-    <string name="use_location_message_error">没有读取到此图片的位置参数</string>
+    <string name="menu_modifier">修改</string>
+    <string name="menu_delete">删除</string>
 
     <string name="device_title">设备</string>
     <string name="device_brand">品牌</string>
     <string name="device_model">型号</string>
 
-    <string name="date_title">日期、位置/镜头</string>
     <string name="date_hint">日期</string>
     <string name="location_hint">位置/镜头</string>
     <string name="location_title">\u3000</string>
 
-    <string name="card_size">卡片尺寸</string>
     <string name="card_size_small">小</string>
+    <string name="card_size_super_small">超小</string>
     <string name="card_size_medium">中</string>
     <string name="card_size_large">大</string>
 
-    <string name="card_color">卡片颜色</string>
     <string name="card_color_white">白色</string>
     <string name="card_color_black">黑色</string>
     <string name="card_color_grey">灰色</string>
@@ -102,27 +96,95 @@
     <string name="label_nubia">努比亚</string>
     <string name="label_oppo">OPPO</string>
 
+    <string name="label_long_year">龙年</string>
+
     <string name="styles_default">默认</string>
     <string name="styles_card">卡片</string>
     <string name="styles_inner">内部</string>
     <string name="styles_new_year">新年</string>
     <string name="styles_space">留白</string>
 
-    <string name="gravity_left_top">左上</string>
-    <string name="gravity_left_bottom">左下</string>
-    <string name="gravity_right_top">右上</string>
-    <string name="gravity_right_bottom">右下</string>
-    <string name="gravity_center">居中</string>
-    <string name="gravity_center_horizontal_and_top">顶部居中</string>
-    <string name="gravity_center_horizontal_and_bottom">底部居中</string>
-    <string name="gravity_center_vertical_left">左居中</string>
-    <string name="gravity_center_vertical_right">右居中</string>
+    <string name="exif_dialog">Exif详细信息</string>
+    <string name="exif_dialog_shutter">快门</string>
+    <string name="exif_dialog_iso">ISO</string>
+    <string name="exif_dialog_focal_length">焦距</string>
+    <string name="exif_dialog_focal_length_canon">等效焦距(1.6)</string>
+    <string name="exif_dialog_focal_length_other">等效焦距(1.5)</string>
+    <string name="exif_dialog_aperture">光圈</string>
+    <string name="exif_dialog_date">拍摄时间</string>
+    <string name="exif_dialog_lens_model">镜头型号</string>
 
-    <string name="exif_dialog">快门 = %sS\n拍摄日期 = %s\n光圈 = f%s\n设备 = %s\n焦距 = %smm\nISO = %s\n镜头型号 = %s\n地理位置 = %s</string>
-
-    <string-array name="model_symbol">
+    <string-array name="string_symbols">
+        <item>AUTO</item>
         <item>ℤ</item>
+        <item>Ⅰ</item>
+        <item>Ⅱ</item>
+        <item>Ⅲ</item>
+        <item>Ⅳ</item>
+        <item>Ⅴ</item>
+        <item>Ⅵ</item>
+        <item>Ⅶ</item>
+        <item>Ⅷ</item>
+        <item>Ⅸ</item>
+        <item>Ⅹ</item>
+        <item>Ⅺ</item>
+        <item>Ⅻ</item>
+        <item>α</item>
+        <item>·</item>
     </string-array>
 
-    <string name="festival_label_long">龙年</string>
+    <string-array name="string_devices">
+        <item>AUTO</item>
+        <item>Sony</item>
+        <item>Nikon</item>
+        <item>Canon</item>
+        <item>Fujifilm</item>
+        <item>Lumix</item>
+    </string-array>
+
+    <string name="screen_picture">图片</string>
+    <string name="screen_style">样式</string>
+    <string name="screen_icon">图标</string>
+    <string name="screen_exif">Exif</string>
+    <string name="screen_effect">效果</string>
+    <string name="screen_color">颜色</string>
+    <string name="screen_size">尺寸</string>
+    <string name="screen_gravity">位置</string>
+    <string name="screen_template">模板</string>
+
+    <string name="screen_picture_picker">选择图片</string>
+    <string name="screen_picture_exif">Exif</string>
+    <string name="screen_picture_save">保存图片</string>
+
+    <string name="screen_icon_gone">隐藏图标</string>
+    <string name="screen_icon_logo">Logo</string>
+    <string name="screen_icon_art_signature">艺术字</string>
+
+    <string name="screen_gravity_none">无</string>
+    <string name="screen_gravity_left">左</string>
+    <string name="screen_gravity_right">右</string>
+    <string name="screen_gravity_top">上</string>
+    <string name="screen_gravity_bottom">下</string>
+
+    <string name="screen_effect_none">无</string>
+    <string name="screen_effect_shadow_picture">图片阴影</string>
+    <string name="screen_effect_shadow_text">文本阴影</string>
+    <string name="screen_effect_cornel">圆角</string>
+
+    <string name="screen_exif_title">Exif</string>
+    <string name="screen_exif_apply">应用</string>
+    <string name="screen_exif_close">关闭</string>
+
+    <string name="font_label_arkipelago">Arkipelago</string>
+    <string name="font_label_quillbacks_demo">Quillbacks</string>
+    <string name="font_label_modesty">Modesty</string>
+    <string name="font_label_bernd">Bernd</string>
+    <string name="font_label_autograf">Autograf</string>
+
+    <string name="font_file_arkipelago">Arkipelago.otf</string>
+    <string name="font_file_quillbacks_demo">QuillbacksDemo.ttf</string>
+    <string name="font_file_modesty">Modesty.ttf</string>
+    <string name="font_file_bernd">Bernd.otf</string>
+    <string name="font_file_autograf">Autograf.ttf</string>
+
 </resources>

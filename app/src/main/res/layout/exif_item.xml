@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="exif"
+            type="me.qingshu.cwm.data.ExifInformation" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <me.qingshu.cwm.view.ReadOnlyTextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="?listPreferredItemPaddingStart"
+            android:layout_marginVertical="2dp"
+            android:hint="@{exif.label}">
+
+            <me.qingshu.cwm.view.ReadOnlyTextInputEditText
+                android:textIsSelectable="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{exif.value}" />
+        </me.qingshu.cwm.view.ReadOnlyTextInputLayout>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

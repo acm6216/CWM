@@ -6,7 +6,6 @@ import me.qingshu.cwm.extensions.date
 import me.qingshu.cwm.extensions.lensModel
 
 data class Information(val date:String, val location:String){
-    fun isEmpty() = date.isEmpty() && location.isEmpty()
 
     companion object {
 

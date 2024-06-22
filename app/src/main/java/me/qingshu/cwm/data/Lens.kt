@@ -13,7 +13,7 @@ data class Lens(
     val aperture: String = EMPTY,
     val shutter: String = EMPTY,
     val iso: String = EMPTY,
-    val paramVisible:Boolean = true
+    val paramVisible:Boolean = false
 ){
     fun string():String {
         val buffer = StringBuilder()
@@ -27,13 +27,11 @@ data class Lens(
         return buffer.toString()
     }
 
-    fun isEmpty() = param.isEmpty() && focalDistance.isEmpty() && aperture.isEmpty() && shutter.isEmpty() && iso.isEmpty()
-
     companion object{
         val empty get() = Lens(param = EMPTY, focalDistance = EMPTY, aperture = EMPTY, shutter = EMPTY, iso = EMPTY)
 
         fun combine(a:Lens,b:Lens) = Lens(
-            param = EMPTY,
+            param = a.param.ifEmpty { b.param },
             paramVisible = a.paramVisible,
             iso = a.iso.ifEmpty { b.iso },
             shutter = a.shutter.ifEmpty { b.shutter },

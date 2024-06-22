@@ -3,6 +3,7 @@ package me.qingshu.cwm.style.space
 import android.graphics.Bitmap
 import android.view.View
 import androidx.annotation.ColorRes
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
 import me.qingshu.cwm.data.Picture
@@ -27,6 +28,7 @@ class SpaceMarkBinding(
             shutter.text = ""
             iso.text = ""
             aperture.text = ""
+            artSignature.text = ""
             root.invalidate()
         }
         return this
@@ -39,6 +41,7 @@ class SpaceMarkBinding(
         click: ((View, Picture) -> Unit)?
     ) = binding.apply {
         if(height*width==0) return@apply
+        clear()
         val size = picture.cardSize.logoSizeByHeight(height, width)
         val textColorValue = ContextCompat.getColor(context,picture.cardColor.textColor)
         val exifHeight = picture.cardSize.sizeByHeight(height, width)
@@ -54,9 +57,12 @@ class SpaceMarkBinding(
             }
             setBackgroundResource(picture.cardColor.bgColor)
         }
-        //infoRoot.setPadding(0,0,exifHeight/4,0)
+
         deviceRoot.setPadding(ts*3,0,0,0)
-        logo.apply {
+        space.layoutParams = LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.WRAP_CONTENT,ts*4)
+
+        if(picture.artSignature.visible) artSignature.text = picture.artSignature.text
+        else logo.apply {
             setImageResource(picture.icon.src)
             layoutParams.also {
                 it.width = (width/10f*4f/2.5f).toInt()
@@ -64,6 +70,10 @@ class SpaceMarkBinding(
             }
             setPadding(picture.icon.padding.dp/2)
         }
+
+        logo.visibility = if(!picture.artSignature.visible) View.VISIBLE else View.GONE
+        artSignature.visibility = if(picture.artSignature.visible) View.VISIBLE else View.GONE
+
         shutter.text = picture.userExif.lens.shutter
         iso.text = picture.userExif.lens.iso
         aperture.text = picture.userExif.lens.aperture
@@ -75,10 +85,14 @@ class SpaceMarkBinding(
             it.textSize = ts.toFloat()/10f*9f
             it.setTextColor(textColorValue)
             it.isPreview = click!=null
+            it.typeface = typeface()
             it.setPadding(0,ts*base,0,ts*base)
         }
         if (picture.icon.tintEnable) logo.setColorFilter(textColorValue)
         else logo.colorFilter = null
 
+        artSignature.typeface = picture.artSignature.typeface(context)
+        artSignature.setTextColor(textColorValue)
+        artSignature.textSize = ts*1.6f
     }
 }

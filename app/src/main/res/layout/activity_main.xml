@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:fitsSystemWindows="true"
         tools:context=".MainActivity">
 
@@ -13,13 +13,22 @@
             android:tag="me.qingshu.cwm.Preview"
             android:name="me.qingshu.cwm.Preview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="0dp"
+            android:layout_weight="7"
+            tools:ignore="FragmentTagUsage" />
+
+        <View
+            android:background="?dividerHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
 
         <fragment
-            android:tag="me.qingshu.cwm.Param"
-            android:name="me.qingshu.cwm.Param"
+            android:tag="me.qingshu.cwm.Screen"
+            android:name="me.qingshu.cwm.screen.MainScreen"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            tools:ignore="FragmentTagUsage" />
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

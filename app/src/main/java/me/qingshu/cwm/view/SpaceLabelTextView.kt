@@ -33,7 +33,7 @@ class SpaceLabelTextView @JvmOverloads constructor(
         paint.strokeWidth = broderWidth / 9
         canvas.drawRoundRect(
             offset + strokeW / 2,
-            strokeW / 2,
+            strokeW*10,
             offset + textSize * 3 + broderWidth * 2 - strokeW / 2,
             if(isPreview) measuredHeight - strokeW*2 else textSize + broderWidth * 2f - strokeW / 2,
             textSize / 3,

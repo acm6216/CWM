@@ -21,7 +21,7 @@ class SpaceViewHolder(
         }
 
         binding.card.radius = if(picture.isCorner()) 8f.dp else  0f
-        binding.card.elevation = if(picture.isShadow()) 4f.dp else  0f
+        binding.card.elevation = if(picture.isShadowPicture()) 4f.dp else  0f
 
         src.load(picture.uri) {
             crossfade(true)
@@ -29,8 +29,6 @@ class SpaceViewHolder(
                 val width = src.width.toFloat()
                 val height = it.intrinsicHeight*width/it.intrinsicWidth
                 src.setImageDrawable(it)
-
-                Log.d("TAG", "receiveGravity: ${src.width},${src.height},${it.intrinsicWidth},${it.intrinsicHeight}")
                 binding.setMark(picture,click = click, height = height.toInt(), width = width.toInt())
             }
         }

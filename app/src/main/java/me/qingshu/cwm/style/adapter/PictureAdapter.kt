@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import me.qingshu.cwm.data.Picture
 import me.qingshu.cwm.style.card.CardStyleViewHolder
 import me.qingshu.cwm.style.def.DefaultStyleViewHolder
-import me.qingshu.cwm.style.newyear.NewYearViewHolder
 import me.qingshu.cwm.style.Styles
 import me.qingshu.cwm.style.space.SpaceViewHolder
 
@@ -21,7 +20,6 @@ class PictureAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder = when(viewType){
         Styles.DEFAULT.ordinal -> DefaultStyleViewHolder.from(parent)
         Styles.SPACE.ordinal -> SpaceViewHolder.from(parent)
-        Styles.NEW_YEAR.ordinal -> NewYearViewHolder.from(parent)
         Styles.INNER.ordinal -> CardInnerStyleViewHolder.from(parent)
         else -> CardStyleViewHolder.from(parent)
     }
@@ -30,7 +28,6 @@ class PictureAdapter(
         is DefaultStyleViewHolder -> holder.bind(getItem(position), click)
         is CardStyleViewHolder -> holder.bind(getItem(position),click)
         is CardInnerStyleViewHolder -> holder.bind(getItem(position),click)
-        is NewYearViewHolder -> holder.bind(getItem(position),click)
         is SpaceViewHolder -> holder.bind(getItem(position),click)
         else -> {}
     }
