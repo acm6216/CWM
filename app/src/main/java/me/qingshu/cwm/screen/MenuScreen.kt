@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
 import me.qingshu.cwm.BaseFragment
 import me.qingshu.cwm.MainViewModel

@@ -26,7 +26,7 @@ class CardSizeViewHolder(parent:ViewGroup): PickerViewHolder(
         checkable:Boolean
     ){
         binding.label.setText(item.cardSize.label)
-        binding.icon.setOnClickListener {
+        binding.card.setOnClickListener {
             click.invoke(item.cardSize)
         }
 

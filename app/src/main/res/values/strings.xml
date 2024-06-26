@@ -19,12 +19,14 @@
     <string name="lens_param_tips">或者单独设置</string>
     <string name="lens_title">参数</string>
 
-    <string name="word_art_title">艺术字</string>
+    <string name="art_signature_title">艺术字</string>
+    <string name="art_signature_font">字体</string>
 
     <string name="template_title">模板 *</string>
     <string name="template_name">模板 %d</string>
     <string name="template_rename">命名</string>
     <string name="template_apply">应用</string>
+    <string name="template_save">保存为模板</string>
     <string name="template_cancel">取消</string>
 
     <string name="logo_picker_title">Logo</string>
@@ -34,11 +36,12 @@
     <string name="menu_clear">移除所有图片</string>
     <string name="menu_remove">移除此图片</string>
     <string name="menu_exif">查看Exif</string>
+    <string name="menu_save">保存此图</string>
 
     <string name="menu_modifier">修改</string>
     <string name="menu_delete">删除</string>
 
-    <string name="device_title">设备</string>
+    <string name="device_title">设备信息</string>
     <string name="device_brand">品牌</string>
     <string name="device_model">型号</string>
 
@@ -51,6 +54,8 @@
     <string name="card_size_medium">中</string>
     <string name="card_size_large">大</string>
 
+    <string name="card_color_auto">图片取色</string>
+    <string name="card_color_blur">毛玻璃</string>
     <string name="card_color_white">白色</string>
     <string name="card_color_black">黑色</string>
     <string name="card_color_grey">灰色</string>
@@ -145,7 +150,6 @@
     <string name="screen_picture">图片</string>
     <string name="screen_style">样式</string>
     <string name="screen_icon">图标</string>
-    <string name="screen_exif">Exif</string>
     <string name="screen_effect">效果</string>
     <string name="screen_color">颜色</string>
     <string name="screen_size">尺寸</string>

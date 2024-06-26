@@ -36,4 +36,10 @@ abstract class BaseFragment:Fragment(){
         lifecycleOwner = this@BaseFragment
         executePendingBindings()
     }
+
+    protected inline val Int.dp: Int get() = run { toFloat().dp }
+    protected inline val Float.dp: Int get() = run {
+        val scale: Float = resources.displayMetrics.density
+        (this * scale + 0.5f).toInt()
+    }
 }

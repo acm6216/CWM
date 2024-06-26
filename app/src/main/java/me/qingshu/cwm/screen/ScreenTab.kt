@@ -11,7 +11,6 @@ enum class ScreenTab(
     PICTURE(R.string.screen_picture,R.drawable.ic_picture),
     STYLE(R.string.screen_style,R.drawable.ic_style),
     ICON(R.string.screen_icon,R.drawable.ic_camera),
-    //EXIF(R.string.screen_exif,R.drawable.ic_exif),
     EFFECT(R.string.screen_effect,R.drawable.ic_effect),
     COLOR(R.string.screen_color,R.drawable.ic_color),
     SIZE(R.string.screen_size,R.drawable.ic_size),

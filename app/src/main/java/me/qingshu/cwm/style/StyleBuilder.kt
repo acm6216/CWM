@@ -3,6 +3,7 @@ package me.qingshu.cwm.style
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.os.Build
 import android.provider.MediaStore
 import androidx.documentfile.provider.DocumentFile
@@ -36,6 +37,22 @@ abstract class StyleBuilder<T: ViewBinding>(
                 newBitmap.compress(Bitmap.CompressFormat.JPEG, 100, os)
             }
         }
+    }
+
+    protected fun Bitmap.radius(picture: Picture):Bitmap{
+        return if(picture.isCorner()) this.radius(this.width / 20f.toInt(), CORNER_ALL)
+        else this
+    }
+
+    protected fun Canvas.blur(picture:Picture, sourceBitmap:Bitmap, newBitmap: Bitmap){
+        if(picture.isBlur())
+            drawBitmap(
+                Bitmap.createScaledBitmap(
+                    sourceBitmap.blur().blur().blur(),
+                    newBitmap.width,newBitmap.height,true
+                ),
+                0f,0f,null
+            )
     }
 
     protected inline val Int.dp: Int get() = run { toFloat().dp.toInt() }

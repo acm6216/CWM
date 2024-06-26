@@ -11,10 +11,27 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 36,
-      "versionName": "1.5.5_20240619_Release",
+      "versionCode": 38,
+      "versionName": "CWM_1.5.8_20240626_Release",
       "outputFile": "app-release.apk"
     }
   ],
-  "elementType": "File"
+  "elementType": "File",
+  "baselineProfiles": [
+    {
+      "minApi": 28,
+      "maxApi": 30,
+      "baselineProfiles": [
+        "baselineProfiles/1/app-release.dm"
+      ]
+    },
+    {
+      "minApi": 31,
+      "maxApi": 2147483647,
+      "baselineProfiles": [
+        "baselineProfiles/0/app-release.dm"
+      ]
+    }
+  ],
+  "minSdkVersionForDexing": 21
 }

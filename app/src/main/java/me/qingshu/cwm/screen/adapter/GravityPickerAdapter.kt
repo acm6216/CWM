@@ -27,7 +27,7 @@ class CardGravityViewHolder(parent:ViewGroup): PickerViewHolder(
     ){
         binding.label.setText(item.cardGravity.label)
         binding.icon.setImageResource(item.cardGravity.src)
-        binding.icon.setOnClickListener {
+        binding.card.setOnClickListener {
             click.invoke(item.cardGravity)
         }
 

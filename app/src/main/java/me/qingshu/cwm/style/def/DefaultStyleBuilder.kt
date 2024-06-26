@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.PorterDuff
-import android.graphics.Rect
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,12 +27,7 @@ class DefaultStyleBuilder(
         coroutineScope.launch(Dispatchers.Main) { layout.clear() }
 
         val sourceBitmap = context.contentResolver.openInputStream(picture.uri)!!.use { stream ->
-            val source = BitmapFactory.decodeStream(stream,
-                Rect(0, 0, 0, 0), BitmapFactory.Options().apply
-                {
-
-                })
-            source!!
+            BitmapFactory.decodeStream(stream)!!
         }
 
         val size = layout.realHeight(sourceBitmap, picture)
@@ -66,6 +60,7 @@ class DefaultStyleBuilder(
         )
         Canvas(newBitmap).apply {
             density = sourceBitmap.density
+            blur(picture,sourceBitmap,newBitmap)
             drawBitmap(sourceBitmap, 0f, 0f, null)
             drawBitmap(bitmap, 0f, sourceBitmap.height.toFloat(), null)
         }

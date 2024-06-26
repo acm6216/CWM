@@ -2,6 +2,7 @@ package me.qingshu.cwm.style.card
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.view.View
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
@@ -19,7 +20,6 @@ class CardMarkBinding(
 
     val src get() = binding.src
     val card get() = binding.card
-    val cardRoot get() = binding.cardRoot
     val exifRoot get() = binding.exifRoot
 
     fun color(@ColorRes resValue:Int) = ContextCompat.getColor(src.context,resValue)
@@ -29,9 +29,9 @@ class CardMarkBinding(
     override fun clear(): StyleMarkBinding<StyleCardBinding> {
         binding.apply {
             logo.setImageDrawable(null)
-            device.text = ""
-            lens.text = ""
-            artSignature.text = ""
+            device.text = emptyString
+            lens.text = emptyString
+            artSignature.text = emptyString
             root.invalidate()
         }
         return this
@@ -43,8 +43,9 @@ class CardMarkBinding(
         width:Int,
         click: ((View, Picture) -> Unit)?
     ):Any = binding.apply {
-        val textColorValue = ContextCompat.getColor(context,picture.cardColor.textColor)
-        val ts = picture.cardSize.textSizeByHeight(height, width).toFloat()
+        val textColor = getTextColor(picture)
+        val bgColor = getBgColor(picture)
+        var ts = picture.cardSize.textSizeByHeight(height, width).toFloat()
         val size = picture.cardSize.logoSizeByHeight(height, width)
         val exifHeight = picture.cardSize.sizeByHeight(height, width)
 
@@ -56,19 +57,28 @@ class CardMarkBinding(
                 it.height = size
             }
             setPadding(picture.icon.iconPadding().dp)
-            if (picture.icon.tintEnable) setColorFilter(textColorValue)
+            if (picture.icon.tintEnable) setColorFilter(textColor)
             else colorFilter = null
         }
 
-        logo.visibility = if(!picture.artSignature.visible) View.VISIBLE else View.GONE
+        if(!picture.artSignature.visible){
+            val v = if(picture.visibleIcon) View.VISIBLE else {
+                ts*=1.5f
+                View.GONE
+            }
+            logo.visibility = v
+        }else {
+            divider.visibility = View.VISIBLE
+            logo.visibility = View.GONE
+        }
         artSignature.visibility = if(picture.artSignature.visible) View.VISIBLE else View.GONE
 
         divider.apply {
             Color.argb(
                 128,
-                textColorValue.red,
-                textColorValue.green,
-                textColorValue.blue
+                textColor.red,
+                textColor.green,
+                textColor.blue
             ).also { setBackgroundColor(it) }
             layoutParams.height = picture.cardSize.dividerHeightSizeByHeight(height, width)/2
             layoutParams.width = picture.cardSize.dividerWidthSizeByHeight(height, width)
@@ -78,7 +88,8 @@ class CardMarkBinding(
         }
         exifRoot.apply {
             layoutParams.height = (exifHeight*1.4f).toInt()
-            setBackgroundResource(picture.cardColor.bgColor)
+            if(!picture.isBlur()) setBackgroundColor(bgColor)
+            else setBackgroundColor(0x0)
         }
         lens.text = picture.userExif.lens.string()
         device.text = picture.userExif.device.string()
@@ -89,13 +100,19 @@ class CardMarkBinding(
         arrayOf(device,lens).forEach {
             it.visibility = if(it.text.trim().isEmpty()) View.GONE else View.VISIBLE
             it.textSize = ts
-            it.setTextColor(textColorValue)
+            it.setTextColor(textColor)
             it.typeface = typeface()
+            it.shadow(ts,textColor,picture)
         }
         artSignature.typeface = picture.artSignature.typeface(context)
         artSignature.textSize = ts*1.6f
-        artSignature.setTextColor(textColorValue)
-        cardRoot.setBackgroundResource(picture.cardColor.bgColor)
+        artSignature.setTextColor(textColor)
+        artSignature.shadow(ts,textColor,picture)
+
+        if(picture.isBlur()) picture.blur?.also {
+            bg.background = BitmapDrawable(context.resources,it)
+        }
+        else bg.setBackgroundColor(bgColor)
     }
 
 }

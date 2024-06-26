@@ -1,12 +1,9 @@
 package me.qingshu.cwm.screen.adapter
 
 import android.view.ViewGroup
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import me.qingshu.cwm.databinding.SingleChoiceItemBinding
 
 abstract class PickerAdapter<T:RecyclerView.ViewHolder,K:Any>(
     private val create:(ViewGroup)->T,

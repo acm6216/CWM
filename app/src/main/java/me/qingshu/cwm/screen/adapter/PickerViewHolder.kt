@@ -7,44 +7,16 @@ import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import androidx.recyclerview.widget.RecyclerView
-import me.qingshu.cwm.databinding.SingleChoiceItemBinding
+import me.qingshu.cwm.databinding.ChoiceItemBinding
 
 open class PickerViewHolder(
-    protected val binding: SingleChoiceItemBinding
+    protected val binding: ChoiceItemBinding
 ): RecyclerView.ViewHolder(
     binding.root
 ) {
 
     fun animationVisible(checkable:Boolean,isCheck:Boolean){
-        if(checkable){
-            if(isCheck) {
-                AlphaAnimation(0f,1f).also {
-                    it.duration = 150
-                    binding.checked.startAnimation(it)
-                    binding.checked.visibility = View.VISIBLE
-                }
-            }
-            else {
-                AlphaAnimation(1f,0f).also {
-                    binding.checked.visibility = View.VISIBLE
-                    it.duration = 150
-                    it.setAnimationListener(object : Animation.AnimationListener{
-                        override fun onAnimationStart(p0: Animation?) {
-
-                        }
-
-                        override fun onAnimationEnd(p0: Animation?) {
-                            binding.checked.visibility = View.INVISIBLE
-                        }
-
-                        override fun onAnimationRepeat(p0: Animation?) {
-
-                        }
-                    })
-                    binding.checked.startAnimation(it)
-                }
-            }
-        }else binding.checked.visibility = View.GONE
+        binding.card.isChecked = isCheck
     }
 
     protected fun getColorStateListTest(color:Int): ColorStateList {
@@ -67,7 +39,7 @@ open class PickerViewHolder(
     companion object{
 
         fun create(parent: ViewGroup) =
-            SingleChoiceItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ChoiceItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
     }
 }

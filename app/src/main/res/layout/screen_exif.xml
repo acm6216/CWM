@@ -142,6 +142,13 @@
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
+            <View
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?dividerHorizontal" />
+
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/information_root"
                 android:layout_width="match_parent"

@@ -25,9 +25,10 @@ class ArtSignatureViewHolder(parent: ViewGroup): PickerViewHolder(
         click:(Font)->Unit,
         checkable:Boolean
     ){
-        binding.icon.setOnClickListener {
+        binding.card.setOnClickListener {
             click.invoke(item.font)
         }
+        //binding.card.checkedIconTint = getColorStateListTest(0xffff0000.toInt())
         binding.label.setText(item.font.label)
         animationVisible(checkable,item.isCheck)
     }

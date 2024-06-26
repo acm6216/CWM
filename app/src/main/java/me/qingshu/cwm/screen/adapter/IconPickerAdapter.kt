@@ -27,12 +27,9 @@ class CardIconViewHolder(parent:ViewGroup): PickerViewHolder(
     ){
         binding.label.setText(item.cardIcon.label)
         binding.icon.setImageResource(item.value())
-        binding.icon.setOnClickListener {
+        binding.card.setOnClickListener {
             click.invoke(item)
         }
-
-        if (checkable) binding.checked.visibility = View.VISIBLE
-        else binding.checked.visibility = View.GONE
     }
 }
 

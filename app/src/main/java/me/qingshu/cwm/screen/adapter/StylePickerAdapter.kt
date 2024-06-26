@@ -26,7 +26,7 @@ class CardStylesViewHolder(parent: ViewGroup) : PickerViewHolder(
         checkable: Boolean
     ) {
         binding.icon.setImageResource(item.style.src)
-        binding.icon.setOnClickListener {
+        binding.card.setOnClickListener {
             click.invoke(item.style)
         }
         binding.label.setText(item.style.label)

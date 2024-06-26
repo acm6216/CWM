@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.PorterDuff
-import android.graphics.Rect
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,9 +23,7 @@ class CardInnerBuilder(
         coroutineScope.launch(Dispatchers.Main) { layout.clear() }
 
         val sourceBitmap = context.contentResolver.openInputStream(picture.uri)!!.use { stream ->
-            val source = BitmapFactory.decodeStream(stream,
-                Rect(0, 0, 0, 0), BitmapFactory.Options().apply {})
-            source!!
+            BitmapFactory.decodeStream(stream)!!
         }
 
         layout.exifRoot.layoutParams.apply {

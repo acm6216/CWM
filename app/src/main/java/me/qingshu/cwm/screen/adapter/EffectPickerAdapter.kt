@@ -26,7 +26,7 @@ class CardEffectViewHolder(parent:ViewGroup): PickerViewHolder(
         checkable:Boolean
     ){
         binding.icon.setImageResource(item.cardEffect.src)
-        binding.icon.setOnClickListener {
+        binding.card.setOnClickListener {
             click.invoke(item.cardEffect)
         }
         binding.label.setText(item.cardEffect.label)

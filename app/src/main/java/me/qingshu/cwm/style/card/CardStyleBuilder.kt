@@ -6,16 +6,12 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.PorterDuff
-import android.graphics.Rect
-import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.qingshu.cwm.data.Picture
 import me.qingshu.cwm.databinding.StyleCardBinding
-import me.qingshu.cwm.style.CORNER_ALL
 import me.qingshu.cwm.style.StyleBuilder
-import me.qingshu.cwm.style.radius
 import me.qingshu.cwm.style.shadow
 
 class CardStyleBuilder(
@@ -32,16 +28,7 @@ class CardStyleBuilder(
         coroutineScope.launch(Dispatchers.Main) { layout.clear() }
 
         val sourceBitmap = context.contentResolver.openInputStream(picture.uri)!!.use { stream ->
-            val source = BitmapFactory.decodeStream(stream,
-                Rect(0, 0, 0, 0), BitmapFactory.Options().apply
-                {
-
-                })
-            source!!.let {
-                val isRadius = picture.isCorner()
-                if(isRadius) it.radius(source.width / 20f.toInt(), CORNER_ALL)
-                else it
-            }
+            BitmapFactory.decodeStream(stream)!!
         }
 
         val size = layout.realHeight(sourceBitmap, picture)
@@ -75,13 +62,16 @@ class CardStyleBuilder(
             sourceBitmap.height + bitmap.height+margin.toInt()+shadowSize.toInt(),
             Bitmap.Config.ARGB_8888
         )
-        val textColorValue = ContextCompat.getColor(context,picture.cardColor.textColor)
         val isRadius = picture.isCorner()
         val isShadow = picture.isShadowPicture()
         Canvas(newBitmap).apply {
-            drawColor(layout.color(picture.cardColor.bgColor))
+            drawColor(layout.getBgColor(picture))
             density = sourceBitmap.density
-            drawBitmap(sourceBitmap.shadow(shadowSize,textColorValue,isRadius,isShadow), margin-shadowSize, margin-shadowSize, null)
+            blur(picture,sourceBitmap,newBitmap)
+            drawBitmap(
+                sourceBitmap.radius(picture).shadow(shadowSize,0xC8000000.toInt(),isRadius,isShadow),
+                margin-shadowSize, margin-shadowSize, null
+            )
             drawBitmap(bitmap, margin, margin + sourceBitmap.height.toFloat()+shadowSize, null)
         }
         saveBitmap(context, picture, newBitmap)

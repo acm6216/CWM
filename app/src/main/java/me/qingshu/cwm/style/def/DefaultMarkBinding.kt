@@ -2,8 +2,8 @@ package me.qingshu.cwm.style.def
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
@@ -25,11 +25,11 @@ class DefaultMarkBinding(
     override fun clear(): DefaultMarkBinding {
         binding.apply {
             logo.setImageDrawable(null)
-            location.text = ""
-            device.text = ""
-            date.text = ""
-            lens.text = ""
-            artSignature.text = ""
+            location.text = emptyString
+            device.text = emptyString
+            date.text = emptyString
+            lens.text = emptyString
+            artSignature.text = emptyString
             root.invalidate()
         }
         return this
@@ -43,15 +43,23 @@ class DefaultMarkBinding(
     ) = binding.apply {
         if(height*width==0) return@apply
         val size = picture.cardSize.logoSizeByHeight(height, width)
-        val textColorValue = ContextCompat.getColor(context,picture.cardColor.textColor)
+        val textColor = getTextColor(picture)
+        val bgColor = getBgColor(picture)
         val exifHeight = picture.cardSize.sizeByHeight(height, width)
         val ts = picture.cardSize.textSizeByHeight(height, width).toFloat()
-        card.setOnClickListener{
+        bg.setOnClickListener{
             click?.invoke(it,picture)
         }
+
+        if(picture.isBlur()) picture.blur?.also {
+            bg.background = BitmapDrawable(context.resources,it)
+        }
+        else bg.setBackgroundColor(bgColor)
+
         exifRoot.apply {
             layoutParams.height = exifHeight
-            setBackgroundResource(picture.cardColor.bgColor)
+            if(!picture.isBlur()) setBackgroundColor(bgColor)
+            else setBackgroundColor(0x0)
         }
         infoRoot.setPadding(0,0,exifHeight/4,0)
         deviceRoot.setPadding(exifHeight/4,0,0,0)
@@ -66,7 +74,14 @@ class DefaultMarkBinding(
             setPadding(picture.icon.iconPadding().dp)
         }
 
-        logo.visibility = if(!picture.artSignature.visible) View.VISIBLE else View.GONE
+        if(!picture.artSignature.visible){
+            val v = if(picture.visibleIcon) View.VISIBLE else View.GONE
+            logo.visibility = v
+            dividerRoot.visibility = v
+        }else {
+            dividerRoot.visibility = View.VISIBLE
+            logo.visibility = View.GONE
+        }
         artSignature.visibility = if(picture.artSignature.visible) View.VISIBLE else View.GONE
 
         device.text = picture.userExif.device.string()
@@ -78,33 +93,36 @@ class DefaultMarkBinding(
         divider.apply {
             Color.argb(
                 128,
-                textColorValue.red,
-                textColorValue.green,
-                textColorValue.blue
+                textColor.red,
+                textColor.green,
+                textColor.blue
             ).also { setBackgroundColor(it) }
             layoutParams.height = picture.cardSize.dividerHeightSizeByHeight(height, width)
             layoutParams.width = picture.cardSize.dividerWidthSizeByHeight(height, width)
         }
-        if (picture.icon.tintEnable) logo.setColorFilter(textColorValue)
+        if (picture.icon.tintEnable) logo.setColorFilter(textColor)
         else logo.colorFilter = null
         arrayOf(device,lens).forEach {
             it.visibility = if(it.text.trim().isEmpty()) View.GONE else View.VISIBLE
             it.textSize = ts
-            it.setTextColor(textColorValue)
+            it.setTextColor(textColor)
             it.typeface = typeface()
+            it.shadow(ts,textColor,picture)
         }
         arrayOf(date,location).forEach {
             it.visibility = if(it.text.trim().isEmpty()) View.GONE else View.VISIBLE
             it.textSize = ts/1.5f
             it.typeface = typeface()
-            it.setTextColor(Color.argb(128,textColorValue.red,textColorValue.green,textColorValue.blue))
+            it.setTextColor(Color.argb(128,textColor.red,textColor.green,textColor.blue))
+            it.shadow(ts,textColor,picture)
         }
         if(date.visibility==View.GONE){
             device.textSize = ts*1.4f
         }
         artSignature.typeface = picture.artSignature.typeface(context)
-        artSignature.setTextColor(textColorValue)
+        artSignature.setTextColor(textColor)
         artSignature.textSize = ts*1.6f
+        artSignature.shadow(ts,textColor,picture)
     }
 
 }

@@ -6,7 +6,7 @@
         android:background="?android:windowBackground"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <androidx.viewpager2.widget.ViewPager2
             android:background="?android:windowBackground"
@@ -20,15 +20,23 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
 
-        <com.google.android.material.tabs.TabLayout
+        <androidx.recyclerview.widget.RecyclerView
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="@integer/orientation"
+            android:layout_margin="8dp"
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!--<com.google.android.material.tabs.TabLayout
             android:background="@null"
             android:layout_margin="8dp"
             app:tabMode="scrollable"
             app:tabGravity="center"
             app:tabIndicatorGravity="top"
-            android:id="@+id/table_layout"
+            android:id="@+id/tab_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"/>-->
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
-import com.google.android.material.tabs.TabLayoutMediator
+import androidx.viewpager2.widget.ViewPager2
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.launch
@@ -26,6 +26,17 @@ class MainScreen: BaseFragment() {
             viewmodel.receivePicture(uri, requireContext().applicationContext)
         }
 
+    private val tabLayoutAdapter = TabLayoutAdapter{ screen,x,y,adapter ->
+        binding.viewpager.currentItem = screen.ordinal
+        if(adapter.isVertical()){
+            val g = binding.tabLayout.measuredHeight / 2 + 24.dp
+            binding.tabLayout.smoothScrollBy( 0,y-g)
+        }else {
+            val g = binding.tabLayout.measuredWidth / 2
+            binding.tabLayout.smoothScrollBy(x - g, 0)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,10 +52,17 @@ class MainScreen: BaseFragment() {
             )
             setPageTransformer(ZoomOutPageTransformer())
             isUserInputEnabled = false
-            TabLayoutMediator(binding.tableLayout,this,true,true) { tab, position ->
-                tab.setText(ScreenTab.values()[position].label)
-                tab.setIcon(ScreenTab.values()[position].icon)
-            }.attach()
+
+            binding.tabLayout.adapter = tabLayoutAdapter
+
+            binding.viewpager.registerOnPageChangeCallback(object :
+                ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    tabLayoutAdapter.checkPosition = position + 1
+                    super.onPageSelected(position)
+                }
+            })
+
         }
 
         repeatWithViewLifecycle {

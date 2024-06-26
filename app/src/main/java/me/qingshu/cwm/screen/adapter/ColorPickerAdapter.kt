@@ -28,18 +28,21 @@ class ColorViewHolder(parent:ViewGroup): PickerViewHolder(
         click:(CardColor)->Unit,
         checkable:Boolean
     ){
-        binding.icon.setOnClickListener {
+        binding.card.setOnClickListener {
             click.invoke(item.cardColor)
         }
         binding.label.setText(item.cardColor.label)
-        val bgColor = ContextCompat.getColor(context,item.cardColor.bgColor)
-        val textColor = ContextCompat.getColor(context,item.cardColor.textColor)
 
         animationVisible(checkable,item.isCheck)
 
+        val bgColor = ContextCompat.getColor(context, item.cardColor.bgColor)
+        val textColor = ContextCompat.getColor(context, item.cardColor.textColor)
+        binding.icon.setImageResource(item.cardColor.icon)
         binding.icon.setColorFilter(textColor)
-        binding.icon.backgroundTintList = getColorStateListTest(bgColor)
-        binding.icon.setRippleColor(getColorStateListTest(textColor).withAlpha(127))
+        binding.label.setTextColor(textColor)
+        binding.card.checkedIconTint = getColorStateListTest(textColor)
+        binding.card.backgroundTintList = getColorStateListTest(bgColor)
+        binding.card.rippleColor = getColorStateListTest(textColor).withAlpha(127)
     }
 }
 

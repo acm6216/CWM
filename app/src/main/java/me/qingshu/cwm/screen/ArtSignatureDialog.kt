@@ -31,7 +31,7 @@ class ArtSignatureDialog:DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
         MaterialAlertDialogBuilder(binding.root.context).apply {
             setView(binding.root)
-            setTitle(R.string.word_art_title)
+            setTitle(R.string.art_signature_title)
             setPositiveButton(R.string.template_apply) { _, _ ->
                 apply()
             }
@@ -49,9 +49,7 @@ class ArtSignatureDialog:DialogFragment() {
     private fun apply(){
         val targetName = binding.input.text.toString()
         if (targetName.trim().replace("\n", "").isNotEmpty()) {
-            viewModel.receiveArtSignature(
-                ArtSignature(targetName, true)
-            )
+            viewModel.receiveArtSignature(targetName)
         }
     }
 

@@ -1,10 +1,12 @@
 package me.qingshu.cwm
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.palette.graphics.Palette
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +29,9 @@ import me.qingshu.cwm.data.Picture
 import me.qingshu.cwm.data.Template
 import me.qingshu.cwm.data.UriExif
 import me.qingshu.cwm.data.ArtSignature
+import me.qingshu.cwm.data.BlurUri
 import me.qingshu.cwm.data.Font
+import me.qingshu.cwm.data.PaletteUri
 import me.qingshu.cwm.databinding.PreviewBinding
 import me.qingshu.cwm.screen.adapter.ArtSignatureItem
 import me.qingshu.cwm.screen.adapter.CardColorCheckableItem
@@ -39,6 +43,7 @@ import me.qingshu.cwm.screen.adapter.EffectItem
 import me.qingshu.cwm.screen.adapter.MainMenuItem
 import me.qingshu.cwm.screen.adapter.TemplateItem
 import me.qingshu.cwm.style.Styles
+import me.qingshu.cwm.style.blur
 import me.qingshu.cwm.style.card.CardStyleBuilder
 import me.qingshu.cwm.style.def.DefaultStyleBuilder
 import me.qingshu.cwm.style.inner.CardInnerBuilder
@@ -294,7 +299,7 @@ class MainViewModel : ViewModel() {
             artSignatureVisible.emit(!artSignatureVisible.value)
         }
     }
-    val artSignatureFont = MutableStateFlow(Font.QuillbacksDemo)
+    private val artSignatureFont = MutableStateFlow(Font.QuillbacksDemo)
     fun receiveFont(font: Font){
         viewModelScope.launch {
             artSignatureFont.emit(font)
@@ -316,10 +321,10 @@ class MainViewModel : ViewModel() {
     val artSignature = combine(artSignatureText,artSignatureVisible,artSignatureFont){ text, visible,font ->
         ArtSignature(text,visible,font)
     }
-    fun receiveArtSignature(word: ArtSignature){
+    fun receiveArtSignature(text:String){
         viewModelScope.launch {
-            artSignatureText.emit(word.text)
-            artSignatureVisible.emit(word.visible)
+            artSignatureText.emit(text)
+            artSignatureVisible.emit(artSignatureVisible.value)
         }
     }
 
@@ -354,6 +359,19 @@ class MainViewModel : ViewModel() {
                 picture.uri != it.uri
             }.also {
                 pictureUris.emit(it)
+                paletteUris.value.also {  pu ->
+                    val target = pu.filter { f->
+                        f.uri != picture.uri
+                    }
+                    paletteUris.emit(target)
+                }
+                blurs.value.also {  bu ->
+                    val target = bu.filter { f->
+                        f.uri != picture.uri
+                    }
+                    bu.find { f -> f.uri == picture.uri }?.blur?.recycle()
+                    blurs.emit(target)
+                }
             }
         }
     }
@@ -361,7 +379,12 @@ class MainViewModel : ViewModel() {
         if(!saveEnable.value) return
         viewModelScope.launch {
             pictureUris.emit(emptyList())
+            paletteUris.emit(emptyList())
+            blurs.emit(emptyList())
         }
+    }
+    fun savePicture(context: Context,binding: PreviewBinding,picture: Picture){
+        save(context,binding, listOf(picture))
     }
 
     private val logo = MutableStateFlow(Logo.CANNON)
@@ -387,10 +410,14 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    private val paletteUris = MutableStateFlow(emptyList<PaletteUri>())
+    private val blurs = MutableStateFlow(emptyList<BlurUri>())
+
     val previewPictures = combine(
         pictureUris, color, size,
         logo, userExif,style,
-        gravity,effect,logoVisible,artSignature
+        gravity,effect,logoVisible,
+        artSignature, paletteUris,blurs
     ) { any ->
         val uris = any[0] as List<UriExif>
         val cardColor = any[1] as CardColor
@@ -402,6 +429,8 @@ class MainViewModel : ViewModel() {
         val f = any[7] as Set<CardEffect>
         val visible = any[8] as Boolean
         val art = any[9] as ArtSignature
+        val paletteItem = any[10] as List<PaletteUri>
+        val blurItem = any[11] as List<BlurUri>
         saveEnable.emit(false)
         uris.map { ue ->
             val targetDevice = Device.combine(exif.device,ue.exif.device)
@@ -414,10 +443,58 @@ class MainViewModel : ViewModel() {
                 gravity = CardGravity.value(gravity),
                 effect = CardEffect.value(f),
                 artSignature = art,
-                visibleIcon = visible
+                visibleIcon = visible,
+                palette = paletteItem.find { ue.uri == it.uri }?.palette,
+                blur = blurItem.find { ue.uri == it.uri }?.blur
             )
         }.also {
             saveEnable.emit(true)
+            if(uris.isNotEmpty()) {
+                paletteItem.executePalette()
+                paletteItem.find { it.palette == null }?:(blurItem.executeBlur())
+            }
+        }
+    }
+
+    private fun List<PaletteUri>.executePalette(){
+        viewModelScope.launch(Dispatchers.IO) {
+            find { pu ->
+                pu.palette == null
+            }?.also { pu ->
+                val index = indexOf(pu)
+                val uri = pu.uri
+                val target = toMutableList()
+                target.removeAt(index)
+
+                app.contentResolver.openInputStream(uri).use { ois ->
+                    Palette.from(
+                        BitmapFactory.decodeStream(ois)
+                    ).generate { p ->
+                        target.add(index, PaletteUri(uri, p))
+                        viewModelScope.launch { paletteUris.emit(target) }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun List<BlurUri>.executeBlur(){
+        viewModelScope.launch(Dispatchers.IO) {
+            find { pu ->
+                pu.blur == null
+            }?.also { bu ->
+                val index = indexOf(bu)
+                val uri = bu.uri
+                val target = toMutableList()
+                target.removeAt(index)
+
+                app.contentResolver.openInputStream(uri).use { ois ->
+                    BitmapFactory.decodeStream(ois).blur().blur().blur().also {
+                        target.add(index, BlurUri(uri,it))
+                        blurs.emit(target)
+                    }
+                }
+            }
         }
     }
 
@@ -430,11 +507,26 @@ class MainViewModel : ViewModel() {
                 }
             }.also {
                 pictureUris.emit(it)
+                paletteUris.emit(
+                    it.map { u ->
+                        PaletteUri(u.uri,null)
+                    }
+                )
+                blurs.emit(
+                    it.map { u ->
+                        BlurUri(u.uri,null)
+                    }
+                )
             }
         }
     }
 
-    fun save(context: Context, binding: PreviewBinding) {
+    fun saveAll(context: Context,binding: PreviewBinding){
+        viewModelScope.launch {
+            save(context,binding,previewPictures.first())
+        }
+    }
+    private fun save(context: Context, binding: PreviewBinding, ps:List<Picture>) {
         val target = when(style.value){
             Styles.DEFAULT -> DefaultStyleBuilder(binding.styleDefault)
             Styles.SPACE -> SpaceStyleBuilder(binding.styleSpace)
@@ -442,12 +534,12 @@ class MainViewModel : ViewModel() {
             else -> CardStyleBuilder(binding.styleCard)
         }
         viewModelScope.launch(Dispatchers.IO) {
-            previewPictures.first().forEach {
+            ps.forEach {
                 saveEnable.emit(false)
                 target.execute(context,it,this)
             }
             saveEnable.emit(true)
-            if(previewPictures.first().isNotEmpty()) _message.trySend(R.string.save_status_completed)
+            if(ps.isNotEmpty()) _message.trySend(R.string.save_status_completed)
             else _message.trySend(R.string.save_status_error)
         }
     }

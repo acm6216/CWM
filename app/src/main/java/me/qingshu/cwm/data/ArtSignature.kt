@@ -16,6 +16,5 @@ data class ArtSignature(
 
     companion object{
         val empty get() = ArtSignature("",false)
-
     }
 }

@@ -8,9 +8,10 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.RectF
-import androidx.core.graphics.blue
-import androidx.core.graphics.green
-import androidx.core.graphics.red
+import com.hoko.blur.HokoBlur
+import com.hoko.blur.HokoBlur.MODE_STACK
+import com.hoko.blur.HokoBlur.SCHEME_NATIVE
+import me.qingshu.cwm.app
 
 const val CORNER_NONE = 0
 const val CORNER_TOP_LEFT = 1
@@ -77,14 +78,8 @@ private fun clipBottomRight(canvas: Canvas, paint: Paint, offset: Int, width: In
     canvas.drawRect(block, paint)
 }
 
-fun Bitmap.shadow(size:Float,textColorValue:Int,isRadius:Boolean = false,isShadow:Boolean = false):Bitmap{
+fun Bitmap.shadow(size:Float, color:Int, isRadius:Boolean = false, isShadow:Boolean = false):Bitmap{
     val shadowPaint = Paint()
-    val color = Color.argb(
-        200,
-        textColorValue.red,
-        textColorValue.green,
-        textColorValue.blue
-    )
     val sr = if(isRadius) size else 0f
     val shadowRadius = if(isShadow) size/2f else 0f
 
@@ -102,4 +97,18 @@ fun Bitmap.shadow(size:Float,textColorValue:Int,isRadius:Boolean = false,isShado
     canvas.drawRoundRect(rectF, sr, sr, shadowPaint)
     canvas.drawBitmap(this,size,size,Paint().apply { isAntiAlias=true })
     return result
+}
+
+fun Bitmap.blur():Bitmap{
+    return HokoBlur.with(app)
+        .scheme(SCHEME_NATIVE) //设置模糊实现方案，包括RenderScript、OpenGL、Native和Java实现，默认为Native方案
+        .mode(MODE_STACK) //设置模糊算法，包括Gaussian、Stack和Box，默认并推荐选择Stack算法
+        .radius(25) //设置模糊半径，内部最大限制为25，默认值5
+        .sampleFactor(5.0f) // 设置scale因子，factor = 2时，内部将bitmap的宽高scale为原来的 1/2，默认值5
+        .forceCopy(true) //对于scale因子为1.0f时，会直接修改传入的bitmap，如果你不希望修改原bitmap，设置forceCopy为true即可，默认值false
+        .translateX(150)//可对部分区域进行模糊，这里设置x轴的偏移量
+        .translateY(150)//可对部分区域进行模糊，这里设置y轴的偏移量
+        .processor() //获得模糊实现类
+        .blur(this);	//模糊图片，方法是阻塞的，底层为多核并行实现，异步请使用asyncBlur
+
 }

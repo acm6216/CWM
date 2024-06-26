@@ -1,6 +1,8 @@
 package me.qingshu.cwm.data
 
+import android.graphics.Bitmap
 import android.net.Uri
+import androidx.palette.graphics.Palette
 import me.qingshu.cwm.style.Styles
 
 data class Picture(
@@ -13,8 +15,14 @@ data class Picture(
     val artSignature:ArtSignature,
     val gravity:Int = 0,
     val effect:Int = 0,
-    val visibleIcon:Boolean = true
+    val visibleIcon:Boolean = true,
+    val palette: Palette? = null,
+    val blur:Bitmap? = null
 ){
+
+    fun isPalette():Boolean = cardColor.fromPalette()
+
+    fun isBlur():Boolean = cardColor == CardColor.BLUR
 
     fun isShadowPicture():Boolean = (effect and (1 shl 1)) != 0
 

@@ -2,6 +2,7 @@ package me.qingshu.cwm.screen.adapter
 
 import android.view.View
 import android.view.ViewGroup
+import me.qingshu.cwm.R
 import me.qingshu.cwm.data.Template
 
 class TemplatePickerAdapter(
@@ -28,11 +29,12 @@ class TemplateViewHolder(parent:ViewGroup): PickerViewHolder(
         longClick:(View, Template)->Unit,
         checkable:Boolean
     ){
-        binding.icon.setOnClickListener { click.invoke(item.template) }
-        binding.icon.setOnLongClickListener {
+        binding.card.setOnClickListener { click.invoke(item.template) }
+        binding.card.setOnLongClickListener {
             longClick.invoke(it,item.template)
             true
         }
+        binding.icon.setImageResource(R.drawable.ic_template)
         binding.label.text = item.template.name
         animationVisible(checkable,item.isCheck)
     }

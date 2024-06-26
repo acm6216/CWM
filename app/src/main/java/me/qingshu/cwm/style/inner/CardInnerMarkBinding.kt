@@ -21,9 +21,9 @@ class CardInnerMarkBinding(
     override fun clear(): StyleMarkBinding<StyleCardInnerBinding> {
         binding.apply {
             logo.setImageDrawable(null)
-            device.text = ""
-            lens.text = ""
-            artSignature.text = ""
+            device.text = emptyString
+            lens.text = emptyString
+            artSignature.text = emptyString
             exifRoot.gravity = Gravity.START
             root.invalidate()
         }
@@ -36,7 +36,8 @@ class CardInnerMarkBinding(
         width:Int,
         click: ((View, Picture) -> Unit)?
     ):Any = binding.apply {
-        val textColorValue = ContextCompat.getColor(context,picture.cardColor.bgColor)
+        val textColor = getTextColor(picture)
+        val bgColor = getBgColor(picture)
         val ts = picture.cardSize.textSizeByHeight(height, width).toFloat()
         val size = picture.cardSize.logoSizeByHeight(height, width)
         val hv = picture.cardSize.dividerHeightSizeByHeight(height, width)/2
@@ -52,7 +53,7 @@ class CardInnerMarkBinding(
                 it.height = size
             }
             setPadding(picture.icon.iconPadding().dp)
-            if (picture.icon.tintEnable) setColorFilter(textColorValue)
+            if (picture.icon.tintEnable) setColorFilter(textColor)
             else colorFilter = null
             visibility = if(picture.visibleIcon) View.VISIBLE else View.GONE
         }
@@ -70,15 +71,16 @@ class CardInnerMarkBinding(
         arrayOf(device,lens).forEach {
             it.visibility = if(it.text.trim().isEmpty()) View.GONE else View.VISIBLE
             it.textSize = ts
-            it.setTextColor(textColorValue)
-            it.setShadowLayer(ts/5,ts/6,ts/10,textColorValue.textShadowColor())
+            it.setTextColor(textColor)
+            it.shadow(ts,textColor,picture)
             it.typeface = typeface()
         }
 
         artSignature.typeface = picture.artSignature.typeface(context)
-        artSignature.setTextColor(textColorValue)
+        artSignature.setTextColor(textColor)
         artSignature.textSize = ts*1.6f
-        cardRoot.setBackgroundResource(picture.cardColor.bgColor)
+        artSignature.shadow(ts*1.6f,textColor,picture)
+        cardRoot.setCardBackgroundColor(bgColor)
     }
 
 

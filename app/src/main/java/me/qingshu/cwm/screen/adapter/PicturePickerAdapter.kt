@@ -1,5 +1,6 @@
 package me.qingshu.cwm.screen.adapter
 
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import me.qingshu.cwm.data.CardMenu
@@ -26,17 +27,15 @@ class MenuViewHolder(parent:ViewGroup): PickerViewHolder(
         checkable:Boolean
     ){
         binding.label.setText(item.cardMenu.label)
-        binding.icon.isEnabled = when(item.cardMenu){
+        binding.card.isEnabled = when(item.cardMenu){
             CardMenu.SAVE -> item.isCheck
             else -> true
         }
         binding.icon.setImageResource(item.cardMenu.icon)
-        binding.icon.setOnClickListener {
+        binding.card.setOnClickListener {
             click.invoke(item)
         }
-
-        if (checkable) binding.checked.visibility = View.VISIBLE
-        else binding.checked.visibility = View.GONE
+        animationVisible(checkable,false)
     }
 }
 
