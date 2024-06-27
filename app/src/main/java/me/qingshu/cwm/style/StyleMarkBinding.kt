@@ -36,7 +36,7 @@ abstract class StyleMarkBinding<T:ViewBinding>(
             picture.isPalette() && !picture.isBlur() -> picture.palette?.switch()?.bodyTextColor ?: def
             picture.isBlur() -> picture.palette?.switch()?.titleTextColor ?: def
             else -> when(picture.cardColor){
-                CardColor.CUSTOM -> sharedPreferences().getInt(CardColor.CUSTOM_TEXT_COLOR_KEY,def)
+                CardColor.CUSTOM -> CardColor.getCustomTextColor(def,context)
                 else -> def
             }
         }
@@ -48,7 +48,7 @@ abstract class StyleMarkBinding<T:ViewBinding>(
             picture.isPalette() && !picture.isBlur() -> picture.palette?.switch()?.rgb ?: def
             picture.isBlur() -> 0
             else -> when(picture.cardColor){
-                CardColor.CUSTOM -> sharedPreferences().getInt(CardColor.CUSTOM_BG_COLOR_KEY,def)
+                CardColor.CUSTOM -> CardColor.getCustomBackgroundColor(def,context)
                 else -> def
             }
         }

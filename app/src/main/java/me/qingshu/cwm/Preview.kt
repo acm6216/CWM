@@ -1,5 +1,6 @@
 package me.qingshu.cwm
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.SpannableString
@@ -15,6 +16,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.qingshu.cwm.data.Picture
 import me.qingshu.cwm.databinding.PreviewBinding
@@ -26,8 +28,6 @@ class Preview : BaseFragment() {
     private val binding by lazy { PreviewBinding.inflate(layoutInflater) }
 
     private val mainViewModel: MainViewModel by activityViewModels()
-
-    private var recyclerViewState: Parcelable? = null
 
     private fun onMenuItemClick(view: View, picture: Picture){
         PopupMenu(view.context,view).apply {
@@ -53,6 +53,7 @@ class Preview : BaseFragment() {
         savedInstanceState: Bundle?
     ): View = binding.root
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.model = mainViewModel
@@ -64,19 +65,16 @@ class Preview : BaseFragment() {
             la.order = LayoutAnimationController.ORDER_NORMAL
             binding.recyclerView.layoutAnimation = la
         }
-        binding.recyclerView.itemAnimator = null
-        pictureAdapter.registerAdapterDataObserver(object :RecyclerView.AdapterDataObserver(){
-            override fun onChanged() {
-                recyclerViewState?.also { state ->
-                    (binding.recyclerView.layoutManager as LinearLayoutManager).onRestoreInstanceState(state)
-                }
-            }
-        })
+        binding.recyclerView.storeRecyclerViewState()
+
         repeatWithViewLifecycle {
             launch {
                 mainViewModel.previewPictures.collect {
-                    recyclerViewState = (binding.recyclerView.layoutManager as LinearLayoutManager).onSaveInstanceState()
+                    binding.recyclerView.store()
                     pictureAdapter.submitList(it)
+                    delay(20)
+                    binding.recyclerView.onRestore()
+
                 }
             }
             launch {
@@ -111,8 +109,10 @@ class Preview : BaseFragment() {
             it.text = content
         }
 
-        val packageInfo = requireActivity().packageManager.getPackageInfo(requireActivity().packageName, 0)
-        binding.version.text = getString(R.string.label_version,packageInfo.versionName)
+        binding.version.text = getString(
+            R.string.label_version,
+            requireActivity().packageManager.getPackageInfo(requireActivity().packageName, 0).versionName
+        )
     }
 
     private fun showMessage(@StringRes strRes:Int){

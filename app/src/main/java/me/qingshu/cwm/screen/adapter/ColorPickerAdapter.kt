@@ -5,7 +5,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import me.qingshu.cwm.R
 import me.qingshu.cwm.data.CardColor
-import me.qingshu.cwm.extensions.sharedPreferences
 
 class ColorPickerAdapter(
     click:(CardColor)->Unit,
@@ -38,7 +37,7 @@ class ColorViewHolder(parent:ViewGroup): PickerViewHolder(
         binding.card.setOnClickListener {
             when(item.cardColor){
                 CardColor.CUSTOM_TEXT -> colorPicker.invoke(defBg,true,bgColor,position)
-                CardColor.CUSTOM_BG -> colorPicker.invoke(defBg,false,bgColor,position)
+                CardColor.CUSTOM_BACKGROUND -> colorPicker.invoke(defBg,false,bgColor,position)
                 else -> click.invoke(item.cardColor)
             }
         }
@@ -55,29 +54,29 @@ class ColorViewHolder(parent:ViewGroup): PickerViewHolder(
     }
     private fun getIcon(cardColor: CardColor):Int{
         return when(cardColor){
-            CardColor.CUSTOM_TEXT,CardColor.CUSTOM_BG -> R.drawable.ic_color
+            CardColor.CUSTOM_TEXT,CardColor.CUSTOM_BACKGROUND -> R.drawable.ic_color
             else -> cardColor.icon
         }
     }
     private fun getTextColor(cardColor:CardColor):Int{
         return when(cardColor){
-            CardColor.CUSTOM_BG,CardColor.CUSTOM_TEXT -> getBgColor(cardColor).textColor()
-            CardColor.CUSTOM -> context.sharedPreferences().getInt(
-                CardColor.CUSTOM_TEXT_COLOR_KEY,
-                ContextCompat.getColor(context, cardColor.textColor)
+            CardColor.CUSTOM_BACKGROUND,CardColor.CUSTOM_TEXT -> getBgColor(cardColor).textColor()
+            CardColor.CUSTOM -> CardColor.getCustomTextColor(
+                ContextCompat.getColor(context, cardColor.textColor),
+                context
             )
             else -> ContextCompat.getColor(context, cardColor.textColor)
         }
     }
     private fun getBgColor(cardColor:CardColor):Int{
         return when(cardColor) {
-            CardColor.CUSTOM_BG,CardColor.CUSTOM -> context.sharedPreferences().getInt(
-                CardColor.CUSTOM_BG_COLOR_KEY,
-                ContextCompat.getColor(context, cardColor.bgColor)
+            CardColor.CUSTOM_BACKGROUND,CardColor.CUSTOM -> CardColor.getCustomBackgroundColor(
+                ContextCompat.getColor(context, cardColor.bgColor),
+                context
             )
-            CardColor.CUSTOM_TEXT -> context.sharedPreferences().getInt(
-                CardColor.CUSTOM_TEXT_COLOR_KEY,
-                ContextCompat.getColor(context, cardColor.bgColor)
+            CardColor.CUSTOM_TEXT -> CardColor.getCustomTextColor(
+                ContextCompat.getColor(context, cardColor.bgColor),
+                context
             )
             else -> ContextCompat.getColor(context, cardColor.bgColor)
         }

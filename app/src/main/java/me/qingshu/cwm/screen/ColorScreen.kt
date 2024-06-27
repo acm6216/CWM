@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.qingshu.cwm.BaseFragment
 import me.qingshu.cwm.MainViewModel
 import me.qingshu.cwm.data.CardColor
 import me.qingshu.cwm.databinding.ScreenColorBinding
-import me.qingshu.cwm.extensions.edit
 import me.qingshu.cwm.screen.adapter.ColorPickerAdapter
 
 class ColorScreen: BaseFragment() {
@@ -26,17 +26,16 @@ class ColorScreen: BaseFragment() {
                 def = defColor,
                 colors = colors,
                 unit = {
-                    if(isTextColor) sharedPreferences().edit {
-                        putInt(CardColor.CUSTOM_TEXT_COLOR_KEY,it)
-                        binding.recyclerView.adapter?.notifyItemChanged(position)
+                    binding.recyclerView.store()
+                    if(isTextColor) CardColor.storeCustomTextColor(requireContext(),it){
                         binding.recyclerView.adapter?.notifyItemChanged(position-1)
                     }
-                    else sharedPreferences().edit {
-                        putInt(CardColor.CUSTOM_BG_COLOR_KEY,it)
-                        binding.recyclerView.adapter?.notifyItemChanged(position)
+                    else CardColor.storeCustomBackgroundColor(requireContext(),it){
                         binding.recyclerView.adapter?.notifyItemChanged(position-2)
                     }
+                    binding.recyclerView.adapter?.notifyItemChanged(position)
                     viewmodel.customColorChange()
+                    binding.recyclerView.onRestore()
                 }
             ).show(childFragmentManager,javaClass.simpleName)
         }
@@ -53,10 +52,14 @@ class ColorScreen: BaseFragment() {
 
         binding.recyclerView.adapter = colorPickerAdapter
         binding.recyclerView.itemAnimator = null
+        binding.recyclerView.storeRecyclerViewState()
         repeatWithViewLifecycle {
             launch {
                 viewmodel.colors.collect{
+                    binding.recyclerView.store()
                     colorPickerAdapter.submitList(it)
+                    delay(20)
+                    binding.recyclerView.onRestore()
                 }
             }
         }
