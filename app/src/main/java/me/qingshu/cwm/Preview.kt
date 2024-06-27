@@ -99,6 +99,11 @@ class Preview : BaseFragment() {
                     save()
                 }
             }
+            launch {
+                mainViewModel.customColor.collect{
+                    binding.recyclerView.adapter?.notifyDataSetChanged()
+                }
+            }
         }
         binding.copyright.also {
             val content = SpannableString(it.text.toString())

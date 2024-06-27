@@ -8,16 +8,39 @@ import androidx.fragment.app.activityViewModels
 import kotlinx.coroutines.launch
 import me.qingshu.cwm.BaseFragment
 import me.qingshu.cwm.MainViewModel
+import me.qingshu.cwm.data.CardColor
 import me.qingshu.cwm.databinding.ScreenColorBinding
+import me.qingshu.cwm.extensions.edit
 import me.qingshu.cwm.screen.adapter.ColorPickerAdapter
 
 class ColorScreen: BaseFragment() {
 
     private val binding by lazy { ScreenColorBinding.inflate(layoutInflater) }
     private val viewmodel: MainViewModel by activityViewModels()
-    private val colorPickerAdapter = ColorPickerAdapter{
-        viewmodel.receiveColor(it)
-    }
+    private val colorPickerAdapter = ColorPickerAdapter(
+        click = {
+            viewmodel.receiveColor(it)
+        },
+        colorPicker = { defColor,isTextColor,colors,position ->
+            ColorPickerDialog(
+                def = defColor,
+                colors = colors,
+                unit = {
+                    if(isTextColor) sharedPreferences().edit {
+                        putInt(CardColor.CUSTOM_TEXT_COLOR_KEY,it)
+                        binding.recyclerView.adapter?.notifyItemChanged(position)
+                        binding.recyclerView.adapter?.notifyItemChanged(position-1)
+                    }
+                    else sharedPreferences().edit {
+                        putInt(CardColor.CUSTOM_BG_COLOR_KEY,it)
+                        binding.recyclerView.adapter?.notifyItemChanged(position)
+                        binding.recyclerView.adapter?.notifyItemChanged(position-2)
+                    }
+                    viewmodel.customColorChange()
+                }
+            ).show(childFragmentManager,javaClass.simpleName)
+        }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,

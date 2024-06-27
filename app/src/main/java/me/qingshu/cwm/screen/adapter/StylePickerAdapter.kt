@@ -9,11 +9,10 @@ class StylePickerAdapter(
     create = {
         CardStylesViewHolder(it)
     },
-    bind = { holder, date, _, checkable ->
-        holder.bind(date, click, checkable)
+    bind = { holder, date, _ ->
+        holder.bind(date, click)
     },
-    CheckableItem(),
-    true
+    CheckableItem()
 )
 
 class CardStylesViewHolder(parent: ViewGroup) : PickerViewHolder(
@@ -22,15 +21,14 @@ class CardStylesViewHolder(parent: ViewGroup) : PickerViewHolder(
 
     fun bind(
         item: CardStylesItem,
-        click: (Styles) -> Unit,
-        checkable: Boolean
+        click: (Styles) -> Unit
     ) {
         binding.icon.setImageResource(item.style.src)
         binding.card.setOnClickListener {
             click.invoke(item.style)
         }
         binding.label.setText(item.style.label)
-        animationVisible(checkable, item.isCheck)
+        check(item.isCheck)
     }
 }
 

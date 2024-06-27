@@ -9,11 +9,10 @@ class GravityPickerAdapter(
     create = {
         CardGravityViewHolder(it)
     },
-    bind = { holder, date, _, checkable ->
-        holder.bind(date,click,checkable)
+    bind = { holder, date, _ ->
+        holder.bind(date, click)
     },
-    CheckableItem(),
-    true
+    CheckableItem()
 )
 
 class CardGravityViewHolder(parent:ViewGroup): PickerViewHolder(
@@ -22,8 +21,7 @@ class CardGravityViewHolder(parent:ViewGroup): PickerViewHolder(
 
     fun bind(
         item: CardGravityItem,
-        click:(CardGravity)->Unit,
-        checkable:Boolean
+        click: (CardGravity) -> Unit
     ){
         binding.label.setText(item.cardGravity.label)
         binding.icon.setImageResource(item.cardGravity.src)
@@ -31,7 +29,7 @@ class CardGravityViewHolder(parent:ViewGroup): PickerViewHolder(
             click.invoke(item.cardGravity)
         }
 
-        animationVisible(checkable,item.isCheck)
+        check(item.isCheck)
     }
 }
 

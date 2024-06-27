@@ -12,6 +12,7 @@ import androidx.core.graphics.red
 import androidx.palette.graphics.Palette
 import androidx.palette.graphics.Palette.Swatch
 import androidx.viewbinding.ViewBinding
+import me.qingshu.cwm.data.CardColor
 import me.qingshu.cwm.data.Picture
 import me.qingshu.cwm.extensions.sharedPreferences
 import me.qingshu.cwm.view.SpaceTextView
@@ -34,7 +35,10 @@ abstract class StyleMarkBinding<T:ViewBinding>(
         return when{
             picture.isPalette() && !picture.isBlur() -> picture.palette?.switch()?.bodyTextColor ?: def
             picture.isBlur() -> picture.palette?.switch()?.titleTextColor ?: def
-            else -> def
+            else -> when(picture.cardColor){
+                CardColor.CUSTOM -> sharedPreferences().getInt(CardColor.CUSTOM_TEXT_COLOR_KEY,def)
+                else -> def
+            }
         }
     }
 
@@ -43,7 +47,10 @@ abstract class StyleMarkBinding<T:ViewBinding>(
         return when{
             picture.isPalette() && !picture.isBlur() -> picture.palette?.switch()?.rgb ?: def
             picture.isBlur() -> 0
-            else -> def
+            else -> when(picture.cardColor){
+                CardColor.CUSTOM -> sharedPreferences().getInt(CardColor.CUSTOM_BG_COLOR_KEY,def)
+                else -> def
+            }
         }
     }
 

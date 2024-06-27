@@ -1,6 +1,5 @@
 package me.qingshu.cwm.screen.adapter
 
-import android.view.View
 import android.view.ViewGroup
 import me.qingshu.cwm.data.CardIcon
 
@@ -10,8 +9,8 @@ class IconPickerAdapter(
     create = {
         CardIconViewHolder(it)
     },
-    bind = { holder, date, _, checkable ->
-        holder.bind(date,click,checkable)
+    bind = { holder, date, _ ->
+        holder.bind(date, click)
     },
     CheckableItem()
 )
@@ -22,8 +21,7 @@ class CardIconViewHolder(parent:ViewGroup): PickerViewHolder(
 
     fun bind(
         item: CardIconItem,
-        click:(CardIconItem)->Unit,
-        checkable:Boolean
+        click: (CardIconItem) -> Unit
     ){
         binding.label.setText(item.cardIcon.label)
         binding.icon.setImageResource(item.value())

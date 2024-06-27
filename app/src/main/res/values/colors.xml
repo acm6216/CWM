@@ -142,6 +142,8 @@
     <color name="md_theme_surfaceContainerHigh_highContrast">#E8E9DE</color>
     <color name="md_theme_surfaceContainerHighest_highContrast">#E2E3D8</color>
 
+    <color name="lobsterpicker_pointer_shadow">#33000000</color>
+
     <color name="checked">#4CAF50</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>

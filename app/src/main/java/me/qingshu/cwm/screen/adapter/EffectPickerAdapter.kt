@@ -9,11 +9,10 @@ class EffectPickerAdapter(
     create = {
         CardEffectViewHolder(it)
     },
-    bind = { holder, date, _, checkable ->
-        holder.bind(date,click,checkable)
+    bind = { holder, date, _ ->
+        holder.bind(date, click)
     },
-    CheckableItem(),
-    true
+    CheckableItem()
 )
 
 class CardEffectViewHolder(parent:ViewGroup): PickerViewHolder(
@@ -22,8 +21,7 @@ class CardEffectViewHolder(parent:ViewGroup): PickerViewHolder(
 
     fun bind(
         item: EffectItem,
-        click:(CardEffect)->Unit,
-        checkable:Boolean
+        click: (CardEffect) -> Unit
     ){
         binding.icon.setImageResource(item.cardEffect.src)
         binding.card.setOnClickListener {
@@ -31,7 +29,7 @@ class CardEffectViewHolder(parent:ViewGroup): PickerViewHolder(
         }
         binding.label.setText(item.cardEffect.label)
 
-        animationVisible(checkable,item.isCheck)
+        check(item.isCheck)
     }
 
 }

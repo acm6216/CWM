@@ -1,34 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:fitsSystemWindows="true"
-        tools:context=".MainActivity">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <fragment
-            android:tag="me.qingshu.cwm.Preview"
-            android:name="me.qingshu.cwm.Preview"
-            android:layout_width="0dp"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="7"
-            tools:ignore="FragmentTagUsage" />
+            android:orientation="horizontal"
+            tools:context=".MainActivity">
+
+            <fragment
+                android:name="me.qingshu.cwm.Preview"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="7"
+                android:tag="me.qingshu.cwm.Preview"
+                tools:ignore="FragmentTagUsage" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="?dividerHorizontal" />
+
+            <fragment
+                android:name="me.qingshu.cwm.screen.MainScreen"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:tag="me.qingshu.cwm.Screen"
+                tools:ignore="FragmentTagUsage" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <View
-            android:background="?dividerHorizontal"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"/>
-
-        <fragment
-            android:tag="me.qingshu.cwm.Screen"
-            android:name="me.qingshu.cwm.screen.MainScreen"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            tools:ignore="FragmentTagUsage" />
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?dividerHorizontal" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

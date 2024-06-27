@@ -13,10 +13,18 @@ enum class CardColor(
 ) {
     BLUR(R.color.checked,R.color.white,R.string.card_color_blur,R.drawable.ic_blur),
     AUTO(R.color.checked,R.color.white,R.string.card_color_auto,R.drawable.ic_auto_fix),
-    WHITE(R.color.white,R.color.black,R.string.card_color_black),
-    BLACK(R.color.black,R.color.white,R.string.card_color_white),
+    WHITE(R.color.white,R.color.black,R.string.card_color_white),
+    BLACK(R.color.black,R.color.white,R.string.card_color_black),
     GREY(R.color.grey,R.color.white,R.string.card_color_grey),
-    GOLD(R.color.new_year,R.color.new_year_text,R.string.card_color_gold);
+    GOLD(R.color.new_year,R.color.new_year_text,R.string.card_color_gold),
+    CUSTOM(R.color.white,R.color.black,R.string.card_color_custom),
+    CUSTOM_TEXT(R.color.black,R.color.white,R.string.card_color_custom_text),
+    CUSTOM_BG(R.color.white,R.color.black,R.string.card_color_custom_bg);
 
     fun fromPalette() = this == AUTO || this == BLUR
+
+    companion object{
+        const val CUSTOM_TEXT_COLOR_KEY = "CUSTOM_TEXT_COLOR_KEY"
+        const val CUSTOM_BG_COLOR_KEY = "CUSTOM_BG_COLOR_KEY"
+    }
 }

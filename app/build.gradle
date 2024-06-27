@@ -11,8 +11,8 @@ android {
         applicationId "me.qingshu.cwm"
         minSdk 21
         targetSdk 34
-        versionCode 38
-        versionName "CWM_1.5.8_20240626_Release"
+        versionCode 39
+        versionName "CWM_1.5.9_20240627_Release"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 

@@ -60,6 +60,13 @@
     <string name="card_color_black">黑色</string>
     <string name="card_color_grey">灰色</string>
     <string name="card_color_gold">新年</string>
+    <string name="card_color_custom_text">自定义文本</string>
+    <string name="card_color_custom_bg">自定义背景</string>
+    <string name="card_color_custom">自定义</string>
+
+    <string name="choose_color_close">关闭</string>
+    <string name="choose_color_save">保存</string>
+    <string name="choose_color_def">默认</string>
 
     <string name="save_status">添加水印中</string>
     <string name="save_status_completed">已保存</string>
@@ -113,8 +120,9 @@
     <string name="exif_dialog_shutter">快门</string>
     <string name="exif_dialog_iso">ISO</string>
     <string name="exif_dialog_focal_length">焦距</string>
-    <string name="exif_dialog_focal_length_canon">等效焦距(1.6)</string>
-    <string name="exif_dialog_focal_length_other">等效焦距(1.5)</string>
+    <string name="exif_dialog_focal_length_canon">等效焦距(1.6,C)</string>
+    <string name="exif_dialog_focal_length_other">等效焦距(1.5,C)</string>
+    <string name="exif_dialog_focal_length_m43">等效焦距(2,M43)</string>
     <string name="exif_dialog_aperture">光圈</string>
     <string name="exif_dialog_date">拍摄时间</string>
     <string name="exif_dialog_lens_model">镜头型号</string>

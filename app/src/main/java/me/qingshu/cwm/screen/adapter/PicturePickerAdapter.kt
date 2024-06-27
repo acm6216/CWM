@@ -1,7 +1,5 @@
 package me.qingshu.cwm.screen.adapter
 
-import android.util.Log
-import android.view.View
 import android.view.ViewGroup
 import me.qingshu.cwm.data.CardMenu
 
@@ -11,8 +9,8 @@ class MenuPickerAdapter(
     create = {
         MenuViewHolder(it)
     },
-    bind = { holder, date, _, checkable ->
-        holder.bind(date,click,checkable)
+    bind = { holder, date, _ ->
+        holder.bind(date, click)
     },
     CheckableItem()
 )
@@ -23,8 +21,7 @@ class MenuViewHolder(parent:ViewGroup): PickerViewHolder(
 
     fun bind(
         item: MainMenuItem,
-        click:(MainMenuItem)->Unit,
-        checkable:Boolean
+        click: (MainMenuItem) -> Unit
     ){
         binding.label.setText(item.cardMenu.label)
         binding.card.isEnabled = when(item.cardMenu){
@@ -35,7 +32,7 @@ class MenuViewHolder(parent:ViewGroup): PickerViewHolder(
         binding.card.setOnClickListener {
             click.invoke(item)
         }
-        animationVisible(checkable,false)
+        check(false)
     }
 }
 

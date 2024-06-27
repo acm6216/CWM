@@ -267,6 +267,12 @@ class MainViewModel : ViewModel() {
         _picker.trySend(Unit)
     }
 
+    private val _customColor  = Channel<Unit>(capacity = Channel.CONFLATED)
+    val customColor = _customColor.receiveAsFlow()
+    fun customColorChange(){
+        _customColor.trySend(Unit)
+    }
+
     private val _save = Channel<Unit>(capacity = Channel.CONFLATED)
     val save = _save.receiveAsFlow()
     fun save(){
@@ -393,7 +399,6 @@ class MainViewModel : ViewModel() {
             logo.emit(icon)
         }
     }
-
 
     private val logoVisible = MutableStateFlow(true)
     fun receiveLogoVisible(visible:Boolean){

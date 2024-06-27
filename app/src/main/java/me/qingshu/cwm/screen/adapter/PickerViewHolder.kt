@@ -2,20 +2,17 @@ package me.qingshu.cwm.screen.adapter
 
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
 import androidx.recyclerview.widget.RecyclerView
-import me.qingshu.cwm.databinding.ChoiceItemBinding
+import me.qingshu.cwm.databinding.SelectableItemBinding
 
 open class PickerViewHolder(
-    protected val binding: ChoiceItemBinding
+    protected val binding: SelectableItemBinding
 ): RecyclerView.ViewHolder(
     binding.root
 ) {
 
-    fun animationVisible(checkable:Boolean,isCheck:Boolean){
+    fun check(isCheck: Boolean){
         binding.card.isChecked = isCheck
     }
 
@@ -39,7 +36,7 @@ open class PickerViewHolder(
     companion object{
 
         fun create(parent: ViewGroup) =
-            ChoiceItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            SelectableItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
     }
 }

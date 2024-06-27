@@ -12,11 +12,10 @@ class TemplatePickerAdapter(
     create = {
         TemplateViewHolder(it)
     },
-    bind = { holder, date, _, checkable ->
-        holder.bind(date,click,longClick,checkable)
+    bind = { holder, date, _ ->
+        holder.bind(date, click, longClick)
     },
-    CheckableItem(),
-    true
+    CheckableItem()
 )
 
 class TemplateViewHolder(parent:ViewGroup): PickerViewHolder(
@@ -24,10 +23,9 @@ class TemplateViewHolder(parent:ViewGroup): PickerViewHolder(
 ) {
 
     fun bind(
-        item:TemplateItem,
-        click:(Template)->Unit,
-        longClick:(View, Template)->Unit,
-        checkable:Boolean
+        item: TemplateItem,
+        click: (Template) -> Unit,
+        longClick: (View, Template) -> Unit
     ){
         binding.card.setOnClickListener { click.invoke(item.template) }
         binding.card.setOnLongClickListener {
@@ -36,7 +34,7 @@ class TemplateViewHolder(parent:ViewGroup): PickerViewHolder(
         }
         binding.icon.setImageResource(R.drawable.ic_template)
         binding.label.text = item.template.name
-        animationVisible(checkable,item.isCheck)
+        check(item.isCheck)
     }
 }
 

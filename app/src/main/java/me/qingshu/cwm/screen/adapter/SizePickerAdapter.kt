@@ -9,11 +9,10 @@ class SizePickerAdapter(
     create = {
         CardSizeViewHolder(it)
     },
-    bind = { holder, date, _, checkable ->
-        holder.bind(date,click,checkable)
+    bind = { holder, date, _ ->
+        holder.bind(date, click)
     },
-    CheckableItem(),
-    true
+    CheckableItem()
 )
 
 class CardSizeViewHolder(parent:ViewGroup): PickerViewHolder(
@@ -22,8 +21,7 @@ class CardSizeViewHolder(parent:ViewGroup): PickerViewHolder(
 
     fun bind(
         item: CardSizeItem,
-        click:(CardSize)->Unit,
-        checkable:Boolean
+        click: (CardSize) -> Unit
     ){
         binding.label.setText(item.cardSize.label)
         binding.card.setOnClickListener {
@@ -32,7 +30,7 @@ class CardSizeViewHolder(parent:ViewGroup): PickerViewHolder(
 
         binding.icon.setImageResource(item.cardSize.src)
 
-        animationVisible(checkable,item.isCheck)
+        check(item.isCheck)
     }
 
 }

@@ -9,11 +9,10 @@ class ArtSignatureAdapter (
     create = {
         ArtSignatureViewHolder(it)
     },
-    bind = { holder, date, _, checkable ->
-        holder.bind(date,click,checkable)
+    bind = { holder, date, _ ->
+        holder.bind(date, click)
     },
-    CheckableItem(),
-    true
+    CheckableItem()
 )
 
 class ArtSignatureViewHolder(parent: ViewGroup): PickerViewHolder(
@@ -21,16 +20,14 @@ class ArtSignatureViewHolder(parent: ViewGroup): PickerViewHolder(
 ) {
 
     fun bind(
-        item:ArtSignatureItem,
-        click:(Font)->Unit,
-        checkable:Boolean
+        item: ArtSignatureItem,
+        click: (Font) -> Unit
     ){
         binding.card.setOnClickListener {
             click.invoke(item.font)
         }
-        //binding.card.checkedIconTint = getColorStateListTest(0xffff0000.toInt())
         binding.label.setText(item.font.label)
-        animationVisible(checkable,item.isCheck)
+        check(item.isCheck)
     }
 }
 
